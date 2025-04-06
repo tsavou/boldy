@@ -24,7 +24,7 @@ CREATE TABLE users
 );
 
 -- Table des freelances (infos spécifiques aux freelances)
-CREATE TABLE freelancers
+CREATE TABLE freelances
 (
     id              INT PRIMARY KEY AUTO_INCREMENT,
     user_id         INT UNIQUE         NOT NULL,
@@ -51,12 +51,12 @@ CREATE TABLE professions
 );
 
 -- Table des relations Freelance <-> Métiers (Un freelance peut avoir plusieurs métiers)
-CREATE TABLE freelancer_professions
+CREATE TABLE freelance_professions
 (
-    freelancer_id INT NOT NULL,
+    freelance_id INT NOT NULL,
     profession_id INT NOT NULL,
-    PRIMARY KEY (freelancer_id, profession_id),
-    FOREIGN KEY (freelancer_id) REFERENCES freelancers (id) ON DELETE CASCADE,
+    PRIMARY KEY (freelance_id, profession_id),
+    FOREIGN KEY (freelance_id) REFERENCES freelances (id) ON DELETE CASCADE,
     FOREIGN KEY (profession_id) REFERENCES professions (id) ON DELETE CASCADE
 );
 
@@ -68,12 +68,12 @@ CREATE TABLE skills
 );
 
 -- Table des relations Freelance <-> Compétences (Un freelance peut avoir plusieurs skills)
-CREATE TABLE freelancer_skills
+CREATE TABLE freelance_skills
 (
-    freelancer_id INT NOT NULL,
+    freelance_id INT NOT NULL,
     skill_id      INT NOT NULL,
-    PRIMARY KEY (freelancer_id, skill_id),
-    FOREIGN KEY (freelancer_id) REFERENCES freelancers (id) ON DELETE CASCADE,
+    PRIMARY KEY (freelance_id, skill_id),
+    FOREIGN KEY (freelance_id) REFERENCES freelances (id) ON DELETE CASCADE,
     FOREIGN KEY (skill_id) REFERENCES skills (id) ON DELETE CASCADE
 );
 
@@ -81,45 +81,45 @@ CREATE TABLE freelancer_skills
 CREATE TABLE certifications
 (
     id            INT PRIMARY KEY AUTO_INCREMENT,
-    freelancer_id INT          NOT NULL,
+    freelance_id INT          NOT NULL,
     name          VARCHAR(255) NOT NULL,
     institution   VARCHAR(255),
     year YEAR,
-    FOREIGN KEY (freelancer_id) REFERENCES freelancers (id) ON DELETE CASCADE
+    FOREIGN KEY (freelance_id) REFERENCES freelances (id) ON DELETE CASCADE
 );
 
 -- Table des expériences professionnelles
 CREATE TABLE experiences
 (
     id            INT PRIMARY KEY AUTO_INCREMENT,
-    freelancer_id INT          NOT NULL,
+    freelance_id INT          NOT NULL,
     title         VARCHAR(255) NOT NULL,
     company       VARCHAR(255) NOT NULL,
     start_date    DATE         NOT NULL,
     end_date      DATE NULL,
     description   TEXT,
-    FOREIGN KEY (freelancer_id) REFERENCES freelancers (id) ON DELETE CASCADE
+    FOREIGN KEY (freelance_id) REFERENCES freelances (id) ON DELETE CASCADE
 );
 
 -- Table des médias (photos/vidéos des freelances)
-CREATE TABLE freelancer_media
+CREATE TABLE freelance_media
 (
     id            INT PRIMARY KEY AUTO_INCREMENT,
-    freelancer_id INT          NOT NULL,
+    freelance_id INT          NOT NULL,
     type          ENUM('image', 'video') NOT NULL,
     url           VARCHAR(255) NOT NULL,
     uploaded_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (freelancer_id) REFERENCES freelancers (id) ON DELETE CASCADE
+    FOREIGN KEY (freelance_id) REFERENCES freelances (id) ON DELETE CASCADE
 );
 
 -- Table des mises en avant premium
 CREATE TABLE boosts
 (
     id            INT PRIMARY KEY AUTO_INCREMENT,
-    freelancer_id INT       NOT NULL,
+    freelance_id INT       NOT NULL,
     start_date    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     end_date      TIMESTAMP NOT NULL,
-    FOREIGN KEY (freelancer_id) REFERENCES freelancers (id) ON DELETE CASCADE
+    FOREIGN KEY (freelance_id) REFERENCES freelances (id) ON DELETE CASCADE
 );
 
 -- Table des abonnements au Business Club
