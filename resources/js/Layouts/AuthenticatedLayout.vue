@@ -6,6 +6,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
+import VerificationBanner from '@/Components/VerificationBanner.vue';
 
 const showingNavigationDropdown = ref(false);
 </script>
@@ -188,6 +189,11 @@ const showingNavigationDropdown = ref(false);
                     <slot name="header" />
                 </div>
             </header>
+
+            <VerificationBanner
+                :isEmailVerified="$page.props.auth.user.email_verified_at !== null"
+                :isFreelanceVerified="false"
+            />
 
             <!-- Page Content -->
             <main>
