@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('roles')->insert([
             ['id' => 1, 'name' => 'admin'],
-            ['id' => 2, 'name' => 'freelance']
+            ['id' => 2, 'name' => 'freelance'],
         ]);
 
         User::factory()->create([
