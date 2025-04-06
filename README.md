@@ -1,14 +1,30 @@
+```bash
+sail up -d
+```
 
-npm install
+```bash
+sail composer install
+```
+```bash
+sail npm install
+```
+```bash
 npm run build
+```
 
-composer install
-composer run dev
 ## create .env file
 config .env file
+
+cp .env.example .env
+
+key generate
 
 ## create & seed database
 
 ```bash
-php artisan migrate --seed
+sail artisan migrate --seed
+```
+
+```bash
+sail npm run dev
 ```
