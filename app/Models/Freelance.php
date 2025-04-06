@@ -13,6 +13,7 @@ class Freelance extends Model
     use HasFactory;
 
     protected $table = 'freelances';
+
     protected $fillable = [
         'bio',
         'price_per_day',
@@ -61,5 +62,4 @@ class Freelance extends Model
     {
         return $this->hasMany(Boost::class, 'freelance_id');
     }
-
 }
