@@ -1,7 +1,6 @@
 <script setup>
 import { Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 defineProps({
     isEmailVerified: {
