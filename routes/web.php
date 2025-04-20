@@ -6,7 +6,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
+Route::get('/welcome', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -15,9 +15,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/', function () {
+    return Inertia::render('Home');
+})->name('home');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -25,9 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/freelance', [FreelanceController::class, 'index'])->name('freelance.index');
-    Route::get('/freelance/{id}', [FreelanceController::class, 'show'])->name('freelance.show');
-});
+Route::get('/freelance', [FreelanceController::class, 'index'])->name('freelance.index');
+Route::get('/freelance/{id}', [FreelanceController::class, 'show'])->name('freelance.show');
 
 require __DIR__.'/auth.php';
