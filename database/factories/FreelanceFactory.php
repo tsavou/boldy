@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Freelance;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -13,21 +14,30 @@ class FreelanceFactory extends Factory
 
     public function definition(): array
     {
+        $user = User::factory()->create([
+            'role_id' => Role::where('name', 'freelance')->first()->id,
+            'first_name' => $this->faker->firstName(),
+            'name' => $this->faker->lastName(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'password' => bcrypt('password'),
+        ]);
+
         return [
             'bio' => $this->faker->word(),
             'price_per_day' => $this->faker->randomNumber(),
-            'location' => $this->faker->word(),
-            'profile_picture' => $this->faker->word(),
-            'cover_picture' => $this->faker->word(),
-            'siret' => $this->faker->word(),
+            'location' => $this->faker->city(),
+            'profile_picture' => $this->faker->imageUrl($category = 'avatar'),
+            'cover_picture' => $this->faker->imageUrl($category = 'cover'),
+            'siret' => $this->faker->numerify('##############'),
             'portfolio_url' => $this->faker->url(),
             'linkedin_url' => $this->faker->url(),
             'is_verified' => $this->faker->boolean(),
             'is_available' => $this->faker->boolean(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
+            'slug' => Freelance::generateUniqueSlug($user->first_name, $user->name),
 
-            'user_id' => User::factory(),
+            'user_id' => $user->id,
         ];
     }
 }
