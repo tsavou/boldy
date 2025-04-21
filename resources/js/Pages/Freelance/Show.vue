@@ -4,6 +4,7 @@ import { Head } from '@inertiajs/vue3';
 
 defineProps({
     freelance: Object,
+    isEditable: Boolean,
 });
 </script>
 
@@ -11,6 +12,6 @@ defineProps({
     <Layout>
         <Head title="Show" />
 
-        {{freelance}}
+        {{ freelance }}
     </Layout>
 </template>

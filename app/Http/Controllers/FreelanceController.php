@@ -36,8 +36,16 @@ class FreelanceController extends Controller
             ->with(['user', 'skills', 'professions', 'experiences', 'certifications', 'freelanceMedias'])
             ->firstOrFail();
 
+        $isEditable = auth()->check() && auth()->user()->id === $freelance->user_id;
+
+        if (!$isEditable && !$freelance->is_verified)
+        {
+            abort(404, 'Freelance profile not found');
+        }
+
         return Inertia::render('Freelance/Show', [
-            'freelance' => $freelance
+            'freelance' => $freelance,
+            'isEditable' => $isEditable
         ]);
     }
 
