@@ -14,9 +14,9 @@ class ExperiencesFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->word(),
+            'title' => $this->faker->jobTitle(),
             'company' => $this->faker->company(),
-            'start_date' => Carbon::now(),
+            'start_date' => Carbon::now()->subMonths(6),
             'end_date' => Carbon::now(),
             'description' => $this->faker->text(),
             'created_at' => Carbon::now(),
