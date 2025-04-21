@@ -59,12 +59,13 @@ const submit = () => {
         </div>
 
         <p v-if="!isFreelanceVerified">
-            Pour être visible publiquement sur la plateforme, votre profil freelance doit être vérifié.
-            <Link :href="route('profile.edit')" class="font-bold underline"
-                > Cliquez ici
+            Pour être visible publiquement sur la plateforme, votre profil
+            freelance doit être vérifié.
+            <Link :href="route('profile.edit')" class="font-bold underline">
+                Cliquez ici
             </Link>
-            pour renseigner votre <span class="font-bold">SIRET</span> et
-            votre <span class="font-bold">pièce d'identité</span>.
+            pour renseigner votre <span class="font-bold">SIRET</span> et votre
+            <span class="font-bold">pièce d'identité</span>.
         </p>
     </div>
 </template>
