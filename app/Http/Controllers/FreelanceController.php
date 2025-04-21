@@ -29,11 +29,12 @@ class FreelanceController extends Controller
     }
 
 
-    public function show($id)
+    public function show($slug)
     {
-        // Fetch the freelance profile with the given ID, including related data
-        $freelance = Freelance::findOrFail($id)
-            ->load('user', 'skills', 'professions', 'experiences', 'certifications', 'freelanceMedias');
+        // Fetch the freelance profile with the given slug, including related data
+        $freelance = Freelance::where('slug', $slug)
+            ->with(['user', 'skills', 'professions', 'experiences', 'certifications', 'freelanceMedias'])
+            ->firstOrFail();
 
         return Inertia::render('Freelance/Show', [
             'freelance' => $freelance

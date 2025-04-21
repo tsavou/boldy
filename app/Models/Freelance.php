@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Freelance extends Model
 {
@@ -26,7 +27,35 @@ class Freelance extends Model
         'is_verified',
         'is_available',
         'user_id',
+        'slug',
     ];
+
+    protected static function boot(): void
+    {
+        parent::boot();
+        // Generate slug before creating a new freelance
+        static::creating(function ($freelance) {
+            $freelance->slug = self::generateUniqueSlug($freelance->user->first_name, $freelance->user->name);
+        });
+        // Update slug before updating a freelance
+        static::updating(function ($freelance) {
+            $freelance->slug = self::generateUniqueSlug($freelance->user->first_name, $freelance->user->name);
+        });
+    }
+
+    // Generate a unique slug based on first name and name
+    public static function generateUniqueSlug($firstName, $name): string
+    {
+        $slug = Str::slug($firstName . ' ' . $name);
+        $originalSlug = $slug;
+        $count = 1;
+
+        while (self::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count++;
+        }
+
+        return $slug;
+    }
 
     public function user(): BelongsTo
     {

@@ -42,9 +42,27 @@ const showingNavigationDropdown = ref(false);
                     </div>
                 </div>
 
-                <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <NavLink
+                        v-if="$page.props.auth.user"
+                        :href="
+                            route(
+                                'freelance.show',
+                                $page.props.auth.user.freelance.slug,
+                            )
+                        "
+                        :active="
+                            route().current(
+                                'freelance.show',
+                                $page.props.auth.user.freelance.slug,
+                            )
+                        "
+                    >
+                        Mon profil
+                    </NavLink>
+
                     <!-- Settings Dropdown -->
-                    <div class="relative ms-3">
+                    <div class="relative ms-3 sm:flex sm:items-center">
                         <Dropdown
                             v-if="$page.props.auth.user"
                             align="right"

@@ -26,6 +26,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/freelance', [FreelanceController::class, 'index'])->name('freelance.index');
-Route::get('/freelance/{id}', [FreelanceController::class, 'show'])->name('freelance.show');
+Route::get('/freelance/{slug}', [FreelanceController::class, 'show'])->name('freelance.show');
 
 require __DIR__.'/auth.php';

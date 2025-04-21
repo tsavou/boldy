@@ -20,7 +20,7 @@ defineProps({
             {{ freelance.user.first_name }}
             {{ freelance.user.name }}
 
-            <a :href="route('freelance.show', freelance.id)">Voir le profil</a>
+            <a :href="route('freelance.show', freelance.slug)">Voir le profil</a>
         </div>
     </Layout>
 </template>
