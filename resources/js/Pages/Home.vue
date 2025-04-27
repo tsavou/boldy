@@ -1,6 +1,7 @@
 <script setup>
 import Layout from '@/Layouts/AppLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 defineProps({
     boosted: Array,
@@ -37,10 +38,10 @@ defineProps({
                             Si vous êtes freelance, vous pouvez créer un profil
                             et être référencé sur Boldy.
                         </p>
+                       <div class="flex gap-4">
+                           <PrimaryButton as="Link" :href="route('register')" >Rejoindre Boldy</PrimaryButton>
+                       </div>
 
-                        <Link :href="route('register')" class="">
-                            Rejoindre Boldy
-                        </Link>
                     </div>
 
                     <!--
