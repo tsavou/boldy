@@ -27,4 +27,8 @@ Route::middleware('auth')->group(function () {
 Route::get('/freelance', [FreelanceController::class, 'index'])->name('freelance.index');
 Route::get('/freelance/{slug}', [FreelanceController::class, 'show'])->name('freelance.show');
 
+Route::post('/freelance/update-images', [FreelanceController::class, 'updateImage'])
+    ->middleware(['auth'])
+    ->name('profile.updateImages');
+
 require __DIR__.'/auth.php';
