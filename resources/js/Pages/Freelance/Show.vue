@@ -6,6 +6,7 @@ import {
     XMarkIcon,
     CheckCircleIcon,
     CameraIcon,
+    MapPinIcon
 } from '@heroicons/vue/24/solid';
 
 defineProps({
@@ -197,7 +198,10 @@ const submitAvatarImage = () => {
                             {{ freelance.user.first_name }}
                             {{ freelance.user.name }}
                         </h2>
-                        <p class="text-gray-400">{{ freelance.location }}</p>
+                        <div class="flex items-center">
+                            <MapPinIcon class="h-4 w-4 text-gray-400" />
+                            <p class="text-gray-400">{{ freelance.location }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
