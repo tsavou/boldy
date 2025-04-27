@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Freelance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class FreelanceController extends Controller
@@ -49,15 +50,38 @@ class FreelanceController extends Controller
         ]);
     }
 
-    public function edit($id)
+    /*
+     * Upload image into public storage and update the path in the database for freelance profile
+     * */
+    public function updateImage(Request $request)
     {
-    }
+         $request->validate([
+            'cover' => 'nullable|image',
+            'avatar' => 'nullable|image'
+        ]);
 
-    public function update(Request $request, $id)
-    {
-    }
+        $freelance = auth()->user()->freelance;
 
-    public function destroy($id)
-    {
+        $success = '';
+
+        if ($request->hasFile('cover')) {
+            if ($freelance->cover_picture) {
+                Storage::disk('public')->delete($freelance->cover_picture);
+            }
+            $coverPath = $request->file('cover')->storeAs('freelances', $freelance->slug . '-cover', 'public');
+            $freelance->update(['cover_picture' => Storage::url($coverPath)]);
+            $success = 'Votre bannière a été mise à jour';
+        }
+
+       if ($request->hasFile('avatar')) {
+            if ($freelance->profile_picture) {
+                Storage::disk('public')->delete($freelance->profile_picture);
+            }
+            $avatarPath = $request->file('avatar')->storeAs('freelances', $freelance->slug . '-avatar', 'public');
+            $freelance->update(['profile_picture' => Storage::url($avatarPath)]);
+            $success = 'Votre photo de profil a été mise à jour';
+       }
+
+       return back()->with('success', $success);
     }
 }
