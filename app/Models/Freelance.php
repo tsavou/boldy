@@ -39,7 +39,9 @@ class Freelance extends Model
         });
         // Update slug before updating a freelance
         static::updating(function ($freelance) {
-            $freelance->slug = self::generateUniqueSlug($freelance->user->first_name, $freelance->user->name);
+            if ($freelance->isDirty('user.first_name') || $freelance->isDirty('user.name')) {
+                $freelance->slug = self::generateUniqueSlug($freelance->user->first_name, $freelance->user->name);
+            }
         });
     }
 
