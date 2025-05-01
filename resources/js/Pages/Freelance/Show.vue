@@ -6,8 +6,10 @@ import {
     XMarkIcon,
     CheckCircleIcon,
     CameraIcon,
-    MapPinIcon
+    MapPinIcon,
 } from '@heroicons/vue/24/solid';
+import AlertBannerStack from '@/Components/AlertBannerStack.vue';
+import AlertBanner from '@/Components/AlertBanner.vue';
 
 defineProps({
     freelance: Object,
@@ -90,19 +92,30 @@ const submitAvatarImage = () => {
 
     <Layout>
         <div>
-            <div
+            <AlertBanner
                 v-show="showNotification && page.props.flash.success"
-                class="flex gap-2 bg-lime-300 px-3 py-2 text-sm font-medium text-green-900"
+                fixed
+                position="top"
             >
-                <CheckCircleIcon class="h-5 w-5" />
-                {{ page.props.flash.success }}
-            </div>
-            <div
+                <template #icon>
+                    <CheckCircleIcon class="h-5 w-5" />
+                </template>
+                <template #title>
+                    {{ page.props.flash.success }}
+                </template>
+            </AlertBanner>
+            <AlertBanner
                 v-if="errors.cover"
-                class="bg-red-400 px-3 py-2 text-sm font-medium text-white"
+                fixed
+                position="top"
+                bg-color="bg-red-400"
+                text-color="text-white"
             >
-                {{ errors.cover }}
-            </div>
+                <template #title>
+                    {{ errors.cover }}
+                </template>
+            </AlertBanner>
+
             <div class="group relative bg-white">
                 <div class="relative flex">
                     <img
@@ -123,6 +136,7 @@ const submitAvatarImage = () => {
 
                             <input
                                 type="file"
+                                accept="image/jpeg, image/png, image/jpg, image/webp, image/gif"
                                 class="absolute bottom-0 left-0 right-0 top-0 cursor-pointer opacity-0"
                                 @change="onCoverChange"
                             />
@@ -200,7 +214,9 @@ const submitAvatarImage = () => {
                         </h2>
                         <div class="flex items-center">
                             <MapPinIcon class="h-4 w-4 text-gray-400" />
-                            <p class="text-gray-400">{{ freelance.location }}</p>
+                            <p class="text-gray-400">
+                                {{ freelance.location }}
+                            </p>
                         </div>
                     </div>
                 </div>

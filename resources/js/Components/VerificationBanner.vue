@@ -47,6 +47,7 @@ const submit = () => {
             >
                 Renvoyer l'email de vérification
             </button>
+            <span aria-hidden="true">&rarr;</span>
         </AlertBanner>
         <AlertBanner v-if="!isFreelanceVerified">
             <template #title>Profil non vérifié</template>
@@ -58,6 +59,7 @@ const submit = () => {
             <Link :href="route('profile.edit')" class="font-bold underline">
                 Cliquez ici
             </Link>
+            <span aria-hidden="true">&rarr;</span>
         </AlertBanner>
     </AlertBannerStack>
 </template>

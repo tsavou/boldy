@@ -1,17 +1,24 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { XMarkIcon, InformationCircleIcon } from '@heroicons/vue/24/solid';
 
-defineProps({
+const props = defineProps({
     bgColor: { type: String, default: 'bg-lime-300' },
     textColor: { type: String, default: 'text-green-900' },
     fixed: { type: Boolean, default: false },
+    position: { type: String, default: 'bottom' },
 });
 
 const emit = defineEmits(['close']);
 
 const visible = ref(true);
 
+const positionClass = computed(() => {
+    if (!props.fixed) return '';
+    return props.position === 'top'
+        ? 'fixed inset-x-0 top-12 sm:px-6 pt-5 lg:px-8 pointer-events-none z-50'
+        : 'fixed inset-x-0 bottom-0 sm:px-6 sm:pb-5 lg:px-8 pointer-events-none z-50';
+});
 const close = () => {
     visible.value = false;
     emit('close');
@@ -20,29 +27,26 @@ const close = () => {
 
 <template>
     <transition name="fade" mode="out-in">
-        <div
-            v-if="visible"
-            role="banner"
-            :class="[
-                fixed
-                    ? 'pointer-events-none fixed inset-x-0 bottom-0 sm:px-6 sm:pb-5 lg:px-8'
-                    : '',
-            ]"
-        >
+        <div v-if="visible" role="banner" :class="positionClass">
             <div
                 :class="[
-                    'pointer-events-auto flex items-center justify-between gap-x-6 px-6 py-2.5 sm:rounded-xl sm:py-3 sm:pl-4 sm:pr-3.5',
+                    'pointer-events-auto mx-auto flex w-full items-center justify-between gap-x-4 rounded-md px-4 py-3 sm:gap-x-6 sm:rounded-xl sm:px-6 sm:py-4',
                     bgColor,
                     textColor,
                 ]"
             >
-                <div class="flex items-center gap-2 text-sm/6">
-                    <InformationCircleIcon class="size-5" aria-hidden="true" />
+                <div class="flex items-center gap-2 text-sm/6 leading-5 flex-wrap">
+                    <slot name="icon">
+                        <InformationCircleIcon
+                            class="size-5"
+                            aria-hidden="true"
+                        />
+                        <span class="sr-only">Information</span>
+                    </slot>
                     <strong class="font-semibold">
-                        <slot name="title">Attention</slot>
+                        <slot name="title"></slot>
                     </strong>
                     <slot />
-                    <span aria-hidden="true">&rarr;</span>
                 </div>
                 <button
                     type="button"
