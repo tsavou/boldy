@@ -1,6 +1,8 @@
 <script setup>
 import { Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import AlertBanner from '@/Components/AlertBanner.vue';
+import AlertBannerStack from '@/Components/AlertBannerStack.vue';
 
 defineProps({
     isEmailVerified: {
@@ -24,48 +26,38 @@ const submit = () => {
 </script>
 
 <template>
-    <div
-        v-if="!isEmailVerified || !isFreelanceVerified"
-        class="border-l-4 border-yellow-500 bg-yellow-100 p-4 text-yellow-800"
-        role="alert"
-    >
-        <p class="font-bold">Attention</p>
+    <AlertBannerStack>
+        <AlertBanner v-if="!isEmailVerified">
+            <template #title>Email non vérifié</template>
+            <p v-if="!verificationLinkSent">
+                Veuillez vérifier votre boîte de réception pour le lien de
+                vérification.
+            </p>
 
-        <div v-if="!isEmailVerified" class="flex items-center">
-            <div class="mr-4">
-                <p v-if="!verificationLinkSent">
-                    Votre email n'est pas vérifié. Veuillez vérifier votre boîte
-                    de réception pour le lien de vérification.
-                </p>
-
-                <p v-else>
-                    Un nouveau lien de vérification a été envoyé à l'adresse
-                    e-mail que vous avez fournie lors de l'inscription.
-                </p>
-            </div>
-            <form @submit.prevent="submit">
-                <div class="flex items-center justify-between">
-                    <button
-                        :class="{
-                            'disabled cursor-not-allowed opacity-25':
-                                form.processing,
-                        }"
-                        class="font-bold underline"
-                    >
-                        Renvoyer l'email de vérification
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <p v-if="!isFreelanceVerified">
-            Pour être visible publiquement sur la plateforme, votre profil
-            freelance doit être vérifié.
+            <p v-else>
+                Un nouveau lien de vérification a été envoyé à l'adresse e-mail que
+                vous avez fournie lors de l'inscription.
+            </p>
+            <button
+                @click="submit"
+                :class="{
+                    'disabled cursor-not-allowed opacity-25': form.processing,
+                }"
+                class="font-bold underline"
+            >
+                Renvoyer l'email de vérification
+            </button>
+        </AlertBanner>
+        <AlertBanner v-if="!isFreelanceVerified">
+            <template #title>Profil non vérifié</template>
+            <p>
+                Pour être visible publiquement sur la plateforme, merci de
+                renseigner votre <span class="font-bold">SIRET</span> et votre
+                <span class="font-bold">pièce d'identité</span>.
+            </p>
             <Link :href="route('profile.edit')" class="font-bold underline">
                 Cliquez ici
             </Link>
-            pour renseigner votre <span class="font-bold">SIRET</span> et votre
-            <span class="font-bold">pièce d'identité</span>.
-        </p>
-    </div>
+        </AlertBanner>
+    </AlertBannerStack>
 </template>
