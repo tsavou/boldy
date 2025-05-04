@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,6 +31,7 @@ class Freelance extends Model
         'slug',
     ];
 
+    protected $appends = ['experience_in_years','experience_level'];
     protected static function boot(): void
     {
         parent::boot();
@@ -59,7 +61,31 @@ class Freelance extends Model
         return $slug;
     }
 
-    public function user(): BelongsTo
+    public function getExperienceInYearsAttribute()
+    {
+        $totalMonths = $this->experiences->reduce(function ($carry, $experience) {
+            $start = Carbon::parse($experience->start_date);
+            $end = $experience->end_date ? Carbon::parse($experience->end_date) : now();
+            return $carry + $start->diffInMonths($end);
+        }, 0);
+
+
+        return intdiv($totalMonths, 12);
+    }
+
+    public function getExperienceLevelAttribute()
+    {
+        $years = $this->experience_in_years;
+
+        return match (true) {
+            $years < 1 => 'Junior',
+            $years < 3 => 'Intermédiaire',
+            $years < 5 => 'Confirmé',
+            default => 'Expert',
+        };
+    }
+
+        public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
