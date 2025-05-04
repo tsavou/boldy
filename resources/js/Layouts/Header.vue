@@ -13,8 +13,8 @@ const user = usePage().props.auth.user;
 </script>
 
 <template>
-    <header role="banner">
-        <nav class="bg-green-900">
+    <header role="banner" class="sticky top-0 z-50">
+        <nav class="bg-green-900 text-orange-50">
             <!-- Primary Navigation Menu -->
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="flex h-16 justify-between">
@@ -24,7 +24,7 @@ const user = usePage().props.auth.user;
                             <Link :href="route('home')">
                                 <div class="flex items-end gap-3">
                                     <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-gray-800"
+                                        class="block h-9 w-auto fill-current"
                                     />
                                     <img
                                         src="/img/boldy.png"
@@ -64,7 +64,7 @@ const user = usePage().props.auth.user;
                                     >
                                         <button
                                             type="button"
-                                            class="flex items-center rounded-full bg-lime-300 pr-1 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                                            class="flex items-center rounded-full bg-lime-300 pr-1 text-sm text-green-900 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                                         >
                                             <img
                                                 :src="
@@ -131,14 +131,14 @@ const user = usePage().props.auth.user;
                                 <div class="space-x-4">
                                     <Link
                                         :href="route('login')"
-                                        class="inline-flex items-center rounded-md border border-lime-300 bg-green-900 px-3 py-2 text-sm font-medium leading-4 text-lime-300 transition duration-150 ease-in-out hover:bg-lime-300 hover:text-green-900 focus:outline-none"
+                                        class="inline-flex items-center rounded-md border border-orange-50 bg-green-900 px-3 py-2 text-sm font-medium leading-4 text-orange-50 transition duration-150 ease-in-out hover:bg-orange-50 hover:text-green-900 focus:outline-none"
                                     >
                                         Connexion
                                     </Link>
 
                                     <Link
                                         :href="route('register')"
-                                        class="inline-flex items-center rounded-md border border-transparent bg-lime-300 px-3 py-2 text-sm font-medium leading-4 text-green-900 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+                                        class="inline-flex items-center rounded-md border border-transparent bg-orange-50 px-3 py-2 text-sm font-medium leading-4 text-green-900 transition duration-150 ease-in-out hover:border-orange-50 hover:bg-green-900 hover:text-orange-50 focus:outline-none"
                                     >
                                         Rejoindre Boldy
                                     </Link>
@@ -196,7 +196,7 @@ const user = usePage().props.auth.user;
                     block: showingNavigationDropdown,
                     hidden: !showingNavigationDropdown,
                 }"
-                class="sm:hidden"
+                class="fixed left-0 right-0 z-40 bg-green-900 sm:hidden"
             >
                 <div class="space-y-1 pb-3 pt-2">
                     <ResponsiveNavLink

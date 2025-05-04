@@ -32,8 +32,9 @@ const props = defineProps({
 const buttonColorClass = computed(() => {
     return {
         purple: 'border border-purple-600 bg-purple-600 hover:bg-purple-700 hover:border-purple-700 text-white',
-        green: 'border border-green-900 bg-green-900 hover:bg-lime-300 hover:border-green-900 text-white hover:text-green-900',
-        secondary: 'border border-green-900 bg-white hover:bg-lime-300 hover:border-green-900 text-green-900',
+        green: 'border border-green-900 bg-green-900 hover:bg-orange-50 hover:border-green-900 text-orange-50 hover:text-green-900',
+        secondary:
+            'border border-orange-50 bg-orange-50 hover:bg-green-900 hover:border-green-900 text-green-900 hover:text-orange-50',
         white: 'border border-gray-300 bg-white hover:bg-gray-50 text-gray-700',
         red: 'border border-red-600 bg-red-600 hover:bg-red-400 hover:border-red-400 text-white',
         orange: 'border border-orange-500 bg-orange-500 hover:bg-orange-400 hover:border-orange-400 text-white',
@@ -104,8 +105,13 @@ const borderRadiusClass = computed(() => {
 <template>
     <component
         :is="buttonAs"
-        :disabled="(processing || disabled)"
-        :class="[buttonSizeClass, buttonColorClass, borderRadiusClass, 'flex items-center justify-center font-bold shadow-xs disabled:opacity-80 hover:bg-gray-100 disabled:cursor-not-allowed gap-x-1.5 cursor-pointer']"
+        :disabled="processing || disabled"
+        :class="[
+            buttonSizeClass,
+            buttonColorClass,
+            borderRadiusClass,
+            'shadow-xs flex cursor-pointer items-center justify-center gap-x-1.5 font-bold hover:bg-gray-100 hover:duration-300 hover:ease-in-out disabled:cursor-not-allowed disabled:opacity-80',
+        ]"
         :aria-disabled="disabled"
     >
         <span v-if="processing" :class="[processingClass, processingSizeClass, 'inline-block']">
