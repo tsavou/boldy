@@ -5,7 +5,7 @@ import VerificationBanner from '@/Components/VerificationBanner.vue';
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen bg-orange-50">
             <Header />
 
             <!-- Page Heading -->
