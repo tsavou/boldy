@@ -16,7 +16,7 @@ class HomeController extends Controller
                 $query->where('end_date', '>', now());
                 $query->where('start_date', '<', now());
             })
-            ->with('user')
+            ->with('user', 'professions')
             ->get();
 
         $categories = Profession::query()

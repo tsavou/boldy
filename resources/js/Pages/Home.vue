@@ -7,15 +7,39 @@ defineProps({
     boosted: Array,
     categories: Array,
 });
+
+const getExperienceLevelColor = (level) => {
+    switch (level) {
+        case 'Junior':
+            return 'bg-gray-500';
+        case 'Intermédiaire':
+            return 'bg-orange-500';
+        case 'Confirmé':
+            return 'bg-emerald-600';
+        case 'Expert':
+            return 'bg-purple-700';
+        default:
+            return 'bg-gray-500';
+    }
+};
+
+const getTJMColor = (price) => {
+    if (price < 250) return 'bg-lime-400';
+    if (price < 500) return 'bg-yellow-400';
+    return 'bg-red-400';
+};
 </script>
 
 <template>
     <Head title="Accueil" />
 
     <Layout>
-        <div class="relative isolate overflow-hidden text-orange-50">
+        <section
+            id="hero"
+            class="relative isolate overflow-hidden text-orange-50"
+        >
             <img
-                src="img/hero_bg.png"
+                src="/img/hero_bg.png"
                 alt=""
                 class="absolute inset-0 -z-10 size-full object-cover"
             />
@@ -49,7 +73,8 @@ defineProps({
                 />
             </div>
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                <div class="max-w-4xl py-8 sm:py-40 2xl:py-64"> <!-- mx-auto ou pas ? -->
+                <div class="max-w-4xl py-8 sm:py-40 2xl:py-64">
+                    <!-- mx-auto ou pas ? -->
                     <div
                         class="mb-8 flex flex-wrap items-center justify-center gap-4 space-x-4 space-y-0 md:flex-row md:justify-start"
                     >
@@ -98,17 +123,21 @@ defineProps({
                                 Besoin d’un freelance ?
                             </div>
                             <p class="text-center">
-                                Trouve le profil idéal grâce à un catalogue vivant
-                                et des filtres sur-mesure.
+                                Trouve le profil idéal grâce à un catalogue
+                                vivant et des filtres sur-mesure.
                             </p>
                         </div>
 
-                        <p class="mt-8 text-center md:text-left text-orange-50/80">
+                        <p
+                            class="mt-8 text-center text-orange-50/80 md:text-left"
+                        >
                             Plus qu’un simple profil ou un annuaire : une vraie
                             communauté qui facilite la rencontre.
                         </p>
 
-                        <div class="mt-10 flex items-center justify-center md:justify-start gap-x-6">
+                        <div
+                            class="mt-10 flex items-center justify-center gap-x-6 md:justify-start"
+                        >
                             <PrimaryButton
                                 as="Link"
                                 size="xl"
@@ -155,7 +184,74 @@ defineProps({
                     "
                 />
             </div>
-        </div>
+        </section>
+
+<!--        TODO: améliorer le design de la section des freelances à la une: les badges color, la taille du bas de la card, badge premium, localisation, etc.-->
+        <section class="bg-green-900 py-12">
+            <div class="mx-auto max-w-7xl px-6">
+                <h2 class="mb-6 text-2xl font-bold text-center text-orange-50">
+                    Freelances à la une
+                </h2>
+                <div
+                    class="scrollbar-hide -mx-6 flex items-center space-x-4 overflow-x-auto px-6 pb-4 md:justify-center"
+                >
+                    <Link
+                        v-for="freelance in boosted"
+                        :key="freelance.id"
+                        :href="route('freelance.show', freelance.slug)"
+                        class="group relative h-[50vh] w-[50vw] flex-shrink-0 overflow-hidden rounded-xl shadow-lg md:w-[20vw]"
+                    >
+                        <img
+                            :src="
+                                freelance.profile_picture ||
+                                '/img/default_avatar.jpg'
+                            "
+                            :alt="`Photo de ${freelance.user.first_name} ${freelance.user.name}`"
+                            class="h-full w-full object-cover transition duration-300 ease-in-out group-hover:scale-105"
+                        />
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"
+                        ></div>
+                        <!-- Badge expérience -->
+                        <span
+                            class="absolute left-2 top-2 rounded-full px-2 py-0.5 text-xs font-medium text-white"
+                            :class="
+                                getExperienceLevelColor(
+                                    freelance.experience_level,
+                                )
+                            "
+                        >
+                            ⭐️
+                            {{ freelance.experience_level }}
+                            ({{ freelance.experience_in_years }} ans)
+                        </span>
+
+                        <span
+                            :class="`absolute left-2 top-8 rounded-full px-2 py-0.5 text-xs font-medium text-green-900 shadow-sm ${getTJMColor(freelance.price_per_day)}`"
+                        >
+                            💶
+                            {{ freelance.price_per_day }} € / jour
+                        </span>
+
+                        <div
+                            class="absolute inset-x-0 bottom-0 rounded-b-xl bg-black/40 p-3 text-white backdrop-blur-sm"
+                        >
+                            <h3 class="text-sm font-semibold leading-tight">
+                                {{ freelance.user.first_name }}
+                                {{ freelance.user.name }}
+                            </h3>
+                            <p class="mt-1 text-xs leading-snug">
+                                {{
+                                    freelance.professions
+                                        .map((p) => p.name)
+                                        .join(', ')
+                                }}
+                            </p>
+                        </div>
+                    </Link>
+                </div>
+            </div>
+        </section>
 
         <div class="py-12">
             <!--
