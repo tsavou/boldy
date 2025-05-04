@@ -116,7 +116,7 @@ const submitAvatarImage = () => {
                 </template>
             </AlertBanner>
 
-            <div class="group relative bg-white">
+            <div class="group relative bg-white text-green-900">
                 <div class="relative flex">
                     <img
                         :src="
