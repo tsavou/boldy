@@ -32,7 +32,7 @@ import VerificationBanner from '@/Components/VerificationBanner.vue';
                 "
             />
             <!-- Page Footer -->
-            <footer class="mt-4 bg-white shadow">footer</footer>
+            <footer>footer</footer>
         </div>
     </div>
 </template>
