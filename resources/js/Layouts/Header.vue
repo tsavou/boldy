@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue';
-import { Link, usePage } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import { Link, router, usePage } from '@inertiajs/vue3';
 import Dropdown from '@/Components/Dropdown.vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import NavLink from '@/Components/NavLink.vue';
@@ -9,7 +9,15 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 
 const showingNavigationDropdown = ref(false);
 
-const user = usePage().props.auth.user;
+const user = computed(() => usePage().props.auth.user);
+
+const logout = () => {
+    router.post(route('logout'), {
+        onSuccess: () => {
+            router.visit(route('home'));
+        },
+    });
+};
 </script>
 
 <template>
@@ -119,7 +127,7 @@ const user = usePage().props.auth.user;
                                         Mon compte
                                     </DropdownLink>
                                     <DropdownLink
-                                        :href="route('logout')"
+                                        @click="logout"
                                         method="post"
                                         as="button"
                                     >
@@ -235,8 +243,7 @@ const user = usePage().props.auth.user;
                             Mon compte
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
-                            :href="route('logout')"
-                            :active="route().current('logout')"
+                            @click="logout"
                             method="post"
                             as="button"
                         >

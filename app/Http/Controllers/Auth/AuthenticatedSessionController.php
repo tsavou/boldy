@@ -33,7 +33,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('home', absolute: false));
+        $slug = $request->user()->freelance->slug;
+
+        return redirect()->intended(route('freelance.show', $slug, absolute: false));
     }
 
     /**
