@@ -8,7 +8,6 @@ import {
     CameraIcon,
     MapPinIcon,
 } from '@heroicons/vue/24/solid';
-import AlertBannerStack from '@/Components/AlertBannerStack.vue';
 import AlertBanner from '@/Components/AlertBanner.vue';
 
 defineProps({
