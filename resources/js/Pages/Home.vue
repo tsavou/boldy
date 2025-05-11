@@ -331,7 +331,7 @@ onMounted(() => {
             </div>
         </section>
 
-        <section class="relative">
+        <section class="relative" id="categories">
             <div class="mx-auto max-w-7xl">
                 <div class="relative z-10 lg:w-full lg:max-w-2xl">
                     <svg
