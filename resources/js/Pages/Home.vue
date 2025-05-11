@@ -5,14 +5,22 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { onMounted, ref } from 'vue';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
 
-defineProps({
+const props = defineProps({
     boosted: Array,
     categories: Array,
+    freelancesCount: Number,
 });
 
 const slider = ref(null);
 const canScrollLeft = ref(false);
 const canScrollRight = ref(false);
+
+const stats = [
+    { id: 1, name: 'Freelances inscrits', value: props.freelancesCount },
+    { id: 2, name: 'Taux de satisfaction', value: '98%' },
+    { id: 3, name: 'Catégories de métier', value: props.categories.length },
+    { id: 4, name: 'Visiteurs par mois', value: '4 500+' },
+];
 
 const checkScroll = () => {
     canScrollLeft.value = slider.value.scrollLeft > 0;
@@ -221,11 +229,24 @@ onMounted(() => {
             </div>
         </section>
 
-        <!--        TODO: améliorer le design de la section des freelances à la une: les badges color, la taille du bas de la card, badge premium, localisation, etc.-->
         <section class="relative bg-green-900 py-12">
-            <h2 class="mb-6 text-center text-2xl font-bold text-orange-50">
-                FREELANCES À LA UNE
-            </h2>
+            <div
+                class="mx-auto mb-6 max-w-7xl px-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
+            >
+                <h2
+                    id="category-heading"
+                    class="text-2xl font-bold tracking-tight text-orange-50"
+                >
+                    Freelances à la une
+                </h2>
+                <Link
+                    :href="route('freelance.index')"
+                    class="hidden text-sm font-semibold text-orange-50 hover:text-lime-300 sm:block"
+                >
+                    Voir tous les freelances
+                    <span aria-hidden="true"> &rarr;</span>
+                </Link>
+            </div>
             <div class="group/slider relative px-6">
                 <button
                     v-show="canScrollLeft"
@@ -281,13 +302,13 @@ onMounted(() => {
                         </span>
 
                         <div
-                            class="absolute inset-x-0 bottom-0 rounded-b-xl rounded-t-sm bg-green-900/60 p-3 text-white backdrop-blur-sm"
+                            class="absolute inset-x-0 bottom-0 h-1/4 rounded-b-xl rounded-t-sm bg-green-900/60 p-3 text-white backdrop-blur-sm"
                         >
-                            <h3 class="text-sm font-semibold leading-tight">
+                            <h3 class="text-md font-semibold leading-tight">
                                 {{ freelance.user.first_name }}
                                 {{ freelance.user.name }}
                             </h3>
-                            <p class="mt-1 text-xs leading-snug">
+                            <p class="mt-2 text-xs leading-snug">
                                 {{
                                     freelance.professions
                                         .map((p) => p.name)
@@ -307,6 +328,108 @@ onMounted(() => {
                         class="h-10 w-10 text-orange-50 transition-transform duration-200 ease-in-out group-hover:scale-125"
                     />
                 </button>
+            </div>
+        </section>
+
+        <section class="relative">
+            <div class="mx-auto max-w-7xl">
+                <div class="relative z-10 lg:w-full lg:max-w-2xl">
+                    <svg
+                        class="absolute inset-y-0 right-8 hidden h-full w-80 translate-x-1/2 transform fill-orange-50 lg:block"
+                        viewBox="0 0 100 100"
+                        preserveAspectRatio="none"
+                        aria-hidden="true"
+                    >
+                        <polygon points="0,0 90,0 50,100 0,100" />
+                    </svg>
+
+                    <div class="relative px-6 py-12 lg:px-8 lg:pr-0">
+                        <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl">
+                            <h2
+                                class="text-pretty text-4xl font-bold tracking-tight text-green-900"
+                            >
+                                Les métiers de nos Bolders
+                            </h2>
+                            <p class="mt-2 text-green-900">
+                                Explore les spécialités de nos freelances et
+                                trouve ton expert en quelques clics.
+                            </p>
+
+                            <ul
+                                class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2"
+                            >
+                                <li
+                                    v-for="category in categories"
+                                    :key="category.id"
+                                >
+                                    <Link
+                                        :href="
+                                            route('freelance.index', {
+                                                category: category.id,
+                                            })
+                                        "
+                                        class="block rounded-lg bg-green-800 py-2 text-center font-medium text-orange-50 transition hover:bg-green-700"
+                                    >
+                                        {{ category.name }} ({{
+                                            category.freelances_count
+                                        }})
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-green-800 lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2"
+            >
+                <div class="relative lg:h-full">
+                    <div class="absolute inset-0 bg-green-900/40"></div>
+                    <!-- Filtre semi-transparent vert -->
+                    <img
+                        class="aspect-[3/2] object-cover lg:aspect-auto lg:size-full"
+                        src="https://images.unsplash.com/photo-1483389127117-b6a2102724ae?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1587&q=80"
+                        alt="Illustration métiers"
+                    />
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-green-900 py-24 sm:py-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-2xl lg:max-w-none">
+                    <div class="text-center">
+                        <h2
+                            class="text-balance text-4xl font-semibold tracking-tight text-orange-50 sm:text-5xl"
+                        >
+                            La communauté Boldy en chiffres
+                        </h2>
+                        <p class="mt-4 text-lg/8 text-orange-50/80">
+                            Des freelances visibles et des clients satisfaits.
+                        </p>
+                    </div>
+                    <dl
+                        class="mt-16 grid grid-cols-1 gap-2 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4"
+                    >
+                        <div
+                            v-for="stat in stats"
+                            :key="stat.id"
+                            class="flex flex-col rounded-xl bg-green-800/50 p-8"
+                        >
+                            <dt
+                                class="text-sm/6 font-semibold text-orange-50/80"
+                            >
+                                {{ stat.name }}
+                            </dt>
+                            <dd
+                                class="order-first text-3xl font-semibold tracking-tight text-orange-50"
+                            >
+                                {{ stat.value }}
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
             </div>
         </section>
     </Layout>

@@ -19,21 +19,21 @@
                                 <span class="sr-only">Address</span>
                                 <BuildingOffice2Icon class="h-7 w-6" aria-hidden="true" />
                             </dt>
-                            <dd>545 Mavis Island<br />Chicago, IL 99191</dd>
+                            <dd>123 rue des bolders<br />59800 Lille, France</dd>
                         </div>
                         <div class="flex gap-x-4">
                             <dt class="flex-none">
                                 <span class="sr-only">Telephone</span>
                                 <PhoneIcon class="h-7 w-6" aria-hidden="true" />
                             </dt>
-                            <dd><a class="hover:text-lime-300" href="tel:+1 (555) 234-5678">+1 (555) 234-5678</a></dd>
+                            <dd><a class="hover:text-lime-300" href="tel:+33 1 23 45 67 89">01 23 45 67 89</a></dd>
                         </div>
                         <div class="flex gap-x-4">
                             <dt class="flex-none">
                                 <span class="sr-only">Email</span>
                                 <EnvelopeIcon class="h-7 w-6" aria-hidden="true" />
                             </dt>
-                            <dd><a class="hover:text-lime-300" href="mailto:hello@example.com">hello@example.com</a></dd>
+                            <dd><a class="hover:text-lime-300" href="mailto:hello@boldy.com">hello@boldy.com</a></dd>
                         </div>
                     </dl>
                 </div>
