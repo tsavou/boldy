@@ -2,32 +2,67 @@
 import Layout from '@/Layouts/AppLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import { onMounted, ref } from 'vue';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
 
 defineProps({
     boosted: Array,
     categories: Array,
 });
 
+const slider = ref(null);
+const canScrollLeft = ref(false);
+const canScrollRight = ref(false);
+
+const checkScroll = () => {
+    canScrollLeft.value = slider.value.scrollLeft > 0;
+    canScrollRight.value =
+        slider.value.scrollLeft <
+        slider.value.scrollWidth - slider.value.clientWidth;
+};
+
+const scrollLeft = () => {
+    slider.value.scrollBy({
+        left: -300,
+        behavior: 'smooth',
+    });
+    checkScroll();
+};
+
+const scrollRight = () => {
+    slider.value.scrollBy({
+        left: 300,
+        behavior: 'smooth',
+    });
+    checkScroll();
+};
+
 const getExperienceLevelColor = (level) => {
     switch (level) {
         case 'Junior':
-            return 'bg-gray-500';
+            return 'bg-green-200 text-green-900 fill-green-500';
         case 'Intermédiaire':
-            return 'bg-orange-500';
+            return 'bg-blue-300 text-blue-900 fill-blue-500';
         case 'Confirmé':
-            return 'bg-emerald-600';
+            return 'bg-indigo-200 text-indigo-900 fill-indigo-500';
         case 'Expert':
-            return 'bg-purple-700';
+            return 'bg-purple-200 text-purple-900 fill-purple-500';
         default:
-            return 'bg-gray-500';
+            return 'bg-gray-100 text-gray-900 fill-gray-400';
     }
 };
 
 const getTJMColor = (price) => {
-    if (price < 250) return 'bg-lime-400';
-    if (price < 500) return 'bg-yellow-400';
-    return 'bg-red-400';
+    if (price < 250) return 'bg-green-200 text-green-900 fill-green-500';
+    if (price < 500) return 'bg-yellow-200 text-yellow-900 fill-yellow-500';
+    return 'bg-red-200 text-red-900 fill-red-500';
 };
+
+onMounted(() => {
+    slider.value.addEventListener('scroll', checkScroll);
+    window.addEventListener('resize', checkScroll);
+    checkScroll();
+});
 </script>
 
 <template>
@@ -150,8 +185,8 @@ const getTJMColor = (price) => {
                                 size="xl"
                                 :href="route('freelance.index')"
                                 color="secondary"
-                                >Trouver un freelance</PrimaryButton
-                            >
+                                >Trouver un freelance
+                            </PrimaryButton>
                         </div>
                     </div>
                 </div>
@@ -186,20 +221,31 @@ const getTJMColor = (price) => {
             </div>
         </section>
 
-<!--        TODO: améliorer le design de la section des freelances à la une: les badges color, la taille du bas de la card, badge premium, localisation, etc.-->
-        <section class="bg-green-900 py-12">
-            <div class="mx-auto max-w-7xl px-6">
-                <h2 class="mb-6 text-2xl font-bold text-center text-orange-50">
-                    Freelances à la une
-                </h2>
+        <!--        TODO: améliorer le design de la section des freelances à la une: les badges color, la taille du bas de la card, badge premium, localisation, etc.-->
+        <section class="relative bg-green-900 py-12">
+            <h2 class="mb-6 text-center text-2xl font-bold text-orange-50">
+                FREELANCES À LA UNE
+            </h2>
+            <div class="group/slider relative px-6">
+                <button
+                    v-show="canScrollLeft"
+                    @click="scrollLeft"
+                    aria-label="Défiler vers la gauche"
+                    class="group absolute bottom-0 left-0 top-0 z-20 flex w-12 items-center justify-center bg-gradient-to-r from-black/70 to-transparent opacity-0 transition hover:from-black/90 group-hover/slider:opacity-100"
+                >
+                    <ChevronLeftIcon
+                        class="h-10 w-10 text-orange-50 transition-transform duration-200 ease-in-out group-hover:scale-125"
+                    />
+                </button>
                 <div
-                    class="scrollbar-hide -mx-6 flex items-center space-x-4 overflow-x-auto px-6 pb-4 md:justify-center"
+                    ref="slider"
+                    class="scrollbar-hide -mx-6 flex space-x-4 overflow-x-auto px-6 pb-4"
                 >
                     <Link
                         v-for="freelance in boosted"
                         :key="freelance.id"
                         :href="route('freelance.show', freelance.slug)"
-                        class="group relative h-[50vh] w-[50vw] flex-shrink-0 overflow-hidden rounded-xl shadow-lg md:w-[20vw]"
+                        class="group relative h-80 w-48 flex-shrink-0 overflow-hidden rounded-2xl shadow-xl transition duration-300 hover:-translate-y-1 hover:shadow-2xl"
                     >
                         <img
                             :src="
@@ -210,31 +256,32 @@ const getTJMColor = (price) => {
                             class="h-full w-full object-cover transition duration-300 ease-in-out group-hover:scale-105"
                         />
                         <div
-                            class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"
+                            class="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent"
                         ></div>
+
                         <!-- Badge expérience -->
                         <span
-                            class="absolute left-2 top-2 rounded-full px-2 py-0.5 text-xs font-medium text-white"
+                            class="absolute left-2 top-2 inline-flex items-center gap-x-1.5 rounded-full px-2 py-0.5 text-xs font-medium"
                             :class="
                                 getExperienceLevelColor(
                                     freelance.experience_level,
                                 )
                             "
                         >
-                            ⭐️
                             {{ freelance.experience_level }}
                             ({{ freelance.experience_in_years }} ans)
                         </span>
 
+                        <!-- Badge TJM -->
                         <span
-                            :class="`absolute left-2 top-8 rounded-full px-2 py-0.5 text-xs font-medium text-green-900 shadow-sm ${getTJMColor(freelance.price_per_day)}`"
+                            class="absolute left-2 top-8 inline-flex items-center gap-x-1.5 rounded-full px-2 py-0.5 text-xs font-medium"
+                            :class="getTJMColor(freelance.price_per_day)"
                         >
-                            💶
-                            {{ freelance.price_per_day }} € / jour
+                            {{ freelance.price_per_day }} € / j
                         </span>
 
                         <div
-                            class="absolute inset-x-0 bottom-0 rounded-b-xl bg-black/40 p-3 text-white backdrop-blur-sm"
+                            class="absolute inset-x-0 bottom-0 rounded-b-xl rounded-t-sm bg-green-900/60 p-3 text-white backdrop-blur-sm"
                         >
                             <h3 class="text-sm font-semibold leading-tight">
                                 {{ freelance.user.first_name }}
@@ -250,65 +297,17 @@ const getTJMColor = (price) => {
                         </div>
                     </Link>
                 </div>
+                <button
+                    v-show="canScrollRight"
+                    @click="scrollRight"
+                    aria-label="Défiler vers la droite"
+                    class="group absolute bottom-0 right-0 top-0 z-20 flex w-12 items-center justify-center bg-gradient-to-r from-black/70 to-transparent opacity-0 transition hover:from-black/90 group-hover/slider:opacity-100"
+                >
+                    <ChevronRightIcon
+                        class="h-10 w-10 text-orange-50 transition-transform duration-200 ease-in-out group-hover:scale-125"
+                    />
+                </button>
             </div>
         </section>
-
-        <div class="py-12">
-            <!--
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900">
-                        &lt;!&ndash;                        Bandeau à propos + CTA rejoindre boldy (si non connecté)&ndash;&gt;
-
-                        <p>Bienvenue sur Boldy !</p>
-                        <p>
-                            Boldy est une plateforme qui référence les
-                            freelances du digital.
-                        </p>
-                        <p>
-                            A la recherche d'un développeur, d'un designer, d'un
-                            community manager...... ? Vous êtes au bon endroit.
-                        </p>
-                        <p>
-                            Si vous êtes freelance, vous pouvez créer un profil
-                            et être référencé sur Boldy.
-                        </p>
-                       <div class="flex gap-4">
-                           <PrimaryButton as="Link" :href="route('register')" >Rejoindre Boldy</PrimaryButton>
-                       </div>
-
-                    </div>
-
-                    &lt;!&ndash;
-                    si connecté speech + CTA qui mene vers les différents plans de tarifs (gratuit, premium, boost)
-&ndash;&gt;
-                    <div class="p-6 text-gray-900">
-                        <p>Vous êtes connecté !</p>
-                        <p>
-                            Vous pouvez maintenant créer un profil et être
-                            référencé sur Boldy.
-                        </p>
-                        <p>
-                            Vous pouvez aussi consulter les profils des autres
-                            freelances.
-                        </p>
-                        <p>
-                            Besoin d'un boost pour être visible en haut des
-                            résultats ?
-                        </p>
-                        <p>
-                            Besoin d'un plan premium pour accéder à des
-                            fonctionnalités supplémentaires ? (plan
-                            d'accompagnement, plan de visibilité, plan de
-                            communication, possibilité de mettre plus de photos,
-                            interviews vidéos de notre équipe, etc... )
-                        </p>
-                        <Link :href="route('home')" class="btn-primary"> vers les tarifs ?</Link>
-                        <div />
-                    </div>
-                </div>
-            </div>
--->
-        </div>
     </Layout>
 </template>
