@@ -1,45 +1,112 @@
 <template>
-    <footer class="bg-green-900 text-orange-50">
-        <div class="mx-auto max-w-7xl overflow-hidden px-6 py-16 sm:py-20 lg:px-8">
-            <nav class="-mb-6 flex flex-wrap justify-center gap-x-12 gap-y-3 text-sm/6" aria-label="Footer">
-                <Link v-for="item in navigation.main" :key="item.name" :href="route(item.href)" :title="item.name" class="hover:text-lime-300">{{ item.name }}</Link>
-            </nav>
-            <div class="mt-16 flex flex-col lg:flex-row justify-center items-center gap-10 lg:gap-40">
-
-                <div class="flex justify-center gap-x-6">
-                    <Link v-for="item in navigation.social" :key="item.name" :href="item.href" class="hover:text-lime-300">
-                        <span class="sr-only">{{ item.name }}</span>
-                        <component :is="item.icon" class="size-6" aria-hidden="true" />
-                    </Link>
+    <footer
+        class="bg-background text-foreground relative border-t bg-green-900 text-orange-50 transition-colors duration-300"
+    >
+        <div class="container mx-auto px-4 py-12 md:px-6 lg:px-8">
+            <div
+                class="mx-auto grid max-w-6xl gap-12 md:grid-cols-2 lg:grid-cols-3"
+            >
+                <div>
+                    <h3 class="mb-4 text-lg font-semibold">Liens utiles</h3>
+                    <nav class="space-y-2 text-sm">
+                        <Link
+                            v-for="item in navigation.main"
+                            :key="item.name"
+                            :href="item.href"
+                            :title="item.name"
+                            class="block transition-colors hover:text-lime-300"
+                            >{{ item.name }}</Link
+                        >
+                    </nav>
                 </div>
-                <div class="text-center">
-                    <dl class="space-y-4">
-                        <div class="flex gap-x-4">
-                            <dt class="flex-none">
-                                <span class="sr-only">Address</span>
-                                <BuildingOffice2Icon class="h-7 w-6" aria-hidden="true" />
-                            </dt>
-                            <dd>123 rue des bolders<br />59800 Lille, France</dd>
-                        </div>
-                        <div class="flex gap-x-4">
-                            <dt class="flex-none">
-                                <span class="sr-only">Telephone</span>
-                                <PhoneIcon class="h-7 w-6" aria-hidden="true" />
-                            </dt>
-                            <dd><a class="hover:text-lime-300" href="tel:+33 1 23 45 67 89">01 23 45 67 89</a></dd>
-                        </div>
-                        <div class="flex gap-x-4">
-                            <dt class="flex-none">
-                                <span class="sr-only">Email</span>
-                                <EnvelopeIcon class="h-7 w-6" aria-hidden="true" />
-                            </dt>
-                            <dd><a class="hover:text-lime-300" href="mailto:hello@boldy.com">hello@boldy.com</a></dd>
-                        </div>
-                    </dl>
+                <div>
+                    <h3 class="mb-4 text-lg font-semibold">Contact</h3>
+                    <address class="space-y-2 text-sm not-italic">
+                        <dl class="space-y-4">
+                            <div class="flex items-center gap-x-4">
+                                <dt class="flex-none">
+                                    <span class="sr-only">Address</span>
+                                    <BuildingOffice2Icon
+                                        class="h-7 w-6"
+                                        aria-hidden="true"
+                                    />
+                                </dt>
+                                <dd>
+                                    123 rue des bolders<br />59800 Lille, France
+                                </dd>
+                            </div>
+                            <div class="flex items-center gap-x-4">
+                                <dt class="flex-none">
+                                    <span class="sr-only">Telephone</span>
+                                    <PhoneIcon
+                                        class="h-7 w-6"
+                                        aria-hidden="true"
+                                    />
+                                </dt>
+                                <dd>
+                                    <a
+                                        class="hover:text-lime-300"
+                                        href="tel:+33 1 23 45 67 89"
+                                        >01 23 45 67 89</a
+                                    >
+                                </dd>
+                            </div>
+                            <div class="flex items-center gap-x-4">
+                                <dt class="flex-none">
+                                    <span class="sr-only">Email</span>
+                                    <EnvelopeIcon
+                                        class="h-7 w-6"
+                                        aria-hidden="true"
+                                    />
+                                </dt>
+                                <dd>
+                                    <a
+                                        class="hover:text-lime-300"
+                                        href="mailto:hello@boldy.com"
+                                        >hello@boldy.com</a
+                                    >
+                                </dd>
+                            </div>
+                        </dl>
+                    </address>
                 </div>
-
+                <div class="relative">
+                    <h3 class="mb-4 text-lg font-semibold">Nous suivre</h3>
+                    <div class="mb-6 flex space-x-4">
+                        <Link
+                            v-for="item in navigation.social"
+                            :key="item.name"
+                            :href="item.href"
+                            class="hover:text-lime-300"
+                        >
+                            <span class="sr-only">{{ item.name }}</span>
+                            <component
+                                :is="item.icon"
+                                class="size-6"
+                                aria-hidden="true"
+                            />
+                        </Link>
+                    </div>
+                </div>
             </div>
-            <p class="mt-10 text-center text-sm/6">&copy; 2025 Boldy - Tous droits réservés.</p>
+            <div
+                class="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 text-center md:flex-row"
+            >
+                <p class="text-muted-foreground text-sm">
+                    © 2025 Boldy. Tous droits réservés.
+                </p>
+                <nav class="flex gap-4 text-sm">
+                    <a href="#" class="hover:text-primary transition-colors">
+                        Politique de confidentialité
+                    </a>
+                    <a href="#" class="hover:text-primary transition-colors">
+                        Conditions d'utilisation
+                    </a>
+                    <a href="#" class="hover:text-primary transition-colors">
+                        Cookie Settings
+                    </a>
+                </nav>
+            </div>
         </div>
     </footer>
 </template>
@@ -47,16 +114,18 @@
 <script setup>
 import { defineComponent, h } from 'vue';
 import { Link } from '@inertiajs/vue3';
-import { PhoneIcon, EnvelopeIcon, BuildingOffice2Icon } from '@heroicons/vue/24/outline';
+import {
+    PhoneIcon,
+    EnvelopeIcon,
+    BuildingOffice2Icon,
+} from '@heroicons/vue/24/outline';
 
 const navigation = {
     main: [
-        { name: 'Accueil', href: 'home' },
-        { name: 'Contact', href: 'freelance.index' },
-        { name: 'CGU', href: 'home' },
-        { name: 'CGV', href: 'home' },
-        { name: 'Mentions légales', href: 'home' },
-        { name: 'Politique de confidentialité', href: 'home' },
+        { name: 'Accueil', href: route('home') },
+        { name: 'Freelances', href: route('freelance.index') },
+        { name: 'Métiers', href: route('home') + '#categories' },
+        { name: 'Pricing', href: route('home') + '#pricing' },
     ],
     social: [
         {
@@ -114,5 +183,5 @@ const navigation = {
             }),
         },
     ],
-}
+};
 </script>
