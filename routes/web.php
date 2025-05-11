@@ -7,6 +7,12 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+Route::fallback(fn () => inertia()->render('Error', [
+    'status' => 404,
+    'message' => 'Page introuvable'
+]))->withoutMiddleware('auth');
+
+
 Route::get('/welcome', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),

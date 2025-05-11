@@ -30,18 +30,28 @@ class FreelanceController extends Controller
     }
 
 
+    /**
+     * Show the freelance profile with the given slug.
+     * If the profile is not editable (i.e., not owned by the authenticated user) and not verified, return a 404 error.
+     * @param $slug
+     * @return \Inertia\Response
+     */
     public function show($slug)
     {
         // Fetch the freelance profile with the given slug, including related data
         $freelance = Freelance::where('slug', $slug)
             ->with(['user', 'skills', 'professions', 'experiences', 'certifications', 'freelanceMedias'])
-            ->firstOrFail();
+            ->first();
+
+        if (!$freelance) {
+            abort(404, 'Ce profil est introuvable');
+        }
 
         $isEditable = auth()->check() && auth()->user()->id === $freelance->user_id;
 
         if (!$isEditable && !$freelance->is_verified)
         {
-            abort(404, 'Freelance profile not found');
+            abort(404, 'Ce profil est introuvable, privé ou non vérifié.');
         }
 
         return Inertia::render('Freelance/Show', [

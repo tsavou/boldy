@@ -19,5 +19,23 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->renderable(function (Throwable $e, $request) {
+            if ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) {
+                $status = $e->getStatusCode();
+
+                return match ($status) {
+                    500, 503, 403, 404 => inertia()->render('Error', [
+                        'status' => $status,
+                        'message' => $e->getMessage() ?? '',
+                    ])
+                        ->toResponse($request)
+                        ->setStatusCode($status),
+                    419     => back()->setStatusCode(419)->with('Page Expired', 'Please refresh the page'),
+                    default => null,
+                };
+            }
+
+            return null;
+        });
+
     })->create();
