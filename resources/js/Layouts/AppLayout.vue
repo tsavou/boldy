@@ -1,6 +1,7 @@
 <script setup>
 import Header from '@/Layouts/Header.vue';
 import VerificationBanner from '@/Components/VerificationBanner.vue';
+import Footer from '@/Layouts/Footer.vue';
 </script>
 
 <template>
@@ -32,7 +33,7 @@ import VerificationBanner from '@/Components/VerificationBanner.vue';
                 "
             />
             <!-- Page Footer -->
-            <footer>footer</footer>
+            <Footer />
         </div>
     </div>
 </template>
