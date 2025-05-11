@@ -21,11 +21,15 @@ class HomeController extends Controller
 
         $categories = Profession::query()
             ->withCount('freelances')
+            ->orderBy('freelances_count', 'desc')
             ->get();
+
+        $freelancesCount = Freelance::count();
 
         return Inertia::render('Home', [
             'boosted' => $boosted,
             'categories' => $categories,
+            'freelancesCount' => $freelancesCount,
         ]);
     }
 }
