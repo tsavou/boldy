@@ -15,11 +15,9 @@ class BoostFactory extends Factory
     {
         return [
             'start_date' => Carbon::now(),
-            'end_date' => Carbon::now(),
+            'end_date' => $this->faker->dateTimeBetween('now', '+1 year'),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-
-            'freelance_id' => Freelance::factory(),
         ];
     }
 }

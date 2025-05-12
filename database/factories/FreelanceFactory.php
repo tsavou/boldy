@@ -2,8 +2,14 @@
 
 namespace Database\Factories;
 
+use App\Models\Boost;
+use App\Models\Certification;
+use App\Models\Experiences;
 use App\Models\Freelance;
+use App\Models\Profession;
 use App\Models\Role;
+use App\Models\Skill;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -18,20 +24,22 @@ class FreelanceFactory extends Factory
             'role_id' => Role::where('name', 'freelance')->first()->id,
             'first_name' => $this->faker->firstName(),
             'name' => $this->faker->lastName(),
-            'email' => $this->faker->unique()->safeEmail(),
+            'email' => function (array $attributes) {
+                return strtolower($attributes['first_name'] . '.' . $attributes['name'] . '@example.com');
+            },
             'password' => bcrypt('password'),
         ]);
 
         return [
-            'bio' => $this->faker->word(),
-            'price_per_day' => $this->faker->randomNumber(),
+            'bio' => $this->faker->paragraph(),
+            'price_per_day' => $this->faker->biasedNumberBetween(200, 1000),
             'location' => $this->faker->city(),
             'profile_picture' => null,
             'cover_picture' => null,
             'siret' => $this->faker->numerify('##############'),
             'portfolio_url' => $this->faker->url(),
-            'linkedin_url' => $this->faker->url(),
-            'is_verified' => $this->faker->boolean(),
+            'linkedin_url' => 'https://www.linkedin.com/in/' . $this->faker->userName() . '/',
+            'is_verified' => true,
             'is_available' => $this->faker->boolean(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -39,5 +47,23 @@ class FreelanceFactory extends Factory
 
             'user_id' => $user->id,
         ];
+    }
+
+    public function configure(): FreelanceFactory
+    {
+        return $this->afterCreating(function (Freelance $freelance) {
+            $freelance->skills()->attach(Skill::inRandomOrder()->take(3)->pluck('id'));
+            $freelance->professions()->attach(Profession::inRandomOrder()->take(1)->pluck('id'));
+            $freelance->certifications()->saveMany(Certification::factory()->count(3)->make());
+            $freelance->experiences()->saveMany(Experiences::factory()->count(3)->make());
+
+            if ($this->faker->boolean()) {
+                $freelance->boosts()->save(Boost::factory()->make());
+            }
+
+            if ($this->faker->boolean()) {
+                $freelance->user->subscription()->save(Subscription::factory()->make());
+            }
+        });
     }
 }

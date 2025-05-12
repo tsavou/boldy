@@ -15,12 +15,10 @@ class CertificationFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'institution' => $this->faker->word(),
-            'year' => $this->faker->randomNumber(),
+            'institution' => $this->faker->company,
+            'year' => $this->faker->year(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-
-            'freelance_id' => Freelance::factory(),
         ];
     }
 }
