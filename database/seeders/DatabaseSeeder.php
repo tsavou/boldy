@@ -23,16 +23,10 @@ class DatabaseSeeder extends Seeder
             ['id' => 2, 'name' => 'freelance'],
         ]);
 
-        Freelance::factory(10)->create();
-
-        Profession::factory(10)->create();
-
         $this->call([
             SkillSeeder::class,
             ProfessionSeeder::class,
+            FreelanceSeeder::class
         ]);
-
-
-        // User::factory(10)->create();
     }
 }

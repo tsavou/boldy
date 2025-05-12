@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\SubscriptionPlanEnum;
 use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -13,14 +14,15 @@ class SubscriptionFactory extends Factory
 
     public function definition(): array
     {
+        $plan = $this->faker->randomElement(SubscriptionPlanEnum::cases());
+
         return [
-            'plan' => $this->faker->word(),
+            'plan' => $plan,
             'start_date' => Carbon::now(),
-            'end_date' => Carbon::now(),
+            'price' => $plan->price(),
+            'end_date' => $this->faker->dateTimeBetween('now', '+1 year'),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-
-            'user_id' => User::factory(),
         ];
     }
 }
