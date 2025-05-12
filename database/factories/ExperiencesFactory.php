@@ -21,8 +21,6 @@ class ExperiencesFactory extends Factory
             'description' => $this->faker->text(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-
-            'freelance_id' => Freelance::factory(),
         ];
     }
 }
