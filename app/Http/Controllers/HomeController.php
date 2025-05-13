@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Boost;
 use App\Models\Freelance;
 use App\Models\Profession;
 use Inertia\Inertia;
@@ -11,16 +10,14 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $boosted = Freelance::query()
-            ->whereHas('boosts', function ($query) {
-                $query->where('end_date', '>', now());
-                $query->where('start_date', '<', now());
-            })
-            ->with('user', 'professions')
+        $boosted = Freelance::boosted()
+            ->with('professions')
             ->get();
 
         $categories = Profession::query()
-            ->withCount('freelances')
+            ->withCount(['freelances' => function ($query) {
+                $query->where('is_verified', true);
+            }])
             ->orderBy('freelances_count', 'desc')
             ->get();
 
