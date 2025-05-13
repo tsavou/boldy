@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
+use App\Models\Scopes\ExperienceDataScope;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
+#[ScopedBy([ExperienceDataScope::class])]
 class Freelance extends Model
 {
     use HasFactory;
@@ -31,7 +34,8 @@ class Freelance extends Model
         'slug',
     ];
 
-    protected $appends = ['experience_in_years','experience_level'];
+    protected $appends = ['full_name', 'first_name'];
+
     protected static function boot(): void
     {
         parent::boot();
@@ -50,42 +54,35 @@ class Freelance extends Model
     // Generate a unique slug based on first name and name
     public static function generateUniqueSlug($firstName, $name): string
     {
-        $slug = Str::slug($firstName . ' ' . $name);
+        $slug = Str::slug($firstName.' '.$name);
         $originalSlug = $slug;
         $count = 1;
 
         while (self::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $count++;
+            $slug = $originalSlug.'-'.$count++;
         }
 
         return $slug;
     }
 
-    public function getExperienceInYearsAttribute()
+    public function getFullNameAttribute()
     {
-        $totalMonths = $this->experiences->reduce(function ($carry, $experience) {
-            $start = Carbon::parse($experience->start_date);
-            $end = $experience->end_date ? Carbon::parse($experience->end_date) : now();
-            return $carry + $start->diffInMonths($end);
-        }, 0);
-
-
-        return intdiv($totalMonths, 12);
+        return $this->user->first_name.' '.$this->user->name;
     }
 
-    public function getExperienceLevelAttribute()
+    public function getFirstNameAttribute()
     {
-        $years = $this->experience_in_years;
-
-        return match (true) {
-            $years < 1 => 'Junior',
-            $years < 3 => 'Intermédiaire',
-            $years < 5 => 'Confirmé',
-            default => 'Expert',
-        };
+        return $this->user->first_name;
     }
 
-        public function user(): BelongsTo
+    public function scopeBoosted(Builder $query)
+    {
+        return $query->whereHas('boosts', function ($query) {
+            $query->where('end_date', '>', now());
+            $query->where('start_date', '<', now());
+        });
+    }
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
