@@ -2,38 +2,96 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FreelanceFilterRequest;
 use App\Models\Freelance;
+use App\Models\Profession;
+use App\Models\Skill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class FreelanceController extends Controller
 {
-    public function index()
+    public function index(FreelanceFilterRequest $request)
     {
-        // Fetch all verified freelancers with their associated user data
-        $freelances = Freelance::query()
+        // Récupérer les freelances avec leurs professions, compétences et expériences
+        // et filtrer en fonction des critères de recherche
+        $query = Freelance::with('professions', 'skills', 'experiences')
             ->where('is_verified', true)
-            ->with(['user'])
-            ->get();
 
-        // ensuite je devrai ajouter 'autres chose pour pouvoir ajouter les filtres et les recherches & pagination
-        // boost apparaisent en premier
-        // filtres sur les skills, les professions, les experiences, les certifications
-        // tri par défaut ?
-        // recherche ? dynamique ?
+            // disponibilité
+            ->when($request->has('available'), fn ($q) => $q->where('is_available', $request->input('available')))
+
+            // professions
+            ->when($request->filled('professions'), fn ($q) => $q->whereHas('professions', fn ($subQ) => $subQ->whereIn('name', (array) $request->input('professions'))))
+
+            // ville
+            ->when($request->filled('city'), fn ($q) => $q->where('location', 'like', '%'.$request->input('city').'%'))
+
+            // skills
+            ->when($request->filled('skills'), fn ($q) => $q->whereHas('skills', fn ($subQ) => $subQ->whereIn('name', (array) $request->input('skills'))))
+
+            // tarifs
+            ->when($request->filled('min_price'), fn ($q) => $q->where('price_per_day', '>=', $request->input('min_price')))
+            ->when($request->filled('max_price'), fn ($q) => $q->where('price_per_day', '<=', $request->input('max_price')))
+
+            //filtres sur l'experience
+                 // En utilisant "having" plutôt que "where" car "experience_in_years" et "experience_level" sont des colonnes virtuelles non existantes dans la DB
+                 // Elles sont calculées dans le scope ExperienceDataScope
+            ->when($request->filled('level'), fn ($q) =>
+            $q->havingRaw('LOWER(experience_level) = ?', [strtolower($request->input('level'))])
+            )
+
+            ->when($request->filled('min_experience'), fn ($q) =>
+            $q->having('experience_in_years', '>=', $request->input('min_experience'))
+            )
+
+            ->when($request->filled('max_experience'), fn ($q) =>
+            $q->having('experience_in_years', '<=', $request->input('max_experience'))
+            );
 
 
-        return Inertia::render( 'Freelance/Index',[
-            'freelances' => $freelances
+
+        // tri dynamique
+        if ($request->filled('sort')) {
+            switch ($request->get('sort')) {
+                case 'price_asc':
+                    $query->orderBy('price_per_day', 'asc');
+                    break;
+                case 'price_desc':
+                    $query->orderBy('price_per_day', 'desc');
+                    break;
+                case 'experience':
+                    $query->orderBy('experience_in_years', 'desc');
+                    break;
+                case 'recent':
+                    $query->orderBy('created_at', 'desc');
+                    break;
+            }
+        }
+
+        // Trier par freelances boostés en premier
+        $query->withExists(['boosts as is_boosted' => function ($q) {
+            $q->where('start_date', '<=', now())
+                ->where('end_date', '>=', now());
+        }])->orderByDesc('is_boosted');
+
+        // Pagination des résultats en gardant les paramètres de requête
+        $freelances = $query->paginate(12)->withQueryString();
+
+        return Inertia::render('Freelance/Index', [
+            'freelances' => $freelances,
+            'professions' => Profession::all(),
+            'skills' => Skill::all(),
+            'cities' => Freelance::whereNotNull('location')->distinct()->pluck('location'), // Récupère les villes distinctes
+            'filters' => $request->all(),
         ]);
     }
-
 
     /**
      * Show the freelance profile with the given slug.
      * If the profile is not editable (i.e., not owned by the authenticated user) and not verified, return a 404 error.
-     * @param $slug
+     *
      * @return \Inertia\Response
      */
     public function show($slug)
@@ -43,20 +101,19 @@ class FreelanceController extends Controller
             ->with(['user', 'skills', 'professions', 'experiences', 'certifications', 'freelanceMedias'])
             ->first();
 
-        if (!$freelance) {
+        if (! $freelance) {
             abort(404, 'Ce profil est introuvable');
         }
 
         $isEditable = auth()->check() && auth()->user()->id === $freelance->user_id;
 
-        if (!$isEditable && !$freelance->is_verified)
-        {
+        if (! $isEditable && ! $freelance->is_verified) {
             abort(404, 'Ce profil est introuvable, privé ou non vérifié.');
         }
 
         return Inertia::render('Freelance/Show', [
             'freelance' => $freelance,
-            'isEditable' => $isEditable
+            'isEditable' => $isEditable,
         ]);
     }
 
@@ -65,9 +122,9 @@ class FreelanceController extends Controller
      * */
     public function updateImage(Request $request)
     {
-         $request->validate([
+        $request->validate([
             'cover' => 'nullable|image',
-            'avatar' => 'nullable|image'
+            'avatar' => 'nullable|image',
         ]);
 
         $freelance = auth()->user()->freelance;
@@ -78,20 +135,20 @@ class FreelanceController extends Controller
             if ($freelance->cover_picture) {
                 Storage::disk('public')->delete($freelance->cover_picture);
             }
-            $coverPath = $request->file('cover')->storeAs('freelances', $freelance->slug . '-cover', 'public');
+            $coverPath = $request->file('cover')->storeAs('freelances', $freelance->slug.'-cover', 'public');
             $freelance->update(['cover_picture' => Storage::url($coverPath)]);
             $success = 'Votre bannière a été mise à jour';
         }
 
-       if ($request->hasFile('avatar')) {
+        if ($request->hasFile('avatar')) {
             if ($freelance->profile_picture) {
                 Storage::disk('public')->delete($freelance->profile_picture);
             }
-            $avatarPath = $request->file('avatar')->storeAs('freelances', $freelance->slug . '-avatar', 'public');
+            $avatarPath = $request->file('avatar')->storeAs('freelances', $freelance->slug.'-avatar', 'public');
             $freelance->update(['profile_picture' => Storage::url($avatarPath)]);
             $success = 'Votre photo de profil a été mise à jour';
-       }
+        }
 
-       return back()->with('success', $success);
+        return back()->with('success', $success);
     }
 }
