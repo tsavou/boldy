@@ -275,7 +275,7 @@ onMounted(() => {
                                 freelance.profile_picture ||
                                 '/img/default_avatar.jpg'
                             "
-                            :alt="`Photo de ${freelance.user.first_name} ${freelance.user.name}`"
+                            :alt="`Photo de ${freelance.full_name}`"
                             class="h-full w-full object-cover transition duration-300 ease-in-out group-hover:scale-105"
                         />
                         <div
@@ -307,8 +307,7 @@ onMounted(() => {
                             class="absolute inset-x-0 bottom-0 h-1/4 rounded-b-xl rounded-t-sm bg-green-900/60 p-3 text-white backdrop-blur-sm"
                         >
                             <h3 class="text-md font-semibold leading-tight">
-                                {{ freelance.user.first_name }}
-                                {{ freelance.user.name }}
+                                {{ freelance.first_name }}
                             </h3>
                             <p class="mt-2 text-xs leading-snug">
                                 {{
@@ -367,7 +366,7 @@ onMounted(() => {
                                     <Link
                                         :href="
                                             route('freelance.index', {
-                                                category: category.id,
+                                                professions: category.name,
                                             })
                                         "
                                         class="block rounded-lg bg-green-800 py-2 text-center font-medium text-orange-50 transition hover:bg-green-700"
