@@ -3,11 +3,9 @@ import Layout from '@/Layouts/AppLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { onMounted, ref } from 'vue';
-import {
-    ChevronLeftIcon,
-    ChevronRightIcon,
-    CheckIcon,
-} from '@heroicons/vue/24/solid';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
+import PricingTier from '@/Components/PricingTier.vue';
+import { tiers } from '@/data/pricingTiers.js';
 
 const props = defineProps({
     boosted: Array,
@@ -24,51 +22,6 @@ const stats = [
     { id: 2, name: 'Taux de satisfaction', value: '98%' },
     { id: 3, name: 'Catégories de métier', value: props.categories.length },
     { id: 4, name: 'Visiteurs par mois', value: '4 500+' },
-];
-
-const tiers = [
-    {
-        name: 'Free',
-        id: 'tier-free',
-        href: '#',
-        price: 'Gratuit',
-        description: 'La version gratuite pour commencer.',
-        features: ['Création de profil', 'Validation du statut freelance', 'Visibilité sur la plateforme',],
-        mostPopular: false,
-        cta: 'Devenir Bolder',
-    },
-    {
-        name: 'Boost',
-        id: 'tier-boost',
-        href: '#',
-        price: '9 €',
-        description: '7, 14 ou 30 jours de boost pour augmenter votre visibilité.',
-        features: [
-            'Apparition en haut des résultats de recherche',
-            'Mise en avant sur la page d\'accueil',
-            'Advanced analytics',
-            '24-hour support response time',
-            'Marketing automations',
-        ],
-        mostPopular: true,
-        cta: 'Obtenir un boost',
-    },
-    {
-        name: 'Premium',
-        id: 'tier-premium',
-        href: '#',
-        price: '129 €',
-        description: 'Dedicated support and infrastructure for your company.',
-        features: [
-            'Boost permanent',
-            'Accompagnement personnalisé',
-            'Shooting photos',
-            'Démarche administrative',
-            'Marketing automations',
-        ],
-        mostPopular: false,
-        cta: 'Devenir Premium',
-    },
 ];
 
 const checkScroll = () => {
@@ -445,12 +398,12 @@ onMounted(() => {
             </div>
         </section>
 
-        <section class="bg-green-900 py-24 sm:py-32" id="stats">
+        <section class="bg-green-900 py-24 sm:py-24" id="stats">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 <div class="mx-auto max-w-2xl lg:max-w-none">
                     <div class="text-center">
                         <h2
-                            class="text-balance text-4xl font-semibold tracking-tight text-orange-50 sm:text-5xl"
+                            class="text-balance text-4xl font-semibold tracking-tight text-orange-50"
                         >
                             La communauté Boldy en chiffres
                         </h2>
@@ -459,7 +412,7 @@ onMounted(() => {
                         </p>
                     </div>
                     <dl
-                        class="mt-16 grid grid-cols-1 gap-2 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4"
+                        class="mt-8 grid grid-cols-1 gap-2 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4"
                     >
                         <div
                             v-for="stat in stats"
@@ -483,34 +436,31 @@ onMounted(() => {
         </section>
 
         <section id="pricing">
-            <div class="bg-orange-50 py-24">
+            <div class="bg-orange-50 py-12">
                 <div class="mx-auto max-w-7xl px-6 lg:px-8">
                     <div class="mx-auto max-w-4xl text-center">
-                        <h2 class="text-base/7 font-semibold text-green-900">Pricing</h2>
-                        <p class="mt-2 text-balance text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">Choisissez votre formule</p>
+                        <h2 class="text-base/7 font-semibold text-green-700">
+                            Pricing
+                        </h2>
+                        <p
+                            class="mt-2 text-balance text-4xl font-semibold tracking-tight text-green-900"
+                        >
+                            Choisissez votre formule
+                        </p>
                     </div>
-                    <p class="mx-auto mt-6 max-w-2xl text-pretty text-center text-lg font-medium text-gray-600 sm:text-xl/8">Choisissez la formule qui vous convient le mieux</p>
-                    <div class="isolate mx-auto mt-10 grid max-w-md grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                        <div v-for="tier in tiers" :key="tier.id" :class="[tier.mostPopular ? 'ring-2 ring-green-900' : 'ring-1 ring-gray-400', 'rounded-3xl p-8 xl:p-10']">
-                            <div class="flex items-center justify-between gap-x-4">
-                                <h3 :id="tier.id" :class="[tier.mostPopular ? 'text-green-900' : 'text-gray-900', 'text-lg/8 font-semibold']">{{ tier.name }}</h3>
-                                <p v-if="tier.mostPopular" class="rounded-full bg-green-900/10 px-2.5 py-1 text-xs/5 font-semibold text-green-900">Le plus populaire</p>
-                            </div>
-                            <p class="mt-4 text-sm/6 text-gray-600">{{ tier.description }}</p>
-                            <p class="mt-6 flex items-baseline gap-x-1">
-                                <span class="text-4xl font-semibold tracking-tight text-gray-900">{{ tier.price }}</span>
-                                <span class="text-sm/6 font-semibold text-gray-600">/mois</span>
-                            </p>
-                            <a :href="tier.href" :aria-describedby="tier.id" :class="[tier.mostPopular ? 'bg-green-900 text-orange-50 shadow-sm hover:bg-green-700' : 'text-green-900 ring-1 ring-inset ring-green-900 hover:bg-green-900 hover:text-orange-50', 'mt-6 block rounded-md px-3 py-2 text-center text-sm/6 font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-900']">
-                                {{ tier.cta}}
-                            </a>
-                            <ul role="list" class="mt-8 space-y-3 text-sm/6 text-gray-600 xl:mt-10">
-                                <li v-for="feature in tier.features" :key="feature" class="flex gap-x-3">
-                                    <CheckIcon class="h-6 w-5 flex-none text-green-900" aria-hidden="true" />
-                                    {{ feature }}
-                                </li>
-                            </ul>
-                        </div>
+                    <p
+                        class="mx-auto mt-6 max-w-2xl text-pretty text-center text-lg font-medium text-gray-600"
+                    >
+                        Choisissez la formule qui vous convient le mieux
+                    </p>
+                    <div
+                        class="isolate mx-auto mt-8 grid max-w-md grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+                    >
+                        <PricingTier
+                            v-for="tier in tiers"
+                            :key="tier.id"
+                            :tier="tier"
+                        />
                     </div>
                 </div>
             </div>
