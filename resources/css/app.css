@@ -11,3 +11,22 @@
 .scrollbar-hide::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
 }
+
+:root {
+    --slider-connect-bg: #016630;
+    --slider-tooltip-bg: #016630;
+    --slider-handle-ring-color: #016630;
+}
+
+
+input[type='checkbox'] {
+    color: #016630;
+}
+
+input[type='checkbox']:focus {
+    --tw-ring-color: #016630;
+}
+
+input[type='radio'] {
+    color: #016630;
+}

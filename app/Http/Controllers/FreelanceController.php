@@ -61,8 +61,11 @@ class FreelanceController extends Controller
                 case 'price_desc':
                     $query->orderBy('price_per_day', 'desc');
                     break;
-                case 'experience':
+                case 'experience_desc':
                     $query->orderBy('experience_in_years', 'desc');
+                    break;
+                case 'experience_asc':
+                    $query->orderBy('experience_in_years', 'asc');
                     break;
                 case 'recent':
                     $query->orderBy('created_at', 'desc');
