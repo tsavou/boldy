@@ -33,7 +33,7 @@ class FreelanceFilterRequest extends FormRequest
             'professions.*' => 'string',
             'skills' => 'nullable|array',
             'skills.*' => 'string',
-            'sort' => 'nullable|in:price_asc,price_desc,experience,recent',
+            'sort' => 'nullable|in:price_asc,price_desc,experience_asc,experience_desc,recent',
             'page' => 'nullable|integer|min:1',
         ];
     }

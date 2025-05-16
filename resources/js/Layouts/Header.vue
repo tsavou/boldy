@@ -21,7 +21,7 @@ const logout = () => {
 </script>
 
 <template>
-    <header role="banner" class="sticky top-0 z-50">
+    <header role="banner" class="sticky top-0 z-40">
         <nav class="bg-green-900 text-orange-50">
             <!-- Primary Navigation Menu -->
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -45,7 +45,7 @@ const logout = () => {
 
                         <!-- Navigation Links -->
                         <div
-                            class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
+                            class="hidden space-x-8 sm:-my-px sm:ms-10 md:flex"
                         >
                             <NavLink
                                 :href="route('home')"
@@ -62,7 +62,7 @@ const logout = () => {
                         </div>
                     </div>
 
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 md:flex">
                         <!-- Settings Dropdown -->
                         <div class="relative ms-3 sm:flex sm:items-center">
                             <Dropdown v-if="user" align="right" width="48" content-classes="bg-green-900">
@@ -156,7 +156,7 @@ const logout = () => {
                     </div>
 
                     <!-- Hamburger -->
-                    <div class="-me-2 flex items-center sm:hidden">
+                    <div class="-me-2 flex items-center md:hidden">
                         <button
                             @click="
                                 showingNavigationDropdown =
@@ -204,7 +204,7 @@ const logout = () => {
                     block: showingNavigationDropdown,
                     hidden: !showingNavigationDropdown,
                 }"
-                class="fixed left-0 right-0 z-40 bg-green-900 sm:hidden"
+                class="fixed left-0 right-0 z-40 bg-green-900 md:hidden"
             >
                 <div class="space-y-1 pb-3 pt-2">
                     <ResponsiveNavLink
