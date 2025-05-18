@@ -3,7 +3,7 @@ export const tiers = [
         name: 'Free',
         id: 'tier-free',
         href: route('register'),
-        description: 'Rejoignez la communauté Boldy et devenez visible sur la plateforme.\n \nCréer et personnaliser votre profil freelance gratuitement.',
+        description: 'Rejoignez la communauté Boldy et devenez visible sur la plateforme.\n \nCréez et personnalisez votre profil freelance gratuitement.',
         features: [
             'Création de profil',
             'Validation du statut freelance',
@@ -37,14 +37,15 @@ export const tiers = [
         href: '#',
         priceFrequency: [
             { price: '29,99 €', frequency: 'Mensuel' },
-            { price: '299,99 €', frequency: 'Annuel' },
+            { price: '290,99 €', frequency: 'Annuel' },
         ],
         description: 'Un accompagnement personnalisé et une visibilité maximale.',
         features: [
             'Boost permanent',
             'Accompagnement personnalisé',
-            'Shooting photos',
             'Boldy analytics',
+            'Shooting photos',
+
         ],
         mostPopular: false,
         cta: 'Devenir Premium',
