@@ -454,7 +454,7 @@ onMounted(() => {
                         Choisissez la formule qui vous convient le mieux
                     </p>
                     <div
-                        class="isolate mx-auto mt-8 grid max-w-md grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+                        class="isolate mx-auto mt-12 grid max-w-md grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3"
                     >
                         <PricingTier
                             v-for="tier in tiers"

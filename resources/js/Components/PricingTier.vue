@@ -1,7 +1,7 @@
 <template>
     <div
         :class="[
-            tier.mostPopular ? 'ring-2 ring-green-900' : 'ring-1 ring-gray-400',
+            tier.mostPopular ? 'ring-2 ring-green-900 scale-105' : 'ring-1 ring-gray-400',
             'rounded-3xl p-8 xl:p-10',
         ]"
     >
@@ -92,8 +92,9 @@
                 <CheckIcon
                     class="h-6 w-5 flex-none text-green-900"
                     aria-hidden="true"
+                    v-if="feature !== 'Shooting photos' || selectedFrequency?.frequency === 'Annuel'"
                 />
-                {{ feature }}
+                {{ feature !== 'Shooting photos' ? feature : selectedFrequency.frequency === 'Annuel' ? 'Shooting photos' : '' }}
             </li>
         </ul>
     </div>
