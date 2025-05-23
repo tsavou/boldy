@@ -23,13 +23,24 @@ class FreelanceController extends Controller
             ->when($request->has('available'), fn ($q) => $q->where('is_available', $request->input('available')))
 
             // professions
-            ->when($request->filled('professions'), fn ($q) => $q->whereHas('professions', fn ($subQ) => $subQ->whereIn('name', (array) $request->input('professions'))))
+            ->when($request->filled('job'), fn ($q) => $q->whereHas('professions', fn ($subQ) => $subQ->where('name', 'like', $request->input('job'))))
+
+            // skills
+            ->when($request->filled('skill'), fn ($q) => $q->whereHas('skills', fn ($subQ) => $subQ->where('name', 'like', $request->input('skill'))))
 
             // ville
             ->when($request->filled('city'), fn ($q) => $q->where('location', 'like', '%'.$request->input('city').'%'))
 
-            // skills
-            ->when($request->filled('skills'), fn ($q) => $q->whereHas('skills', fn ($subQ) => $subQ->whereIn('name', (array) $request->input('skills'))))
+            //recherche libre parmis les noms, prénoms, compétences et professions
+            ->when($request->filled('search'), function ($q) use ($request) {
+                $search = $request->input('search');
+                $q->where(function ($subQ) use ($search) {
+                    $subQ->whereHas('user', fn($userQ) => $userQ->where('name', 'like', "%{$search}%")
+                       ->orWhere('first_name', 'like', "%{$search}%"))
+                    ->orWhereHas('skills', fn($skillQ) => $skillQ->where('name', 'like', "%{$search}%"))
+                        ->orWhereHas('professions', fn($jobQ) => $jobQ->where('name', 'like', "%{$search}%"));
+                });
+            })
 
             // tarifs
             ->when($request->filled('min_price'), fn ($q) => $q->where('price_per_day', '>=', $request->input('min_price')))
@@ -38,16 +49,23 @@ class FreelanceController extends Controller
             //filtres sur l'experience
                  // En utilisant "having" plutôt que "where" car "experience_in_years" et "experience_level" sont des colonnes virtuelles non existantes dans la DB
                  // Elles sont calculées dans le scope ExperienceDataScope
-            ->when($request->filled('level'), fn ($q) =>
+          /*  ->when($request->filled('level'), fn ($q) =>
             $q->havingRaw('LOWER(experience_level) = ?', [strtolower($request->input('level'))])
+            )*/
+
+            ->when($request->filled('level'), function ($q) use ($request) {
+                $levels = collect($request->input('level'))
+                    ->map(fn ($level) => strtolower($level))->toArray();
+                $placeholders = implode(',', array_fill(0, count($levels), '?'));
+                $q->havingRaw("LOWER(experience_level) IN ($placeholders)", $levels);
+            })
+
+            ->when($request->filled('min_exp'), fn ($q) =>
+            $q->having('experience_in_years', '>=', $request->input('min_exp'))
             )
 
-            ->when($request->filled('min_experience'), fn ($q) =>
-            $q->having('experience_in_years', '>=', $request->input('min_experience'))
-            )
-
-            ->when($request->filled('max_experience'), fn ($q) =>
-            $q->having('experience_in_years', '<=', $request->input('max_experience'))
+            ->when($request->filled('max_exp'), fn ($q) =>
+            $q->having('experience_in_years', '<=', $request->input('max_exp'))
             );
 
 
@@ -87,7 +105,7 @@ class FreelanceController extends Controller
             'professions' => Profession::all(),
             'skills' => Skill::all(),
             'cities' => Freelance::whereNotNull('location')->distinct()->pluck('location'), // Récupère les villes distinctes
-            'filters' => $request->all(),
+            'activeFilters' => $request->all(),
         ]);
     }
 

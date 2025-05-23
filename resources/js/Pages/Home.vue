@@ -366,7 +366,7 @@ onMounted(() => {
                                     <Link
                                         :href="
                                             route('freelance.index', {
-                                                professions: category.name,
+                                                job: category.name,
                                             })
                                         "
                                         class="block rounded-lg bg-green-800 py-2 text-center font-medium text-orange-50 transition hover:bg-green-700"
