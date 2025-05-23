@@ -1,7 +1,7 @@
 <script setup>
 import Layout from '@/Layouts/AppLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { computed, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import {
     Dialog,
     DialogPanel,
@@ -9,13 +9,6 @@ import {
     MenuButton,
     MenuItem,
     MenuItems,
-    Popover,
-    PopoverButton,
-    PopoverGroup,
-    PopoverPanel,
-    Switch,
-    SwitchGroup,
-    SwitchLabel,
     TransitionChild,
     TransitionRoot,
 } from '@headlessui/vue';
@@ -23,21 +16,40 @@ import {
     XMarkIcon,
     MapPinIcon,
     AdjustmentsHorizontalIcon,
-    ArrowPathIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon } from '@heroicons/vue/20/solid';
 import SearchBar from '@/Components/SearchBar.vue';
-import Slider from '@vueform/slider';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import AdvancedFilters from '@/Components/AdvancedFilters.vue';
+import PaginationNavigation from '@/Components/PaginationNavigation.vue';
 
 const props = defineProps({
     freelances: Object,
     professions: Array,
     skills: Array,
     cities: Array,
-    filters: Object,
+    activeFilters: Object,
 });
 
+const filters = reactive({
+    selectedSearchOption:
+        props.activeFilters.job || props.activeFilters.skill || null,
+    search: props.activeFilters.search || '',
+    city: props.activeFilters.city || null,
+    priceRange: [
+        props.activeFilters.min_price || 0,
+        props.activeFilters.max_price || 1500,
+    ],
+    experienceRange: [
+        props.activeFilters.min_exp || 0,
+        props.activeFilters.max_exp || 10,
+    ],
+    level: props.activeFilters.level || [],
+    available: props.activeFilters.available || null,
+    sort: props.activeFilters.sort || null,
+});
+
+// création d'un tableau avec les métiers et les compétences en ajoutant un type pour les différencier
 const searchOptions = computed(() => {
     return [
         ...props.professions.map((profession) => ({
@@ -48,45 +60,83 @@ const searchOptions = computed(() => {
     ];
 });
 
-const selectedSearchOption = ref(null);
-const curentSearchQuery = ref('');
-const selectedCity = ref(null);
-
-const selectedLevels = ref([]);
-
-const availability = ref(false);
-
-const priceRange = ref([0, 1500]);
-const experienceRange = ref([0, 50]);
-
-const levels = [
-    { id: 1, name: 'Junior' },
-    { id: 2, name: 'Intermédiaire' },
-    { id: 3, name: 'Confirmé' },
-    { id: 4, name: 'Expert' },
-];
 const sortOptions = [
-    { label: 'Expérience: (Croissant)', value:'experience_asc' },
-    { label: 'Expérience: (Décroissant)', value:'experience_desc' },
-    { label: 'Récents', value:'recent' },
-    { label: 'Tarif (Croissant)', value:'price_asc'},
-    { label: 'Tarif (Décroissant)', value:'price_desc' },
+    { label: 'Expérience (Croissant)', value: 'experience_asc' },
+    { label: 'Expérience (Décroissant)', value: 'experience_desc' },
+    { label: 'Récents', value: 'recent' },
+    { label: 'Tarif (Croissant)', value: 'price_asc' },
+    { label: 'Tarif (Décroissant)', value: 'price_desc' },
 ];
-const activeFilters = [{ value: 'objects', label: 'Objects' }];
 
 const mobileFiltersOpen = ref(false);
 
-const sortBy = (option) => {
-    router.get(
-        route('freelance.index'),
-        {
-            sort: option,
-        },
-        {
-            preserveScroll: true,
+const applyFilters = () => {
+    const params = {};
+
+    if (filters.selectedSearchOption) {
+        if (filters.selectedSearchOption.type === 'Métier') {
+            params.job = filters.selectedSearchOption.name;
+        } else if (filters.selectedSearchOption.type === 'Compétence') {
+            params.skill = filters.selectedSearchOption.name;
         }
-    );
-}
+    }
+
+    if (filters.search) params.search = filters.search;
+    if (filters.city) params.city = filters.city;
+
+    if (filters.priceRange[0] > 0) params.min_price = filters.priceRange[0];
+    if (filters.priceRange[1] < 1500) params.max_price = filters.priceRange[1];
+
+    if (filters.experienceRange[0] > 0)
+        params.min_exp = filters.experienceRange[0];
+    if (filters.experienceRange[1] < 10)
+        params.max_exp = filters.experienceRange[1];
+    if (filters.level.length > 0) params.level = filters.level;
+    if (filters.available) params.available = 1;
+    if (filters.sort) params.sort = filters.sort;
+
+    router.get(route('freelance.index'), params, {
+        preserveScroll: true,
+        preserveState: true,
+    });
+};
+const sortBy = (option) => {
+    filters.sort = option.value;
+    applyFilters();
+};
+
+const sortLabel = computed(() => {
+    return props.activeFilters.sort
+        ? sortOptions.find(
+              (option) => option.value === props.activeFilters.sort,
+          )?.label
+        : '';
+});
+
+const hasActiveFilters = computed(() => {
+    return Object.keys(props.activeFilters).length > 0;
+});
+
+const clearAllFilters = () => {
+    filters.search = '';
+    filters.city = '';
+    filters.priceRange = [0, 1500];
+    filters.experienceRange = [0, 10];
+    filters.level = [];
+    filters.available = false;
+    filters.selectedSearchOption = null;
+    filters.sort = null;
+    applyFilters();
+};
+
+// Détection des changements dans filters avec debounce (pour éviter trop de requêtes à chaque caractère)
+watch(
+    filters,
+    () => {
+        applyFilters();
+    },
+    { deep: true },
+);
 </script>
 
 <template>
@@ -96,7 +146,7 @@ const sortBy = (option) => {
             <!-- Mobile filter dialog -->
             <TransitionRoot as="template" :show="mobileFiltersOpen">
                 <Dialog
-                    class="relative z-40 sm:hidden"
+                    class="relative z-50 sm:hidden"
                     @close="mobileFiltersOpen = false"
                 >
                     <TransitionChild
@@ -122,19 +172,19 @@ const sortBy = (option) => {
                             leave-to="translate-x-full"
                         >
                             <DialogPanel
-                                class="relative ml-auto flex size-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl"
+                                class="relative ml-auto flex size-full max-w-xs flex-col overflow-y-auto bg-orange-50 py-4 pb-12 shadow-xl"
                             >
                                 <div
-                                    class="flex items-center justify-between px-4"
+                                    class="mb-8 flex items-center justify-between px-4"
                                 >
                                     <h2
                                         class="text-lg font-medium text-gray-900"
                                     >
-                                        Filters
+                                        Filtres avancés
                                     </h2>
                                     <button
                                         type="button"
-                                        class="-mr-2 flex size-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
+                                        class="-mr-2 flex size-10 items-center justify-center rounded-md p-2 text-gray-400"
                                         @click="mobileFiltersOpen = false"
                                     >
                                         <span class="sr-only">Close menu</span>
@@ -144,8 +194,14 @@ const sortBy = (option) => {
                                         />
                                     </button>
                                 </div>
-
-                                <!-- Filters -->
+                                <div class="mx-auto">
+                                    <!-- Filters -->
+                                    <AdvancedFilters
+                                        v-model:filters="filters"
+                                        :show-clear-button="hasActiveFilters"
+                                        @clearFilters="clearAllFilters"
+                                    />
+                                </div>
                             </DialogPanel>
                         </TransitionChild>
                     </div>
@@ -153,12 +209,27 @@ const sortBy = (option) => {
             </TransitionRoot>
 
             <div>
-                <h1
-                    class="bg-orange-100 px-4 py-8 text-center text-3xl font-bold tracking-tight text-green-900 sm:px-6 lg:px-8"
-                >
-                    Trouvez le bon freelance
-                </h1>
-                <div class="bg-orange-100 sticky top-[64px] z-50">
+                <div class="relative overflow-hidden bg-orange-100">
+                    <!-- Decorative background image and gradient -->
+                    <div aria-hidden="true" class="absolute inset-0">
+                        <div class="absolute inset-0 overflow-hidden">
+                            <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-sale-full-width.jpg" alt="" class="size-full object-cover object-top" />
+                        </div>
+                        <div class="absolute inset-0 bg-orange-100/50" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-orange-100 via-orange-100/50" />
+                    </div>
+
+                    <section aria-labelledby="sale-heading" class="relative mx-auto flex max-w-7xl flex-col items-center px-4 pt-36 pb-8 text-center sm:px-6 lg:px-8">
+                        <div class="mx-auto max-w-2xl lg:max-w-none">
+                            <h1 id="sale-heading" class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">Trouvez le bon freelance pour votre projet</h1>
+                            <p class="mt-4 text-center text-xl text-gray-600">
+                                Plus de 10 000 freelances vérifiés vous attendent : affinez votre recherche et trouvez le talent qu’il vous faut.
+                            </p>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="sticky top-[64px] z-30 bg-orange-100">
                     <!-- Filters -->
                     <section
                         aria-labelledby="filter-heading"
@@ -172,8 +243,8 @@ const sortBy = (option) => {
                             <!-- SearchBars-->
                             <div class="basis-2/3">
                                 <SearchBar
-                                    v-model="selectedSearchOption"
-                                    v-model:query="curentSearchQuery"
+                                    v-model="filters.selectedSearchOption"
+                                    v-model:query="filters.search"
                                     :options="searchOptions"
                                     placeholder="Métier, compétence..."
                                 />
@@ -181,7 +252,7 @@ const sortBy = (option) => {
 
                             <div class="basis-1/3">
                                 <SearchBar
-                                    v-model="selectedCity"
+                                    v-model="filters.city"
                                     :options="cities"
                                     :icon="MapPinIcon"
                                     placeholder="Ville"
@@ -206,267 +277,12 @@ const sortBy = (option) => {
                             <div class="flex items-center justify-between">
                                 <!-- Desktop Filters -->
                                 <div class="hidden w-full sm:block">
-                                    <div
-                                        class="flex flex-wrap items-center gap-12"
-                                    >
-                                        <h3
-                                            class="mb-4 text-sm font-medium text-gray-500"
-                                        >
-                                            Filtres avancés :
-                                        </h3>
-
-                                        <!-- Price Range -->
-
-                                        <div
-                                            class="flex w-48 flex-col space-y-2"
-                                        >
-                                            <label
-                                                class="block text-sm font-medium text-gray-700"
-                                                >Tarif indicatif (/jour)</label
-                                            >
-
-                                            <Slider
-                                                v-model="priceRange"
-                                                :min="0"
-                                                :max="1500"
-                                                :step="10"
-                                                showTooltip="drag"
-                                                tooltipPosition="top"
-                                                :merge="500"
-                                                :format="
-                                                    (v) => `${Math.round(v)}€`
-                                                "
-                                            />
-                                            <div
-                                                class="flex justify-between text-sm text-gray-500"
-                                            >
-                                                <span
-                                                    >{{ priceRange[0] }}€</span
-                                                >
-                                                <span
-                                                    >{{ priceRange[1] }}€</span
-                                                >
-                                            </div>
-                                        </div>
-
-                                        <!-- Experience Level -->
-                                        <div
-                                            class="flex w-48 flex-col space-y-2"
-                                        >
-                                            <label
-                                                class="block text-sm font-medium text-gray-700"
-                                                >Années d'expérience</label
-                                            >
-
-                                            <Slider
-                                                v-model="experienceRange"
-                                                :min="0"
-                                                :max="60"
-                                                :step="1"
-                                                :merge="10"
-                                                showTooltip="drag"
-                                            />
-
-                                            <div
-                                                class="flex justify-between text-sm text-gray-500"
-                                            >
-                                                <span>{{
-                                                    experienceRange[0]
-                                                }}</span>
-                                                <span>{{
-                                                    experienceRange[1]
-                                                }}</span>
-                                            </div>
-                                        </div>
-
-                                        <PopoverGroup
-                                            class="hidden sm:flex sm:items-baseline sm:space-x-8"
-                                        >
-                                            <Popover
-                                                as="div"
-                                                class="relative inline-block text-left"
-                                            >
-                                                <div>
-                                                    <PopoverButton
-                                                        class="group inline-flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
-                                                    >
-                                                        <span
-                                                            >Niveau
-                                                            d'expérience</span
-                                                        >
-                                                        <span
-                                                            v-if="
-                                                                selectedLevels.length >
-                                                                0
-                                                            "
-                                                            class="ml-1.5 rounded bg-green-900 px-1.5 py-0.5 text-xs font-semibold text-white"
-                                                        >
-                                                            {{
-                                                                selectedLevels.length
-                                                            }}
-                                                        </span>
-                                                        <ChevronDownIcon
-                                                            class="-mr-1 ml-1 size-5 shrink-0 text-gray-400 group-hover:text-gray-500"
-                                                            aria-hidden="true"
-                                                        />
-                                                    </PopoverButton>
-                                                </div>
-
-                                                <transition
-                                                    enter-active-class="transition ease-out duration-100"
-                                                    enter-from-class="transform opacity-0 scale-95"
-                                                    enter-to-class="transform opacity-100 scale-100"
-                                                    leave-active-class="transition ease-in duration-75"
-                                                    leave-from-class="transform opacity-100 scale-100"
-                                                    leave-to-class="transform opacity-0 scale-95"
-                                                >
-                                                    <PopoverPanel
-                                                        class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black/5 focus:outline-none"
-                                                    >
-                                                        <form class="space-y-4">
-                                                            <div
-                                                                v-for="(
-                                                                    level,
-                                                                    levelIdx
-                                                                ) in levels"
-                                                                :key="level.id"
-                                                                class="flex gap-3"
-                                                            >
-                                                                <div
-                                                                    class="flex h-5 shrink-0 items-center"
-                                                                >
-                                                                    <div
-                                                                        class="group grid size-4 grid-cols-1"
-                                                                    >
-                                                                        <input
-                                                                            :id="`level-${level.id}`"
-                                                                            name="experience[]"
-                                                                            :value="
-                                                                                level.id
-                                                                            "
-                                                                            type="checkbox"
-                                                                            v-model="
-                                                                                selectedLevels
-                                                                            "
-                                                                            class="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-green-900 checked:bg-green-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-900"
-                                                                        />
-                                                                        <svg
-                                                                            class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white"
-                                                                            viewBox="0 0 14 14"
-                                                                            fill="none"
-                                                                        >
-                                                                            <path
-                                                                                class="opacity-0 group-has-[:checked]:opacity-100"
-                                                                                d="M3 8L6 11L11 3.5"
-                                                                                stroke-width="2"
-                                                                                stroke-linecap="round"
-                                                                                stroke-linejoin="round"
-                                                                            />
-                                                                        </svg>
-                                                                    </div>
-                                                                </div>
-                                                                <label
-                                                                    :for="`level-${level.id}`"
-                                                                    class="whitespace-nowrap pr-6 text-sm font-medium text-gray-900"
-                                                                    >{{
-                                                                        level.name
-                                                                    }}</label
-                                                                >
-                                                            </div>
-                                                        </form>
-                                                    </PopoverPanel>
-                                                </transition>
-                                            </Popover>
-                                        </PopoverGroup>
-
-                                        <!-- Availability -->
-                                        <SwitchGroup
-                                            as="div"
-                                            class="flex items-center"
-                                        >
-                                            <Switch
-                                                v-model="availability"
-                                                :class="[
-                                                    availability
-                                                        ? 'bg-green-900'
-                                                        : 'bg-gray-200',
-                                                    'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out',
-                                                ]"
-                                            >
-                                                <span
-                                                    aria-hidden="true"
-                                                    :class="[
-                                                        availability
-                                                            ? 'translate-x-5'
-                                                            : 'translate-x-0',
-                                                        'pointer-events-none inline-block size-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
-                                                    ]"
-                                                />
-                                            </Switch>
-                                            <SwitchLabel
-                                                as="span"
-                                                class="ml-3 text-sm"
-                                            >
-                                                <span
-                                                    class="font-medium text-gray-900"
-                                                    >Disponible</span
-                                                >
-                                                {{ ' ' }}
-                                            </SwitchLabel>
-                                        </SwitchGroup>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Active Filters -->
-                        <div class="mt-4 pb-4">
-                            <div class="flex flex-wrap items-center gap-3">
-                                <div
-                                    v-for="activeFilter in activeFilters"
-                                    :key="activeFilter.value"
-                                >
-                                    <span
-                                        class="inline-flex items-center rounded-full border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-800"
-                                    >
-                                        {{ activeFilter.label }}
-                                        <button
-                                            type="button"
-                                            class="ml-2 flex size-4 items-center justify-center rounded-full text-gray-400 hover:bg-gray-200 hover:text-gray-600"
-                                            @click="removeFilter(activeFilter)"
-                                        >
-                                            <span class="sr-only"
-                                                >Supprimer
-                                                {{ activeFilter.label }}</span
-                                            >
-                                            <svg
-                                                class="size-2"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 8 8"
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-width="1.5"
-                                                    d="M1 1l6 6m0-6L1 7"
-                                                />
-                                            </svg>
-                                        </button>
-                                    </span>
-                                </div>
-
-                                <button
-                                    v-if="activeFilters.length > 0"
-                                    type="button"
-                                    class="text-sm text-gray-500 hover:underline"
-                                    @click="clearAllFilters"
-                                >
-                                    <ArrowPathIcon
-                                        class="inline size-4"
-                                        aria-hidden="true"
+                                    <AdvancedFilters
+                                        v-model:filters="filters"
+                                        :show-clear-button="hasActiveFilters"
+                                        @clearFilters="clearAllFilters"
                                     />
-                                    Tout effacer
-                                </button>
+                                </div>
                             </div>
                         </div>
                     </section>
@@ -480,16 +296,21 @@ const sortBy = (option) => {
                     <div class="flex items-center justify-between py-8">
                         <h2
                             id="freelances-heading"
-                            class="text-2xl font-bold tracking-tight text-gray-900"
+                            class="text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-2"
                         >
-                            Freelances ({{ freelances.total }})
+                            Freelances
+                            <span
+                                class="inline-flex items-center justify-center rounded-full bg-green-800 px-2.5 py-1 text-sm font-semibold text-orange-50"
+                            >
+                                {{ freelances.total }}
+                            </span>
                         </h2>
                         <Menu as="div" class="relative inline-block text-left">
                             <div>
                                 <MenuButton
                                     class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
                                 >
-                                    Trier par
+                                    Trier par : {{ sortLabel }}
                                     <ChevronDownIcon
                                         class="-mr-1 ml-1 size-5 shrink-0 text-gray-400 group-hover:text-gray-500"
                                         aria-hidden="true"
@@ -510,15 +331,20 @@ const sortBy = (option) => {
                                 >
                                     <div class="py-1">
                                         <MenuItem
-                                            v-for="(option, index) in sortOptions"
+                                            v-for="(
+                                                option, index
+                                            ) in sortOptions"
                                             :key="index"
                                             v-slot="{ active }"
                                         >
                                             <button
-                                                @click="sortBy(option.value)"
-                                                :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm w-full text-left']"
+                                                @click="sortBy(option)"
+                                                :class="[
+                                                    active ? 'bg-gray-100' : '',
+                                                    'block w-full px-4 py-2 text-left text-sm',
+                                                ]"
                                             >
-                                                {{option.label}}
+                                                {{ option.label }}
                                             </button>
                                         </MenuItem>
                                     </div>
@@ -527,7 +353,37 @@ const sortBy = (option) => {
                         </Menu>
                     </div>
 
-                    <div
+                    <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                        <li v-for="freelance in freelances.data" :key="freelance.email" class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
+                            <Link :href="route('freelance.show', freelance.slug)">
+                                <div class="flex flex-1 flex-col p-8">
+                                    <img class="mx-auto size-32 shrink-0 rounded-full object-cover object-center shadow-lg shadow-gray-400" :src="freelance.profile_picture ||
+                                        '/img/default_avatar.jpg'" alt="" />
+                                    <h3 class="mt-6 text-sm font-medium text-gray-900">{{ freelance.full_name }}</h3>
+                                    <dl class="mt-1 flex grow flex-col justify-between">
+                                        <dt class="sr-only">Title</dt>
+                                        <dd v-for="job in freelance.professions" class="text-sm text-gray-500">{{ job.name }}</dd>
+                                        <dt class="sr-only">Role</dt>
+                                        <dd class="mt-3">
+                                            <span v-for="skills in freelance.skills" class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ skills.name }}</span>
+                                        </dd>
+                                    </dl>
+                                </div>
+                                <div>
+                                    <div class="-mt-px flex divide-x divide-gray-200">
+                                        <div class="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900 flex w-0 flex-1">
+                                            {{ freelance.experience_level }}
+                                        </div>
+                                        <div class="-ml-px flex w-0 flex-1 relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
+                                         {{ freelance.price_per_day }} €/jour
+                                        </div>
+                                    </div>
+                                </div>
+                            </Link>
+                        </li>
+                    </ul>
+
+<!--                    <div
                         class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
                     >
                         <Link
@@ -551,10 +407,38 @@ const sortBy = (option) => {
                                 {{ freelance.price_per_day }} €/jour
                             </p>
                         </Link>
-                    </div>
+                    </div>-->
                 </section>
+                <!-- Pagination -->
+                <div
+                    class="flex items-center justify-center border-t border-gray-200 bg-orange-100 px-4 py-3 sm:justify-between sm:px-6"
+                >
+                    <div
+                        class="flex sm:flex-1 sm:items-center sm:justify-between"
+                    >
+                        <div class="hidden sm:block">
+                            <p class="text-sm text-gray-700">
+                                Affichage de
+                                <span class="font-medium">{{
+                                    freelances.from
+                                }}</span>
+                                à
+                                <span class="font-medium">{{
+                                    freelances.to
+                                }}</span>
+                                sur
+                                <span class="font-medium">{{
+                                    freelances.total
+                                }}</span>
+                                résultats
+                            </p>
+                        </div>
+                        <div>
+                            <PaginationNavigation :links="freelances.links" />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </Layout>
 </template>
-<style src="@vueform/slider/themes/default.css"></style>
