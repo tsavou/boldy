@@ -9,7 +9,7 @@ import { MagnifyingGlassIcon } from '@heroicons/vue/20/solid';
 import { computed, ref, watch } from 'vue';
 
 const props = defineProps({
-    modelValue: Object,
+    modelValue: [Object, String, null],
     options: {
         type: Array,
         required: true,
@@ -23,48 +23,50 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(['select']);
+const emit = defineEmits(['select', 'update:modelValue', 'update:query']);
 
 const query = ref('');
 
 const filteredOptions = computed(() => {
     if (query.value === '') {
-        return []
+        return [];
     }
 
-    return  props.options.filter((option) => {
+    return props.options.filter((option) => {
         if (typeof option === 'object') {
-            console.log('object', option)
+            console.log('object', option);
             return option.name
                 .toLowerCase()
                 .includes(query.value.toLowerCase());
         }
-        console.log(option)
+        console.log(option);
         return option.toLowerCase().includes(query.value.toLowerCase());
-    })
-    }
-);
+    });
+});
 
 const onSelect = (option) => {
-    emit('update:modelValue', option)
+    emit('update:modelValue', option);
     emit('select', option);
     query.value = '';
 };
 
+watch(query, (value) => {
+    emit('update:query', value);
+});
+
 //TODO: watch pour debug
 //TODO: debug suppression de la valeur au clavier
-
 </script>
 
 <template>
-    <Combobox as="div" :modelValue="modelValue" @update:modelValue="onSelect">
-        <div class="relative grid grid-cols-1 ">
+    <Combobox as="div" :modelValue="modelValue" @update:modelValue="onSelect" nullable>
+        <div class="relative grid grid-cols-1">
             <ComboboxInput
-                class="rounded-md sm:rounded-none border border-gray-300 col-start-1 row-start-1 h-12 w-full pl-11 pr-4 text-base text-gray-900 outline-none placeholder:text-gray-400 sm:text-sm focus:border-green-900 focus:ring-1 focus:ring-green-900"
-                :placeholder=placeholder
-                :displayValue="(option) => option?.name || option"
-                @change="query = $event.target.value"
-                @blur="query = ''"
+                class="col-start-1 row-start-1 h-12 w-full rounded-md border border-gray-300 pl-11 pr-4 text-base text-gray-900 outline-none placeholder:text-gray-400 focus:border-green-900 focus:ring-1 focus:ring-green-900 sm:rounded-none sm:text-sm"
+                :placeholder="placeholder"
+                :displayValue="(option) => option?.name || option || ''"
+                @input="query = $event.target.value"
+                @keydown.backspace="() => {if (query === '') emit('update:modelValue', null)}"
             />
             <component
                 :is="icon"
@@ -72,36 +74,40 @@ const onSelect = (option) => {
                 aria-hidden="true"
             />
 
-        <ComboboxOptions
-            v-if="filteredOptions.length > 0"
-            static
-            class="absolute z-10 w-full top-full mt-1 max-h-72 overflow-y-auto py-2 text-sm text-gray-800 bg-white border border-gray-300 rounded-md"
-        >
-            <ComboboxOption
-                v-for="(option, index) in filteredOptions"
-                :key="option.id || index"
-                :value="option"
-                as="template"
-                v-slot="{ active }"
+            <ComboboxOptions
+                v-if="filteredOptions.length > 0"
+                static
+                class="absolute top-full z-10 mt-1 max-h-72 w-full overflow-y-auto rounded-md border border-gray-300 bg-white py-2 text-sm text-gray-800"
             >
-                <li
-                    :class="[
-                        'cursor-default select-none px-4 py-2',
-                        active && 'bg-green-900 text-white outline-none',
-                    ]"
+                <ComboboxOption
+                    v-for="(option, index) in filteredOptions"
+                    :key="option.id || index"
+                    :value="option"
+                    as="template"
+                    v-slot="{ active }"
                 >
-                    <div>
-                        <div>{{ option.name || option }}</div>
-                        <div v-if="option.type" class="text-xs text-gray-500" :class="active && 'text-orange-50'">
-                            {{ option.type }}
+                    <li
+                        :class="[
+                            'cursor-default select-none px-4 py-2',
+                            active && 'bg-green-900 text-white outline-none',
+                        ]"
+                    >
+                        <div>
+                            <div>{{ option.name || option }}</div>
+                            <div
+                                v-if="option.type"
+                                class="text-xs text-gray-500"
+                                :class="active && 'text-orange-50'"
+                            >
+                                {{ option.type }}
+                            </div>
                         </div>
-                    </div>
-                </li>
-            </ComboboxOption>
-        </ComboboxOptions>
+                    </li>
+                </ComboboxOption>
+            </ComboboxOptions>
         </div>
 
-<!--        <p
+        <!--        <p
             v-if="query !== '' && filteredOptions.length === 0"
             class="p-4 text-sm text-gray-500"
         >
