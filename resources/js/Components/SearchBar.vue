@@ -53,9 +53,6 @@ const onSelect = (option) => {
 watch(query, (value) => {
     emit('update:query', value);
 });
-
-//TODO: watch pour debug
-//TODO: debug suppression de la valeur au clavier
 </script>
 
 <template>

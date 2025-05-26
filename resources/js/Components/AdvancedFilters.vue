@@ -32,7 +32,7 @@ const clearAllFilters = () => {
 </script>
 
 <template>
-    <div class="flex flex-col md:items-center gap-8 md:gap-12 md:flex-row">
+    <div class="flex flex-col gap-8 md:flex-row md:items-center md:gap-12">
         <h3 class="mb-4 hidden text-sm font-medium text-gray-500 xl:block">
             Filtres avancés :
         </h3>
