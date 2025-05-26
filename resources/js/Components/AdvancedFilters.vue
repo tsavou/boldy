@@ -32,8 +32,8 @@ const clearAllFilters = () => {
 </script>
 
 <template>
-    <div class="flex flex-col flex-wrap sm:items-center gap-8 sm:gap-12 sm:flex-row">
-        <h3 class="mb-4 hidden text-sm font-medium text-gray-500 sm:block">
+    <div class="flex flex-col md:items-center gap-8 md:gap-12 md:flex-row">
+        <h3 class="mb-4 hidden text-sm font-medium text-gray-500 xl:block">
             Filtres avancés :
         </h3>
 
@@ -104,7 +104,7 @@ const clearAllFilters = () => {
         </div>
 
         <!-- Experience Level Desktop -->
-        <PopoverGroup class="hidden sm:flex sm:items-baseline sm:space-x-8">
+        <PopoverGroup class="hidden md:flex md:items-baseline md:space-x-8">
             <Popover as="div" class="relative inline-block text-left">
                 <div>
                     <PopoverButton
@@ -140,7 +140,7 @@ const clearAllFilters = () => {
                 </transition>
             </Popover>
         </PopoverGroup>
-        <div class="block space-y-4 text-sm font-medium text-gray-700 sm:hidden">
+        <div class="block space-y-4 text-sm font-medium text-gray-700 md:hidden">
             <label>Niveau d'expérience</label>
             <ExperienceLevelOption v-model="filters.level" />
         </div>
@@ -149,7 +149,7 @@ const clearAllFilters = () => {
         <button
             v-if="showClearButton"
             type="button"
-            class="order-first text-sm text-gray-500 hover:underline sm:order-last"
+            class="order-first text-sm text-gray-500 hover:underline md:order-last"
             @click="clearAllFilters"
         >
             <ArrowPathIcon class="inline size-4" aria-hidden="true" />
