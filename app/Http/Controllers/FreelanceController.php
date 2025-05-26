@@ -17,7 +17,6 @@ class FreelanceController extends Controller
         // Récupérer les freelances avec leurs professions, compétences et expériences
         // et filtrer en fonction des critères de recherche
         $query = Freelance::with('professions', 'skills', 'experiences')
-            ->where('is_verified', true)
 
             // disponibilité
             ->when($request->has('available'), fn ($q) => $q->where('is_available', $request->input('available')))
