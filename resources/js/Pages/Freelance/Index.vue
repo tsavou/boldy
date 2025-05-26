@@ -1,6 +1,6 @@
 <script setup>
 import Layout from '@/Layouts/AppLayout.vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { computed, reactive, ref, watch } from 'vue';
 import {
     Dialog,
@@ -22,6 +22,7 @@ import SearchBar from '@/Components/SearchBar.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import AdvancedFilters from '@/Components/AdvancedFilters.vue';
 import PaginationNavigation from '@/Components/PaginationNavigation.vue';
+import FreelanceCard from '@/Components/FreelanceCard.vue';
 
 const props = defineProps({
     freelances: Object,
@@ -213,17 +214,33 @@ watch(
                     <!-- Decorative background image and gradient -->
                     <div aria-hidden="true" class="absolute inset-0">
                         <div class="absolute inset-0 overflow-hidden">
-                            <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-sale-full-width.jpg" alt="" class="size-full object-cover object-top" />
+                            <img
+                                src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-sale-full-width.jpg"
+                                alt=""
+                                class="size-full object-cover object-top"
+                            />
                         </div>
                         <div class="absolute inset-0 bg-orange-100/50" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-orange-100 via-orange-100/50" />
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-orange-100 via-orange-100/50"
+                        />
                     </div>
 
-                    <section aria-labelledby="sale-heading" class="relative mx-auto flex max-w-7xl flex-col items-center px-4 pt-36 pb-8 text-center sm:px-6 lg:px-8">
+                    <section
+                        aria-labelledby="sale-heading"
+                        class="relative mx-auto flex max-w-7xl flex-col items-center px-4 pb-8 pt-36 text-center sm:px-6 lg:px-8"
+                    >
                         <div class="mx-auto max-w-2xl lg:max-w-none">
-                            <h1 id="sale-heading" class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">Trouvez le bon freelance pour votre projet</h1>
+                            <h1
+                                id="sale-heading"
+                                class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl"
+                            >
+                                Trouvez le bon freelance pour votre projet
+                            </h1>
                             <p class="mt-4 text-center text-xl text-gray-600">
-                                Plus de 10 000 freelances vérifiés vous attendent : affinez votre recherche et trouvez le talent qu’il vous faut.
+                                Plus de 10 000 freelances vérifiés vous
+                                attendent : affinez votre recherche et trouvez
+                                le talent qu’il vous faut.
                             </p>
                         </div>
                     </section>
@@ -296,7 +313,7 @@ watch(
                     <div class="flex items-center justify-between py-8">
                         <h2
                             id="freelances-heading"
-                            class="text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-2"
+                            class="flex items-center gap-2 text-2xl font-bold tracking-tight text-gray-900"
                         >
                             Freelances
                             <span
@@ -353,61 +370,15 @@ watch(
                         </Menu>
                     </div>
 
-                    <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                        <li v-for="freelance in freelances.data" :key="freelance.email" class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
-                            <Link :href="route('freelance.show', freelance.slug)">
-                                <div class="flex flex-1 flex-col p-8">
-                                    <img class="mx-auto size-32 shrink-0 rounded-full object-cover object-center shadow-lg shadow-gray-400" :src="freelance.profile_picture ||
-                                        '/img/default_avatar.jpg'" alt="" />
-                                    <h3 class="mt-6 text-sm font-medium text-gray-900">{{ freelance.full_name }}</h3>
-                                    <dl class="mt-1 flex grow flex-col justify-between">
-                                        <dt class="sr-only">Title</dt>
-                                        <dd v-for="job in freelance.professions" class="text-sm text-gray-500">{{ job.name }}</dd>
-                                        <dt class="sr-only">Role</dt>
-                                        <dd class="mt-3">
-                                            <span v-for="skills in freelance.skills" class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ skills.name }}</span>
-                                        </dd>
-                                    </dl>
-                                </div>
-                                <div>
-                                    <div class="-mt-px flex divide-x divide-gray-200">
-                                        <div class="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900 flex w-0 flex-1">
-                                            {{ freelance.experience_level }}
-                                        </div>
-                                        <div class="-ml-px flex w-0 flex-1 relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
-                                         {{ freelance.price_per_day }} €/jour
-                                        </div>
-                                    </div>
-                                </div>
-                            </Link>
-                        </li>
-                    </ul>
-
-<!--                    <div
-                        class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
+                    <div
+                        class="grid grid-cols-1 items-stretch justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                     >
-                        <Link
+                        <FreelanceCard
                             v-for="freelance in freelances.data"
                             :key="freelance.id"
-                            :href="route('freelance.show', freelance.slug)"
-                            class="group"
-                        >
-                            <img
-                                :src="
-                                    freelance.profile_picture ||
-                                    '/img/default_avatar.jpg'
-                                "
-                                :alt="`Photo de profil de  ${freelance.full_name}`"
-                                class="aspect-square w-full rounded-lg bg-gray-200 object-cover group-hover:opacity-75 xl:aspect-[7/8]"
-                            />
-                            <h3 class="mt-4 text-sm text-gray-700">
-                                {{ freelance.first_name }}
-                            </h3>
-                            <p class="mt-1 text-lg font-medium text-gray-900">
-                                {{ freelance.price_per_day }} €/jour
-                            </p>
-                        </Link>
-                    </div>-->
+                            :freelance="freelance"
+                        />
+                    </div>
                 </section>
                 <!-- Pagination -->
                 <div
