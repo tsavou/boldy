@@ -147,7 +147,7 @@ watch(
             <!-- Mobile filter dialog -->
             <TransitionRoot as="template" :show="mobileFiltersOpen">
                 <Dialog
-                    class="relative z-50 sm:hidden"
+                    class="relative z-50 md:hidden"
                     @close="mobileFiltersOpen = false"
                 >
                     <TransitionChild
@@ -185,7 +185,7 @@ watch(
                                     </h2>
                                     <button
                                         type="button"
-                                        class="-mr-2 flex size-10 items-center justify-center rounded-md p-2 text-gray-400"
+                                        class="-mr-2 flex size-10 items-center justify-center rounded-md bg-green-900 p-2 text-orange-50"
                                         @click="mobileFiltersOpen = false"
                                     >
                                         <span class="sr-only">Close menu</span>
@@ -255,7 +255,7 @@ watch(
                         <h2 id="filter-heading" class="sr-only">Filtres</h2>
 
                         <div
-                            class="flex w-full flex-col gap-y-4 sm:flex-row sm:gap-y-0"
+                            class="flex w-full flex-col gap-y-4 md:flex-row md:gap-y-0"
                         >
                             <!-- SearchBars-->
                             <div class="basis-2/3">
@@ -279,7 +279,7 @@ watch(
                             <!-- Mobile Filters Button -->
                             <PrimaryButton
                                 @click="mobileFiltersOpen = true"
-                                class="w-full sm:hidden"
+                                class="w-full md:hidden"
                             >
                                 <AdjustmentsHorizontalIcon
                                     class="size-5"
@@ -293,7 +293,7 @@ watch(
                         <div class="border-b border-gray-200 pb-4 pt-4">
                             <div class="flex items-center justify-between">
                                 <!-- Desktop Filters -->
-                                <div class="hidden w-full sm:block">
+                                <div class="hidden w-full md:block">
                                     <AdvancedFilters
                                         v-model:filters="filters"
                                         :show-clear-button="hasActiveFilters"
