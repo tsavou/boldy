@@ -100,11 +100,19 @@ class FreelanceController extends Controller
         // Pagination des résultats en gardant les paramètres de requête
         $freelances = $query->paginate(12)->withQueryString();
 
+        // Récupérer les villes distinctes pour le filtre
+        $cities = Freelance::whereNotNull('location')
+            ->pluck('location')
+            ->map(fn($city) => strtolower(trim($city)))
+            ->unique()
+            ->map(fn($city)=> ucfirst($city))
+            ->values();
+
         return Inertia::render('Freelance/Index', [
             'freelances' => $freelances,
             'professions' => Profession::all(),
             'skills' => Skill::all(),
-            'cities' => Freelance::whereNotNull('location')->distinct()->pluck('location'), // Récupère les villes distinctes
+            'cities' => $cities,
             'activeFilters' => $request->all(),
         ]);
     }
