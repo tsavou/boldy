@@ -17,13 +17,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
-        DB::table('roles')->insert([
-            ['id' => 1, 'name' => 'admin'],
-            ['id' => 2, 'name' => 'freelance'],
-        ]);
-
         $this->call([
+            RoleSeeder::class,
             SkillSeeder::class,
             ProfessionSeeder::class,
             FreelanceSeeder::class
