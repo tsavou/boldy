@@ -96,15 +96,18 @@
                     © 2025 Boldy. Tous droits réservés.
                 </p>
                 <nav class="flex gap-4 text-sm">
-                    <a href="#" class="hover:text-primary transition-colors">
+                    <Link :href="route('cgu')" class="hover:text-lime-300 transition-colors">
+                        CGU
+                    </Link>
+                    <Link :href="route('cgv')" class="hover:text-lime-300 transition-colors">
+                        CGV
+                    </Link>
+                    <Link :href="route('privacy')" class="hover:text-lime-300 transition-colors">
                         Politique de confidentialité
-                    </a>
-                    <a href="#" class="hover:text-primary transition-colors">
-                        Conditions d'utilisation
-                    </a>
-                    <a href="#" class="hover:text-primary transition-colors">
-                        Cookie Settings
-                    </a>
+                    </Link>
+                    <Link :href="route('mentions')" class="hover:text-lime-300 transition-colors">
+                        Mentions légales
+                    </Link>
                 </nav>
             </div>
         </div>
