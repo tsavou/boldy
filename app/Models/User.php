@@ -58,7 +58,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function freelance(): HasOne
     {
-        return $this->hasOne(Freelance::class);
+        return $this->hasOne(Freelance::class)->withoutGlobalScopes();
     }
 
     public function subscription(): HasOne
