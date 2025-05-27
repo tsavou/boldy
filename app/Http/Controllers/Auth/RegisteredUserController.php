@@ -34,6 +34,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -43,7 +44,7 @@ class RegisteredUserController extends Controller
             'first_name' => $request->first_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => Role::where('name', 'freelance')->first()->id,
+            'role_id' => Role::where('name', 'freelance')->first()->id,
         ]);
 
         Freelance::create([

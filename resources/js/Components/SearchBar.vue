@@ -34,12 +34,10 @@ const filteredOptions = computed(() => {
 
     return props.options.filter((option) => {
         if (typeof option === 'object') {
-            console.log('object', option);
             return option.name
                 .toLowerCase()
                 .includes(query.value.toLowerCase());
         }
-        console.log(option);
         return option.toLowerCase().includes(query.value.toLowerCase());
     });
 });
@@ -63,7 +61,11 @@ watch(query, (value) => {
                 :placeholder="placeholder"
                 :displayValue="(option) => option?.name || option || ''"
                 @input="query = $event.target.value"
-                @keydown.backspace="() => {if (query === '') emit('update:modelValue', null)}"
+                @keydown.backspace="
+                    () => {
+                        if (query === '') emit('update:modelValue', null);
+                    }
+                "
             />
             <component
                 :is="icon"
