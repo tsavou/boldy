@@ -75,10 +75,13 @@ const applyFilters = () => {
     const params = {};
 
     if (filters.selectedSearchOption) {
-        if (filters.selectedSearchOption.type === 'Métier') {
-            params.job = filters.selectedSearchOption.name;
-        } else if (filters.selectedSearchOption.type === 'Compétence') {
-            params.skill = filters.selectedSearchOption.name;
+        if (typeof filters.selectedSearchOption === 'object') {
+            const { type, name } = filters.selectedSearchOption;
+            if (type === 'Métier') params.job = name;
+            if (type === 'Compétence') params.skill = name;
+        } else {
+            // selectedSearchOption est une chaîne de caractères lorsque le job est sélectionné depuis la page d'accueil
+            params.job = filters.selectedSearchOption;
         }
     }
 
