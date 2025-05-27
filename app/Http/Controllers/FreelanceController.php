@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FreelanceFilterRequest;
 use App\Models\Freelance;
 use App\Models\Profession;
+use App\Models\Scopes\VerifiedScope;
 use App\Models\Skill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -126,10 +127,11 @@ class FreelanceController extends Controller
     {
         // Fetch the freelance profile with the given slug, including related data
         $freelance = Freelance::where('slug', $slug)
+            ->withoutGlobalScopes([VerifiedScope::class])
             ->with(['user', 'skills', 'professions', 'experiences', 'certifications', 'freelanceMedias'])
             ->first();
 
-        if (! $freelance) {
+        if (!$freelance) {
             abort(404, 'Ce profil est introuvable');
         }
 
