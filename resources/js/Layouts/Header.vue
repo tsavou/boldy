@@ -130,6 +130,7 @@ const logout = () => {
                                         @click="logout"
                                         method="post"
                                         as="button"
+                                        href="#"
                                     >
                                         Déconnexion
                                     </DropdownLink>
@@ -246,6 +247,7 @@ const logout = () => {
                             @click="logout"
                             method="post"
                             as="button"
+                            href="#"
                         >
                             Déconnexion
                         </ResponsiveNavLink>
