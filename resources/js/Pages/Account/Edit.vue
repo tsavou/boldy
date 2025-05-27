@@ -4,7 +4,7 @@ import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
 import { Head } from '@inertiajs/vue3';
-import VerifyFreelanceForm from "@/Pages/Profile/Partials/VerifyFreelanceForm.vue";
+import VerifyFreelanceForm from "@/Pages/Account/Partials/VerifyFreelanceForm.vue";
 
 defineProps({
     mustVerifyEmail: {
