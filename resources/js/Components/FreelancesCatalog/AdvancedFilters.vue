@@ -12,7 +12,7 @@ import { ArrowPathIcon } from '@heroicons/vue/24/outline/index.js';
 import Slider from '@vueform/slider';
 import { ChevronDownIcon } from '@heroicons/vue/20/solid/index.js';
 import { computed } from 'vue';
-import ExperienceLevelOption from '@/Components/ExperienceLevelOption.vue';
+import ExperienceLevelOption from '@/Components/FreelancesCatalog/ExperienceLevelOption.vue';
 
 const props = defineProps({
     filters: Object,
@@ -99,7 +99,11 @@ const clearAllFilters = () => {
 
             <div class="flex justify-between text-sm text-gray-500">
                 <span>{{ filters.experienceRange[0] }}</span>
-                <span>{{ filters.experienceRange[1] < 10 ? filters.experienceRange[1] : '10+' }}</span>
+                <span>{{
+                    filters.experienceRange[1] < 10
+                        ? filters.experienceRange[1]
+                        : '10+'
+                }}</span>
             </div>
         </div>
 
@@ -135,16 +139,17 @@ const clearAllFilters = () => {
                     <PopoverPanel
                         class="absolute z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black/5 focus:outline-none"
                     >
-                    <ExperienceLevelOption v-model="filters.level" />
+                        <ExperienceLevelOption v-model="filters.level" />
                     </PopoverPanel>
                 </transition>
             </Popover>
         </PopoverGroup>
-        <div class="block space-y-4 text-sm font-medium text-gray-700 md:hidden">
+        <div
+            class="block space-y-4 text-sm font-medium text-gray-700 md:hidden"
+        >
             <label>Niveau d'expérience</label>
             <ExperienceLevelOption v-model="filters.level" />
         </div>
-
 
         <button
             v-if="showClearButton"
@@ -157,4 +162,6 @@ const clearAllFilters = () => {
         </button>
     </div>
 </template>
-<style src="@vueform/slider/themes/default.css"></style>
+<style
+    src="../../../../node_modules/@vueform/slider/themes/default.css"
+></style>

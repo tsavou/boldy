@@ -1,5 +1,4 @@
 <script setup>
-
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -26,11 +25,7 @@ const levels = [
 
 <template>
     <form class="space-y-4">
-        <div
-            v-for="level in levels"
-            :key="level.id"
-            class="flex gap-3"
-        >
+        <div v-for="level in levels" :key="level.id" class="flex gap-3">
             <div class="flex h-5 shrink-0 items-center">
                 <div class="group grid size-4 grid-cols-1">
                     <input
@@ -59,13 +54,10 @@ const levels = [
             <label
                 :for="`level-${level.id}`"
                 class="whitespace-nowrap pr-6 text-sm font-medium text-gray-900"
-            >{{ level.name }}</label
+                >{{ level.name }}</label
             >
         </div>
     </form>
-
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
