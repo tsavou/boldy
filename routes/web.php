@@ -22,20 +22,30 @@ Route::get('/welcome', function () {
     ]);
 });
 
+// Accueil
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// Mon compte
 Route::middleware('auth')->group(function () {
     Route::get('/account', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/account', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/account', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// FREELANCES
+// Catalogue des freelances
 Route::get('/freelance', [FreelanceController::class, 'index'])->name('freelance.index');
+
+// Profil d'un freelance
 Route::get('/freelance/{slug}', [FreelanceController::class, 'show'])->name('freelance.show');
 
-Route::post('/freelance/update-images', [FreelanceController::class, 'updateImage'])
-    ->middleware(['auth'])
-    ->name('profile.updateImages');
+// Modification du profil freelance
+Route::middleware(['auth', 'can:update,freelance'])->group(function () {
+    Route::post('/freelance/{freelance}/update-images', [FreelanceController::class, 'updateImage'])->name('freelance.updateImages');
+    Route::put('/freelance/{freelance}/update-bio', [FreelanceController::class, 'updateBio'])->name('freelance.updateBio');
+});
+
+
 
 // Pages légales
 

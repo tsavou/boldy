@@ -12,20 +12,19 @@ import AlertBanner from '@/Components/AlertBanner.vue';
 import { EnvelopeIcon } from '@heroicons/vue/24/solid/index.js';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 
-defineProps({
+const props = defineProps({
     freelance: Object,
     isEditable: Boolean,
     errors: Object,
 });
 
-const page = usePage();
+const emit = defineEmits(['notify']);
 
 const imagesForm = useForm({
     avatar: null,
     cover: null,
 });
 
-const showNotification = ref(true);
 const coverImageSrc = ref('');
 const avatarImageSrc = ref('');
 
@@ -62,27 +61,21 @@ const resetAvatarImage = () => {
 };
 
 const submitCoverImage = () => {
-    imagesForm.post(route('profile.updateImages'), {
+    imagesForm.post(route('freelance.updateImages', props.freelance.id), {
         preserveScroll: true,
         onSuccess: () => {
-            showNotification.value = true;
+            emit('notify');
             resetCoverImage();
-            setTimeout(() => {
-                showNotification.value = false;
-            }, 3000);
         },
     });
 };
 
 const submitAvatarImage = () => {
-    imagesForm.post(route('profile.updateImages'), {
+    imagesForm.post(route('freelance.updateImages', props.freelance.id), {
         preserveScroll: true,
         onSuccess: () => {
-            showNotification.value = true;
+            emit('notify');
             resetAvatarImage();
-            setTimeout(() => {
-                showNotification.value = false;
-            }, 3000);
         },
     });
 };
@@ -90,18 +83,6 @@ const submitAvatarImage = () => {
 
 <template>
     <div>
-        <AlertBanner
-            v-show="showNotification && page.props.flash.success"
-            fixed
-            position="top"
-        >
-            <template #icon>
-                <CheckCircleIcon class="h-5 w-5" />
-            </template>
-            <template #title>
-                {{ page.props.flash.success }}
-            </template>
-        </AlertBanner>
         <AlertBanner
             v-if="errors.cover"
             fixed
@@ -114,7 +95,7 @@ const submitAvatarImage = () => {
             </template>
         </AlertBanner>
 
-        <div class="group relative bg-orange-50 text-green-900">
+        <div class="group relative bg-orange-50 text-green-900 shadow-md">
             <div class="relative flex">
                 <img
                     :src="
@@ -158,7 +139,7 @@ const submitAvatarImage = () => {
                 </div>
             </div>
 
-            <div class="mx-auto flex max-w-5xl px-4 sm:px-6 lg:px-8">
+            <div class="mx-auto flex max-w-6xl px-4 sm:px-6 lg:px-8">
                 <div
                     class="group/avatar relative -mt-16 flex size-24 items-center justify-center sm:size-32"
                 >
@@ -228,15 +209,15 @@ const submitAvatarImage = () => {
                     </div>
                 </div>
                 <div
-                    class="mt-2 flex min-w-0 flex-1 items-center justify-end space-x-6 pb-1 sm:mt-0"
+                    class="flex min-w-0 flex-1 items-center justify-end space-x-6 pb-1"
                 >
-                    <!--      TODO: Ajouter la route pour modifier le profil du freelance             -->
+<!--                    &lt;!&ndash;      TODO: Ajouter la route pour modifier le profil du freelance             &ndash;&gt;
                     <PrimaryButton v-if="isEditable" as="button">
                         <PencilIcon class="-ml-0.5 size-4" aria-hidden="true" />
                         <span class="text-xs sm:text-sm">Éditer</span>
-                    </PrimaryButton>
+                    </PrimaryButton>-->
                     <PrimaryButton
-                        v-else
+                       v-if="!isEditable"
                         as="a"
                         :href="`mailto:${freelance.user.email}`"
                     >
@@ -244,7 +225,7 @@ const submitAvatarImage = () => {
                             class="-ml-0.5 mr-1 size-5"
                             aria-hidden="true"
                         />
-                        <span>Contacter</span>
+                        <span class="text-xs sm:text-sm">Contacter</span>
                     </PrimaryButton>
                 </div>
             </div>

@@ -146,7 +146,7 @@ watch(
 <template>
     <Head title="Freelances" />
     <Layout>
-        <div class="">
+        <div class="bg-orange-50">
             <!-- Mobile filter dialog -->
             <TransitionRoot as="template" :show="mobileFiltersOpen">
                 <Dialog
@@ -249,7 +249,7 @@ watch(
                     </section>
                 </div>
 
-                <div class="sticky top-[64px] z-30 bg-orange-100">
+                <div class="sticky top-[64px] z-30 bg-orange-100 shadow-md">
                     <!-- Filters -->
                     <section
                         aria-labelledby="filter-heading"
