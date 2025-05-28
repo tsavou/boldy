@@ -45,7 +45,8 @@ const buttonColorClass = computed(() => {
 const processingClass = computed(() => {
     return {
         purple: 'text-white',
-        green: 'text-white',
+        green: 'text-orange-50',
+        secondary: 'text-green-900',
         white: 'text-gray-700',
         red: 'text-white',
         orange: 'text-white',
