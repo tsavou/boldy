@@ -135,7 +135,7 @@ class FreelanceController extends Controller
             abort(404, 'Ce profil est introuvable');
         }
 
-        $isEditable = auth()->check() && auth()->user()->id === $freelance->user_id;
+        $isEditable = auth()->check() && auth()->user()->can('update', $freelance);
 
         if (! $isEditable && ! $freelance->is_verified) {
             abort(404, 'Ce profil est introuvable, privé ou non vérifié.');
@@ -150,14 +150,12 @@ class FreelanceController extends Controller
     /*
      * Upload image into public storage and update the path in the database for freelance profile
      * */
-    public function updateImage(Request $request)
+    public function updateImage(Request $request, Freelance $freelance)
     {
         $request->validate([
             'cover' => 'nullable|image',
             'avatar' => 'nullable|image',
         ]);
-
-        $freelance = auth()->user()->freelance;
 
         $success = '';
 
@@ -180,5 +178,16 @@ class FreelanceController extends Controller
         }
 
         return back()->with('success', $success);
+    }
+
+    public function updateBio(Request $request, Freelance $freelance)
+    {
+        $request->validate([
+            'bio' => 'nullable|string|max:2000',
+        ]);
+
+        $freelance->update(['bio' => $request->bio]);
+
+        return back()->with('success', 'Votre bio a été mise à jour');
     }
 }
