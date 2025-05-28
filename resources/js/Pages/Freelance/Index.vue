@@ -20,9 +20,9 @@ import {
 import { ChevronDownIcon } from '@heroicons/vue/20/solid';
 import SearchBar from '@/Components/SearchBar.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import AdvancedFilters from '@/Components/AdvancedFilters.vue';
+import AdvancedFilters from '@/Components/FreelancesCatalog/AdvancedFilters.vue';
 import PaginationNavigation from '@/Components/PaginationNavigation.vue';
-import FreelanceCard from '@/Components/FreelanceCard.vue';
+import FreelanceCard from '@/Components/FreelancesCatalog/FreelanceCard.vue';
 
 const props = defineProps({
     freelances: Object,
@@ -374,6 +374,7 @@ watch(
                     </div>
 
                     <div
+                        v-if="freelances.total > 0"
                         class="grid grid-cols-1 items-stretch justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                     >
                         <FreelanceCard
@@ -381,6 +382,9 @@ watch(
                             :key="freelance.id"
                             :freelance="freelance"
                         />
+                    </div>
+                    <div v-else class="text-center text-xl text-green-900">
+                        Aucun freelance correspondant à votre recherche
                     </div>
                 </section>
                 <!-- Pagination -->

@@ -16,8 +16,6 @@
             </span>
         </span>
 
-
-
         <span
             v-if="freelance.is_boosted"
             class="group/boost absolute right-4 top-4 rounded bg-lime-300 p-1"
@@ -65,7 +63,9 @@
         </div>
         <!-- Skills -->
 
-        <div class="my-4 flex flex-wrap justify-center gap-2 max-h-16 overflow-hidden">
+        <div
+            class="my-4 flex max-h-16 flex-wrap justify-center gap-2 overflow-hidden"
+        >
             <span
                 v-for="skill in freelance.skills"
                 :key="skill.id"
