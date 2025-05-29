@@ -12,6 +12,7 @@ import Bio from '@/Components/FreelanceProfile/Bio.vue';
 import AlertBanner from '@/Components/AlertBanner.vue';
 import { CheckCircleIcon } from '@heroicons/vue/24/solid/index.js';
 import { ref } from 'vue';
+import KeyInfos from '@/Components/FreelanceProfile/KeyInfos.vue';
 
 defineProps({
     freelance: Object,
@@ -63,7 +64,9 @@ const handleNotification = () => {
                 <div
                     class="row-span-2 flex flex-col gap-2 rounded-3xl bg-green-900 p-6 text-orange-50 shadow"
                 >
-                    <h2 class="text-lg font-bold">Infos clés</h2>
+                    <KeyInfos :freelance="freelance" :is-editable="isEditable" @notify="handleNotification" />
+
+<!--                    <h2 class="text-lg font-bold">Infos clés</h2>
                     <p class="flex items-center gap-2">
                         <span
                             :class="
@@ -90,7 +93,7 @@ const handleNotification = () => {
                     </p>
                     <p>
                         🕑 Expérience : {{ freelance.experience_in_years }} ans
-                    </p>
+                    </p>-->
                 </div>
 
                 <!-- Présentation (bio) -->

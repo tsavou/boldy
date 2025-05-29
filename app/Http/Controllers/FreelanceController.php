@@ -190,4 +190,17 @@ class FreelanceController extends Controller
 
         return back()->with('success', 'Votre bio a été mise à jour');
     }
+
+    public function updateInfos(Request $request, Freelance $freelance)
+    {
+        $request->validate([
+            'is_available' => 'required|boolean',
+            'price_per_day' => 'nullable|integer|min:0',
+        ]);
+
+        $freelance->update($request->only('is_available', 'price_per_day'));
+
+        return back()->with('success', 'Informations mises à jour.');
+    }
+
 }

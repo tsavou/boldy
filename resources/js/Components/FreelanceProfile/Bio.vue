@@ -45,7 +45,7 @@ const saveBio = () => {
         onSuccess: () => {
             emit('notify');
             editing.value = false;
-        }
+        },
     });
 };
 </script>
@@ -63,31 +63,29 @@ const saveBio = () => {
             <XMarkIcon v-if="editing" class="size-5" />
             <PencilIcon v-else class="size-5" />
             {{ editing ? 'Annuler' : 'Modifier' }}
-
-
         </PrimaryButton>
     </div>
     <div v-if="editing">
-        <div class="relative">
-            <div
-                ref="bioInput"
-                contenteditable="true"
-                @input="handleInput"
-                class="w-full min-h-32 max-h-60 overflow-auto whitespace-pre-wrap break-words bg-orange-50 rounded border border-green-900 p-2 text-sm text-green-900 focus:outline-none"
-            ></div>
+        <div
+            ref="bioInput"
+            contenteditable="true"
+            @input="handleInput"
+            class="max-h-60 min-h-32 w-full overflow-auto whitespace-pre-wrap break-words rounded border border-green-900 bg-orange-50 p-2 text-sm text-green-900 focus:outline-none"
+        ></div>
+        <div class="flex justify-end">
             <PrimaryButton
                 :processing="form.processing"
                 as="button"
                 size="sm"
                 @click="saveBio"
-                class="absolute bottom-4 right-2 flex items-center gap-1 rounded bg-green-900 px-2 py-1 text-white hover:bg-green-700"
+                class="my-2 flex items-center gap-1 rounded bg-green-900 px-2 py-1 text-white hover:bg-green-700"
             >
                 <CheckIcon class="h-4 w-4" />
                 Valider
             </PrimaryButton>
         </div>
     </div>
-    <p v-else class="text- text-green-900 whitespace-pre-line">
-        {{ bio || 'Aucune biographie n\'a été ajoutée pour le moment.' }}
+    <p v-else class="my-auto whitespace-pre-line text-green-900">
+        {{ bio || "Aucune biographie n'a été ajoutée pour le moment." }}
     </p>
 </template>
