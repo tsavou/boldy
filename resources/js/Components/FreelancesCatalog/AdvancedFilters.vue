@@ -4,15 +4,13 @@ import {
     PopoverButton,
     PopoverGroup,
     PopoverPanel,
-    Switch,
-    SwitchGroup,
-    SwitchLabel,
 } from '@headlessui/vue';
 import { ArrowPathIcon } from '@heroicons/vue/24/outline/index.js';
 import Slider from '@vueform/slider';
 import { ChevronDownIcon } from '@heroicons/vue/20/solid/index.js';
 import { computed } from 'vue';
 import ExperienceLevelOption from '@/Components/FreelancesCatalog/ExperienceLevelOption.vue';
+import Toggle from '@/Components/Toggle.vue';
 
 const props = defineProps({
     filters: Object,
@@ -38,26 +36,12 @@ const clearAllFilters = () => {
         </h3>
 
         <!-- Availability -->
-        <SwitchGroup as="div" class="flex items-center">
-            <Switch
-                v-model="filters.available"
-                :class="[
-                    filters.available ? 'bg-green-900' : 'bg-gray-200',
-                    'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out',
-                ]"
-            >
-                <span
-                    aria-hidden="true"
-                    :class="[
-                        filters.available ? 'translate-x-5' : 'translate-x-0',
-                        'pointer-events-none inline-block size-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
-                    ]"
-                />
-            </Switch>
-            <SwitchLabel as="span" class="ml-3 text-sm">
-                <span>Disponible</span>
-            </SwitchLabel>
-        </SwitchGroup>
+        <Toggle
+            v-model="filters.available"
+            label="Disponible"
+            activeColor="bg-green-900"
+            inactiveColor="bg-gray-200"
+        />
 
         <!-- Price Range -->
 
