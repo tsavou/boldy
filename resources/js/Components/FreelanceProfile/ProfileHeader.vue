@@ -217,7 +217,7 @@ const submitAvatarImage = () => {
                         <span class="text-xs sm:text-sm">Éditer</span>
                     </PrimaryButton>-->
                     <PrimaryButton
-                       v-if="!isEditable"
+                        v-if="!isEditable"
                         as="a"
                         :href="`mailto:${freelance.user.email}`"
                     >
