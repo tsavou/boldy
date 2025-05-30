@@ -19,4 +19,14 @@ class CertificationRequest extends FormRequest
     {
         return true;
     }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Le nom est requis.',
+            'year.required' => 'L\'année est requise.',
+            'year.integer' => 'L\'année doit être un nombre entier.',
+
+        ];
+    }
 }
