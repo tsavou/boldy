@@ -6,6 +6,7 @@ import { onMounted, ref } from 'vue';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
 import PricingTier from '@/Components/PricingTier.vue';
 import { tiers } from '@/data/pricingTiers.js';
+import { formatExperience } from '../utils/formatters.js';
 
 const props = defineProps({
     boosted: Array,
@@ -292,11 +293,8 @@ onMounted(() => {
                             "
                         >
                             {{ freelance.experience_level }}
-                            ({{ freelance.experience_in_years }}
-                            {{
-                                freelance.experience_in_years > 1
-                                    ? 'ans'
-                                    : 'an'
+                            ({{
+                                formatExperience(freelance.experience_in_years)
                             }})
                         </span>
 
