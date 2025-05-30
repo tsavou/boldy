@@ -1,10 +1,9 @@
 <script setup>
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
-import { PencilIcon, CheckIcon } from '@heroicons/vue/24/solid';
+import { PencilIcon, CheckIcon, XMarkIcon, Squares2X2Icon } from '@heroicons/vue/24/solid';
 import Toggle from '@/Components/Toggle.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { XMarkIcon } from '@heroicons/vue/24/solid/index.js';
 import Slider from '@vueform/slider';
 import { formatExperience } from '@/utils/formatters.js';
 
@@ -41,7 +40,10 @@ const saveInfos = () => {
 
 <template>
     <div class="mb-6 flex items-center justify-between">
-        <h2 class="text-lg font-bold">Infos clés</h2>
+        <h2 class="flex items-center text-lg font-bold">
+            <Squares2X2Icon class="mr-2 size-6" />
+            Infos clés
+        </h2>
         <PrimaryButton
             as="button"
             :color="editing ? 'white' : 'secondary'"
