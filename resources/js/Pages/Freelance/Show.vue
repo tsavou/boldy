@@ -11,11 +11,11 @@ import {
 import Bio from '@/Components/FreelanceProfile/Bio.vue';
 import AlertBanner from '@/Components/AlertBanner.vue';
 import { CheckCircleIcon } from '@heroicons/vue/24/solid/index.js';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import KeyInfos from '@/Components/FreelanceProfile/KeyInfos.vue';
 import JobSelect from '@/Components/FreelanceProfile/JobSelect.vue';
 
-defineProps({
+const props = defineProps({
     freelance: Object,
     isEditable: Boolean,
     professions: Array,
@@ -26,6 +26,22 @@ defineProps({
 const page = usePage();
 
 const showNotification = ref(false);
+
+const photos = computed(() => {
+    return props.freelance.freelance_medias
+        ? props.freelance.freelance_medias.filter(
+              (media) => media.type === 'image',
+          )
+        : [];
+});
+
+const videos = computed(() => {
+    return props.freelance.freelance_medias
+        ? props.freelance.freelance_medias.filter(
+              (media) => media.type === 'video',
+          )
+        : [];
+});
 const handleNotification = () => {
     showNotification.value = true;
     setTimeout(() => {
@@ -56,8 +72,12 @@ const handleNotification = () => {
             @notify="handleNotification"
         />
         <section class="mx-auto mt-4 max-w-6xl px-4">
-
-            <JobSelect :jobs="professions" :freelance="freelance" :is-editable="isEditable" />
+            <JobSelect
+                :jobs="professions"
+                :freelance="freelance"
+                :is-editable="isEditable"
+                @notify="handleNotification"
+            />
             <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <!-- colonne 1-->
                 <div class="order-2 col-span-1 flex flex-col gap-4 md:order-1">
@@ -136,7 +156,7 @@ const handleNotification = () => {
                     <!-- Photos -->
                     <div class="columns-2 gap-4">
                         <div
-                            v-for="photo in freelance.freelance_medias"
+                            v-for="photo in photos"
                             :key="photo.id"
                             class="mb-4 break-inside-avoid"
                         >
@@ -226,12 +246,11 @@ const handleNotification = () => {
 
                     <div class="gap-4">
                         <div
-                            v-for="video in freelance.freelance_medias"
+                            v-for="video in videos"
                             :key="video.id"
                             class="mb-4 break-inside-avoid"
                         >
                             <iframe
-                                v-if="video.type === 'video'"
                                 :src="video.url"
                                 title="Vidéo"
                                 allowfullscreen
