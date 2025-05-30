@@ -44,6 +44,7 @@ Route::middleware(['auth', 'can:update,freelance'])->group(function () {
     Route::post('/freelance/{freelance}/update-images', [FreelanceController::class, 'updateImage'])->name('freelance.updateImages');
     Route::put('/freelance/{freelance}/update-bio', [FreelanceController::class, 'updateBio'])->name('freelance.updateBio');
     Route::put('/freelance/{freelance}/infos', [FreelanceController::class, 'updateInfos'])->name('freelance.updateInfos');
+    Route::put('/freelances/{freelance}/professions', [FreelanceController::class, 'updateProfessions'])->name('freelances.updateProfessions');
 });
 
 

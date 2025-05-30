@@ -13,10 +13,13 @@ import AlertBanner from '@/Components/AlertBanner.vue';
 import { CheckCircleIcon } from '@heroicons/vue/24/solid/index.js';
 import { ref } from 'vue';
 import KeyInfos from '@/Components/FreelanceProfile/KeyInfos.vue';
+import JobSelect from '@/Components/FreelanceProfile/JobSelect.vue';
 
 defineProps({
     freelance: Object,
     isEditable: Boolean,
+    professions: Array,
+    skills: Array,
     errors: Object,
 });
 
@@ -53,9 +56,8 @@ const handleNotification = () => {
             @notify="handleNotification"
         />
         <section class="mx-auto mt-4 max-w-6xl px-4">
-            <h2 class="my-12 text-center text-2xl font-bold text-green-800">
-                {{ freelance.professions.map((p) => p.name).join(' • ') }}
-            </h2>
+
+            <JobSelect :jobs="professions" :freelance="freelance" :is-editable="isEditable" />
             <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <!-- colonne 1-->
                 <div class="order-2 col-span-1 flex flex-col gap-4 md:order-1">

@@ -144,6 +144,8 @@ class FreelanceController extends Controller
         return Inertia::render('Freelance/Show', [
             'freelance' => $freelance,
             'isEditable' => $isEditable,
+            'professions' => $isEditable ? Profession::orderBy('name')->get() : [],
+            'skills' => $isEditable ? Skill::orderBy('name')->get() : [],
         ]);
     }
 
@@ -178,6 +180,18 @@ class FreelanceController extends Controller
         }
 
         return back()->with('success', $success);
+    }
+
+    public function updateProfessions(Request $request, Freelance $freelance)
+    {
+        $validated = $request->validate([
+            'professions' => ['nullable', 'array'],
+            'professions.*' => ['exists:professions,id'],
+        ]);
+
+        $freelance->professions()->sync($validated['professions']);
+
+        return back()->with('success', 'Métiers mis à jour.');
     }
 
     public function updateBio(Request $request, Freelance $freelance)
