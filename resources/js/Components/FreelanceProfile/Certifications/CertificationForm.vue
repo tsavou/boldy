@@ -63,7 +63,6 @@ const submit = () => {
                 type="text"
                 placeholder="Certification, formation, diplôme..."
                 class="mt-1 block w-full"
-                required
             />
             <InputError class="mt-2" :message="form.errors.name" />
         </div>
@@ -90,7 +89,6 @@ const submit = () => {
             <select
                 id="year"
                 v-model="form.year"
-                required
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-900 focus:ring-green-900"
             >
                 <option v-for="year in years" :key="year" :value="year">
