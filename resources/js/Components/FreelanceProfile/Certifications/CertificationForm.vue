@@ -101,6 +101,7 @@ const submit = () => {
         <div class="mt-4 flex justify-end gap-2">
             <PrimaryButton
                 as="button"
+                type="button"
                 color="red"
                 size="lg"
                 @click="emit('cancel')"
