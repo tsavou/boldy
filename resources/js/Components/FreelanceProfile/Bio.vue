@@ -85,7 +85,7 @@ const saveBio = () => {
             </PrimaryButton>
         </div>
     </div>
-    <p v-else class="my-auto whitespace-pre-line text-green-900">
+    <p v-else class="whitespace-pre-line text-green-900">
         {{ bio || "Aucune biographie n'a été ajoutée pour le moment." }}
     </p>
 </template>

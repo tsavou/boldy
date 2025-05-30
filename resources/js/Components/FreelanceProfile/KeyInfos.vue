@@ -39,7 +39,7 @@ const saveInfos = () => {
 </script>
 
 <template>
-    <div class="flex items-center justify-between mb-6">
+    <div class="mb-6 flex items-center justify-between">
         <h2 class="text-lg font-bold">Infos clés</h2>
         <PrimaryButton
             as="button"
@@ -51,36 +51,63 @@ const saveInfos = () => {
             <XMarkIcon v-if="editing" class="size-5" />
             <PencilIcon v-else class="size-5" />
             {{ editing ? 'Annuler' : 'Modifier' }}
-
-
         </PrimaryButton>
     </div>
 
-    <div class="space-y-6">
-        <p class="flex items-center">
-            <Toggle v-if="editing" v-model="form.is_available" active-color="green" activeColor="bg-green-600" />
+    <div class="grid grid-cols-2 gap-4">
+        <!--Disponibilité-->
+        <div
+            class="flex flex-col items-center justify-center gap-2 rounded-xl bg-green-800/50 p-4"
+        >
             <span
-                :class="form.is_available ? 'bg-green-600' : 'bg-red-500'"
-                class="rounded-full px-2 py-0.5 text-sm text-orange-50"
+                :class="form.is_available ? 'bg-emerald-100 text-emerald-800 fill-emerald-500 ring-emerald-800' : 'bg-rose-100 text-rose-800 fill-rose-500 ring-red-900'"
+                class="inline-flex items-center gap-x-1.5 rounded-full px-2 py-0.5 text-sm font-medium ring-1 ring-inset"
             >
                 {{ form.is_available ? 'Disponible' : 'Indisponible' }}
             </span>
-        </p>
-        <p v-if="!editing">
-            💶 <strong>{{ form.price_per_day }}€</strong> / jour
-        </p>
-        <div v-else class="flex items-center justify-between">
-            <div class="slider--lime text-green-900">
-                <label for="price" class="mr-2">Tarif :</label>
+            <Toggle
+                v-if="editing"
+                v-model="form.is_available"
+                active-color="green"
+                activeColor="bg-green-600"
+            />
+        </div>
+
+        <!--Tarif-->
+        <div
+            class="flex flex-col gap-2 rounded-xl bg-green-800/50 p-4"
+            v-if="!editing"
+        >
+            <span class="text-xs text-lime-200">Tarif indicatif</span>
+            <span class="text-center text-lg font-bold"
+                >{{ form.price_per_day }}€ / jour</span
+            >
+        </div>
+        <div v-else class="flex flex-col gap-2 rounded-xl bg-green-800/50 p-4">
+            <label for="price_per_day" class="text-xs text-lime-200"
+                >Tarif indicatif</label
+            >
+            <div class="slider--lime">
                 <Slider
                     v-model="form.price_per_day"
+                    tooltipPosition="bottom"
                     :min="0"
                     :max="1500"
                     :step="5"
                     :format="(v) => `${Math.round(v)}€`"
-                    class="w-48"
+                    class="w-32"
                 />
             </div>
+        </div>
+
+        <div
+            v-if="editing"
+            class="col-span-2 flex items-center justify-between gap-2 rounded-xl bg-green-800/50 p-2 text-xs italic text-lime-200"
+        >
+            <p>
+                Le niveau et les années d'expérience sont calculés
+                automatiquement à partir de vos expériences.
+            </p>
             <PrimaryButton
                 :processing="form.processing"
                 as="button"
@@ -94,18 +121,23 @@ const saveInfos = () => {
             </PrimaryButton>
         </div>
 
-        <p>
-            🎖️ Niveau : <strong>{{ props.freelance.experience_level }}</strong>
-        </p>
-        <p>🕑 Expérience : {{ props.freelance.experience_in_years }} {{ props.freelance.experience_in_years > 1 ? 'ans' : 'an' }}</p>
-        <p v-if="editing" class="mt-2 text-xs italic text-lime-200">
-            Le niveau et les années d'expérience sont calculés automatiquement à
-            partir de vos expériences.
-        </p>
+        <div class="flex flex-col gap-2 rounded-xl bg-green-800/50 p-4">
+            <span class="text-xs text-lime-200">Expérience</span>
+            <span class="text-center text-lg font-bold">
+                {{ props.freelance.experience_in_years }}
+                {{ props.freelance.experience_in_years > 1 ? 'ans' : 'an' }}
+            </span>
+        </div>
+
+        <div
+            class="flex items-center justify-center rounded-xl bg-green-800/50 p-4"
+        >
+            <span class="text-md text-center font-bold text-lime-300">
+                {{ props.freelance.experience_level }}
+            </span>
+        </div>
     </div>
 </template>
 <style
-    src="../../../../node_modules/@vueform/slider/themes/default.css">
-
-
-</style>
+    src="../../../../node_modules/@vueform/slider/themes/default.css"
+></style>

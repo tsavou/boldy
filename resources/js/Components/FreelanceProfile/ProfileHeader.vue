@@ -1,12 +1,11 @@
 <script setup>
-import { useForm, usePage } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import {
     XMarkIcon,
     CheckCircleIcon,
     CameraIcon,
     MapPinIcon,
-    PencilIcon,
 } from '@heroicons/vue/24/solid';
 import AlertBanner from '@/Components/AlertBanner.vue';
 import { EnvelopeIcon } from '@heroicons/vue/24/solid/index.js';
@@ -211,11 +210,6 @@ const submitAvatarImage = () => {
                 <div
                     class="flex min-w-0 flex-1 items-center justify-end space-x-6 pb-1"
                 >
-<!--                    &lt;!&ndash;      TODO: Ajouter la route pour modifier le profil du freelance             &ndash;&gt;
-                    <PrimaryButton v-if="isEditable" as="button">
-                        <PencilIcon class="-ml-0.5 size-4" aria-hidden="true" />
-                        <span class="text-xs sm:text-sm">Éditer</span>
-                    </PrimaryButton>-->
                     <PrimaryButton
                         v-if="!isEditable"
                         as="a"

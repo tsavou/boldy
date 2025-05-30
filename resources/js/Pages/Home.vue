@@ -63,9 +63,9 @@ const getExperienceLevelColor = (level) => {
 };
 
 const getTJMColor = (price) => {
-    if (price < 250) return 'bg-green-200 text-green-900 fill-green-500';
-    if (price < 500) return 'bg-yellow-200 text-yellow-900 fill-yellow-500';
-    return 'bg-red-200 text-red-900 fill-red-500';
+    if (price < 350) return 'bg-emerald-100 text-emerald-800 fill-emerald-500';
+    if (price < 600) return 'bg-amber-100 text-amber-800 fill-amber-500';
+    return 'bg-rose-100 text-rose-800 fill-rose-500';
 };
 
 onMounted(() => {
@@ -292,7 +292,12 @@ onMounted(() => {
                             "
                         >
                             {{ freelance.experience_level }}
-                            ({{ freelance.experience_in_years }} ans)
+                            ({{ freelance.experience_in_years }}
+                            {{
+                                freelance.experience_in_years > 1
+                                    ? 'ans'
+                                    : 'an'
+                            }})
                         </span>
 
                         <!-- Badge TJM -->
@@ -364,6 +369,7 @@ onMounted(() => {
                                     :key="category.id"
                                 >
                                     <Link
+                                        v-if="category.freelances_count > 0"
                                         :href="
                                             route('freelance.index', {
                                                 job: category.name,
