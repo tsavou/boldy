@@ -36,7 +36,7 @@ const buttonColorClass = computed(() => {
         secondary:
             'border border-orange-50 bg-orange-50 hover:bg-green-900 hover:border-green-900 text-green-900 hover:text-orange-50',
         white: 'border border-gray-300 bg-orange-50 hover:bg-gray-50 text-gray-700',
-        red: 'border border-red-600 bg-red-600 hover:bg-red-400 hover:border-red-400 text-white',
+        red: 'border border-red-500 bg-red-600 hover:bg-red-400 hover:border-red-400 text-white',
         orange: 'border border-orange-500 bg-orange-500 hover:bg-orange-400 hover:border-orange-400 text-white',
         gray: 'border border-gray-100 bg-gray-100 hover:bg-gray-200 hover:border-gray-200 text-gray-700',
     }[props.color];
