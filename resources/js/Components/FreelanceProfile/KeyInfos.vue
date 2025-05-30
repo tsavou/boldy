@@ -1,7 +1,12 @@
 <script setup>
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
-import { PencilIcon, CheckIcon, XMarkIcon, Squares2X2Icon } from '@heroicons/vue/24/solid';
+import {
+    PencilIcon,
+    CheckIcon,
+    XMarkIcon,
+    Squares2X2Icon,
+} from '@heroicons/vue/24/solid';
 import Toggle from '@/Components/Toggle.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Slider from '@vueform/slider';
@@ -63,7 +68,11 @@ const saveInfos = () => {
             class="flex flex-col items-center justify-center gap-2 rounded-xl bg-green-800/50 p-4"
         >
             <span
-                :class="form.is_available ? 'bg-emerald-100 text-emerald-800 fill-emerald-500 ring-emerald-800' : 'bg-rose-100 text-rose-800 fill-rose-500 ring-red-900'"
+                :class="
+                    form.is_available
+                        ? 'bg-emerald-100 fill-emerald-500 text-emerald-800 ring-emerald-800'
+                        : 'bg-rose-100 fill-rose-500 text-rose-800 ring-red-900'
+                "
                 class="inline-flex items-center gap-x-1.5 rounded-full px-2 py-0.5 text-sm font-medium ring-1 ring-inset"
             >
                 {{ form.is_available ? 'Disponible' : 'Indisponible' }}

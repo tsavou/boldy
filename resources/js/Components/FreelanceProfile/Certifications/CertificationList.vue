@@ -12,7 +12,7 @@ import ConfirmDialog from '@/Components/ConfirmDialog.vue';
 import Modal from '@/Components/Modal.vue';
 import CertificationForm from '@/Components/FreelanceProfile/Certifications/CertificationForm.vue';
 
-const props = defineProps({
+defineProps({
     certifications: Array,
     isEditable: Boolean,
 });
