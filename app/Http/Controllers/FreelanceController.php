@@ -49,9 +49,6 @@ class FreelanceController extends Controller
             //filtres sur l'experience
                  // En utilisant "having" plutôt que "where" car "experience_in_years" et "experience_level" sont des colonnes virtuelles non existantes dans la DB
                  // Elles sont calculées dans le scope ExperienceDataScope
-          /*  ->when($request->filled('level'), fn ($q) =>
-            $q->havingRaw('LOWER(experience_level) = ?', [strtolower($request->input('level'))])
-            )*/
 
             ->when($request->filled('level'), function ($q) use ($request) {
                 $levels = collect($request->input('level'))

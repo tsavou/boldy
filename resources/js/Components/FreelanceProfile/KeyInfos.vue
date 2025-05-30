@@ -6,6 +6,7 @@ import Toggle from '@/Components/Toggle.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { XMarkIcon } from '@heroicons/vue/24/solid/index.js';
 import Slider from '@vueform/slider';
+import { formatExperience } from '@/utils/formatters.js';
 
 const props = defineProps({
     freelance: Object,
@@ -124,8 +125,7 @@ const saveInfos = () => {
         <div class="flex flex-col gap-2 rounded-xl bg-green-800/50 p-4">
             <span class="text-xs text-lime-200">Expérience</span>
             <span class="text-center text-lg font-bold">
-                {{ props.freelance.experience_in_years }}
-                {{ props.freelance.experience_in_years > 1 ? 'ans' : 'an' }}
+                {{ formatExperience(freelance.experience_in_years) }}
             </span>
         </div>
 
