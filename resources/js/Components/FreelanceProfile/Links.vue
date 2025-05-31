@@ -42,7 +42,7 @@ const linkTypes = [
     { value: 'youtube', label: 'YouTube' },
     { value: 'tiktok', label: 'TikTok' },
     { value: 'behance', label: 'Behance' },
-    { value: 'dribble', label: 'Dribbble' },
+    { value: 'dribble', label: 'Dribble' },
     { value: 'pinterest', label: 'Pinterest' },
     { value: 'threads', label: 'Threads' },
 ];
@@ -60,6 +60,7 @@ const openModal = (link = null) => {
 
 const closeModal = () => {
     showModal.value = false;
+    form.reset();
 };
 
 const handleSubmit = () => {
