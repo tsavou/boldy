@@ -3,6 +3,7 @@
 use App\Http\Controllers\CertificationController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\FreelanceController;
+use App\Http\Controllers\FreelanceLinkController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -62,6 +63,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/experiences', [ExperienceController::class, 'store'])->name('experiences.store');
     Route::put('/experiences/{experience}', [ExperienceController::class, 'update'])->name('experiences.update')->can('update', 'experience');
     Route::delete('/experiences/{experience}', [ExperienceController::class, 'destroy'])->name('experiences.destroy')->can('update', 'experience');
+});
+
+// Freelance Links
+Route::middleware(['auth'])->group(function () {
+    Route::post('/freelance-links', [FreelanceLinkController::class, 'store'])->name('freelance-links.store');
+    Route::put('/freelance-links/{link}', [FreelanceLinkController::class, 'update'])->name('freelance-links.update')->can('update', 'link');
+    Route::delete('/freelance-links/{link}', [FreelanceLinkController::class, 'destroy'])->name('freelance-links.destroy')->can('update', 'link');
 });
 
 

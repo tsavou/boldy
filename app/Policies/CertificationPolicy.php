@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\Certification;
-use App\Models\Freelance;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
