@@ -46,6 +46,7 @@ Route::middleware(['auth', 'can:update,freelance'])->group(function () {
     Route::put('/freelance/{freelance}/update-bio', [FreelanceController::class, 'updateBio'])->name('freelance.updateBio');
     Route::put('/freelance/{freelance}/infos', [FreelanceController::class, 'updateInfos'])->name('freelance.updateInfos');
     Route::put('/freelances/{freelance}/professions', [FreelanceController::class, 'updateProfessions'])->name('freelances.updateProfessions');
+    Route::put('/freelances/{freelance}/skills', [FreelanceController::class, 'updateSkills'])->name('freelances.updateSkills');
 });
 
 // Certifications
