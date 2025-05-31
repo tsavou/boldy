@@ -7,6 +7,7 @@ import {
     CheckIcon,
     PencilIcon,
     XMarkIcon,
+    WrenchScrewdriverIcon,
 } from '@heroicons/vue/24/solid/index.js';
 
 const props = defineProps({
@@ -43,7 +44,10 @@ const saveSkills = () => {
 
 <template>
     <div class="flex items-center justify-between">
-        <h2 class="text-lg font-bold text-green-900">Compétences</h2>
+        <h2 class="flex items-center text-lg font-bold text-green-900">
+            <WrenchScrewdriverIcon class="mr-2 size-5" />
+            Compétences
+        </h2>
         <PrimaryButton
             as="button"
             :color="editing ? 'secondary' : 'green'"
