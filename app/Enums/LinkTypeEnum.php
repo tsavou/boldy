@@ -14,7 +14,7 @@ enum LinkTypeEnum: string
     case YOUTUBE = 'youtube';
     case TIKTOK = 'tiktok';
     case BEHANCE = 'behance';
-    case DRIBBBLE = 'dribbble';
+    case DRIBBBLE = 'dribble';
     case PINTEREST = 'pinterest';
 
     case THREADS = 'threads';
