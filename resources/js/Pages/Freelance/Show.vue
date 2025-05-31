@@ -12,6 +12,7 @@ import JobSelect from '@/Components/FreelanceProfile/JobSelect.vue';
 import CertificationList from '@/Components/FreelanceProfile/Certifications/CertificationList.vue';
 import SkillSelect from '@/Components/FreelanceProfile/SkillSelect.vue';
 import ExperienceList from '@/Components/FreelanceProfile/Experiences/ExperienceList.vue';
+import Links from '@/Components/FreelanceProfile/Links.vue';
 
 const props = defineProps({
     freelance: Object,
@@ -105,30 +106,11 @@ const handleNotification = () => {
                     <div
                         class="rounded-3xl bg-orange-100 p-6 text-green-900 shadow"
                     >
-                        <h2 class="flex items-center gap-2 text-lg font-bold">
-                            <LinkIcon class="h-5 w-5" />
-                            Liens externes
-                        </h2>
-                        <ul class="mt-2 text-sm">
-                            <li v-if="freelance.portfolio_url">
-                                🌐
-                                <a
-                                    :href="freelance.portfolio_url"
-                                    target="_blank"
-                                    class="underline"
-                                    >Portfolio</a
-                                >
-                            </li>
-                            <li v-if="freelance.linkedin_url">
-                                🔗
-                                <a
-                                    :href="freelance.linkedin_url"
-                                    target="_blank"
-                                    class="underline"
-                                    >LinkedIn</a
-                                >
-                            </li>
-                        </ul>
+                        <Links
+                            :links="freelance.links"
+                            :is-editable="isEditable"
+                            @notify="handleNotification"
+                        />
                     </div>
 
                     <!-- Photos -->

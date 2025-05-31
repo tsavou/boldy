@@ -134,6 +134,7 @@ class FreelanceController extends Controller
                 'professions',
                 'experiences'    => fn($query) => $query->orderByDesc('start_date'),
                 'certifications' => fn($query) => $query->orderByDesc('year'),
+                'links',
                 'freelanceMedias'
             ])
             ->first();
