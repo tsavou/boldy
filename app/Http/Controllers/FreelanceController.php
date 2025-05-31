@@ -224,4 +224,16 @@ class FreelanceController extends Controller
         return back()->with('success', 'Informations mises à jour.');
     }
 
+    public function updateSkills(Request $request, Freelance $freelance)
+    {
+        $validated = $request->validate([
+            'skills'   => ['nullable', 'array'],
+            'skills.*' => ['exists:skills,id'],
+        ]);
+
+        $freelance->skills()->sync($validated['skills']);
+
+        return back()->with('success', 'Compétences mises à jour.');
+    }
+
 }

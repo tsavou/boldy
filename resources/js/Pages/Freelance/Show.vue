@@ -10,6 +10,7 @@ import { computed, ref } from 'vue';
 import KeyInfos from '@/Components/FreelanceProfile/KeyInfos.vue';
 import JobSelect from '@/Components/FreelanceProfile/JobSelect.vue';
 import CertificationList from '@/Components/FreelanceProfile/Certifications/CertificationList.vue';
+import SkillSelect from '@/Components/FreelanceProfile/Certifications/SkillSelect.vue';
 
 const props = defineProps({
     freelance: Object,
@@ -164,26 +165,12 @@ const handleNotification = () => {
                     <div
                         class="flex flex-col gap-3 rounded-3xl bg-orange-100/50 p-6 shadow"
                     >
-                        <div class="flex items-center justify-between">
-                            <h2 class="text-lg font-bold text-green-900">
-                                Compétences
-                            </h2>
-                            <button
-                                v-if="isEditable"
-                                class="text-green-900 hover:text-green-700"
-                            >
-                                <PencilIcon class="h-5 w-5" />
-                            </button>
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                            <span
-                                v-for="skill in freelance.skills"
-                                :key="skill.id"
-                                class="rounded-full border border-green-700 bg-green-800 px-2 py-1 text-xs text-orange-50"
-                            >
-                                {{ skill.name }}
-                            </span>
-                        </div>
+                        <SkillSelect
+                            :skills="skills"
+                            :freelance="freelance"
+                            :is-editable="isEditable"
+                            @notify="handleNotification"
+                        />
                     </div>
 
                     <!-- Expériences -->
