@@ -79,6 +79,13 @@ const cancelDelete = () => {
             </PrimaryButton>
         </div>
 
+        <div v-if="certifications.length === 0">
+            <p class="mt-4 text-sm text-green-800">
+                Aucune certification ajoutée.
+            </p>
+        </div>
+
+
         <ul class="mt-4 space-y-3">
             <li
                 v-for="cert in certifications"

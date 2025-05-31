@@ -117,4 +117,9 @@ class Freelance extends Model
     {
         return $this->hasMany(Boost::class, 'freelance_id');
     }
+
+    public function links(): HasMany
+    {
+        return $this->hasMany(FreelanceLink::class, 'freelance_id');
+    }
 }
