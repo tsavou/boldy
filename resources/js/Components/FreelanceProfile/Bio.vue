@@ -1,7 +1,7 @@
 <script setup>
 import { nextTick, ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
-import { PencilIcon, CheckIcon, XMarkIcon } from '@heroicons/vue/24/solid';
+import { PencilIcon, CheckIcon, XMarkIcon, ChatBubbleLeftEllipsisIcon } from '@heroicons/vue/24/solid';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 const props = defineProps({
@@ -52,7 +52,10 @@ const saveBio = () => {
 
 <template>
     <div class="flex items-center justify-between">
-        <h2 class="text-lg font-bold text-green-900">À propos</h2>
+        <h2 class="flex items-center text-lg font-bold text-green-900">
+            <ChatBubbleLeftEllipsisIcon class="mr-2 size-6" />
+            À propos
+        </h2>
         <PrimaryButton
             as="button"
             :color="editing ? 'secondary' : 'green'"

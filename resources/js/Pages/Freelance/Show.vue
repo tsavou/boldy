@@ -2,7 +2,7 @@
 import Layout from '@/Layouts/AppLayout.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import ProfileHeader from '@/Components/FreelanceProfile/ProfileHeader.vue';
-import { PlusIcon, PencilIcon, LinkIcon } from '@heroicons/vue/24/solid';
+import { PlusIcon, LinkIcon } from '@heroicons/vue/24/solid';
 import Bio from '@/Components/FreelanceProfile/Bio.vue';
 import AlertBanner from '@/Components/AlertBanner.vue';
 import { CheckCircleIcon } from '@heroicons/vue/24/solid/index.js';
@@ -10,7 +10,8 @@ import { computed, ref } from 'vue';
 import KeyInfos from '@/Components/FreelanceProfile/KeyInfos.vue';
 import JobSelect from '@/Components/FreelanceProfile/JobSelect.vue';
 import CertificationList from '@/Components/FreelanceProfile/Certifications/CertificationList.vue';
-import SkillSelect from '@/Components/FreelanceProfile/Certifications/SkillSelect.vue';
+import SkillSelect from '@/Components/FreelanceProfile/SkillSelect.vue';
+import ExperienceList from '@/Components/FreelanceProfile/Experiences/ExperienceList.vue';
 
 const props = defineProps({
     freelance: Object,
@@ -102,7 +103,7 @@ const handleNotification = () => {
 
                     <!-- Liens externes -->
                     <div
-                        class="rounded-3xl bg-green-900 p-6 text-orange-50 shadow"
+                        class="rounded-3xl bg-orange-100 p-6 text-green-900 shadow"
                     >
                         <h2 class="flex items-center gap-2 text-lg font-bold">
                             <LinkIcon class="h-5 w-5" />
@@ -175,36 +176,13 @@ const handleNotification = () => {
 
                     <!-- Expériences -->
                     <div
-                        class="flex flex-col gap-3 overflow-auto rounded-3xl bg-orange-100 p-6 shadow"
+                        class="flex flex-col gap-3 overflow-auto rounded-3xl bg-lime-50 p-6 shadow"
                     >
-                        <div class="flex items-center justify-between">
-                            <h2 class="text-lg font-bold text-green-900">
-                                Expériences
-                            </h2>
-                            <button
-                                v-if="isEditable"
-                                class="flex items-center gap-1 text-sm text-green-900 hover:text-green-700"
-                            >
-                                <PlusIcon class="h-5 w-5" />
-                                Ajouter
-                            </button>
-                        </div>
-                        <div
-                            v-for="exp in freelance.experiences"
-                            :key="exp.id"
-                            class="rounded-lg border border-lime-100 bg-white p-3 text-sm"
-                        >
-                            <p class="font-bold text-green-900">
-                                {{ exp.title }}
-                            </p>
-                            <p class="text-gray-600">
-                                {{ exp.company }} • {{ exp.start_date }} →
-                                {{ exp.end_date }}
-                            </p>
-                            <p class="mt-1 text-xs text-green-800">
-                                {{ exp.description }}
-                            </p>
-                        </div>
+                        <ExperienceList
+                            :experiences="freelance.experiences"
+                            :is-editable="isEditable"
+                            @notify="handleNotification"
+                        />
                     </div>
 
                     <div class="gap-4">

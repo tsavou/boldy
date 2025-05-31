@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Boost;
 use App\Models\Certification;
-use App\Models\Experiences;
+use App\Models\Experience;
 use App\Models\Freelance;
 use App\Models\Profession;
 use App\Models\Role;
@@ -55,7 +55,7 @@ class FreelanceFactory extends Factory
             $freelance->skills()->attach(Skill::inRandomOrder()->take(3)->pluck('id'));
             $freelance->professions()->attach(Profession::inRandomOrder()->take(1)->pluck('id'));
             $freelance->certifications()->saveMany(Certification::factory()->count(3)->make());
-            $freelance->experiences()->saveMany(Experiences::factory()->count(3)->make());
+            $freelance->experiences()->saveMany(Experience::factory()->count(3)->make());
 
             if ($this->faker->boolean()) {
                 $freelance->boosts()->save(Boost::factory()->make());

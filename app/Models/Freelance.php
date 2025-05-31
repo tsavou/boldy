@@ -105,7 +105,7 @@ class Freelance extends Model
 
     public function experiences(): HasMany
     {
-        return $this->hasMany(Experiences::class, 'freelance_id');
+        return $this->hasMany(Experience::class, 'freelance_id');
     }
 
     public function freelanceMedias(): HasMany

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CertificationController;
+use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\FreelanceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
@@ -54,6 +55,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/certifications', [CertificationController::class, 'store'])->name('certifications.store');
     Route::put('/certifications/{certification}', [CertificationController::class, 'update'])->name('certifications.update')->can('update', 'certification');
     Route::delete('/certifications/{certification}', [CertificationController::class, 'destroy'])->name('certifications.destroy')->can('update', 'certification');
+});
+
+// Experiences
+Route::middleware(['auth'])->group(function () {
+    Route::post('/experiences', [ExperienceController::class, 'store'])->name('experiences.store');
+    Route::put('/experiences/{experience}', [ExperienceController::class, 'update'])->name('experiences.update')->can('update', 'experience');
+    Route::delete('/experiences/{experience}', [ExperienceController::class, 'destroy'])->name('experiences.destroy')->can('update', 'experience');
 });
 
 
