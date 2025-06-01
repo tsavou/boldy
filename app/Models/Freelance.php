@@ -26,6 +26,7 @@ class Freelance extends Model
         'profile_picture',
         'cover_picture',
         'siret',
+        'identity_document_path',
         'portfolio_url',
         'linkedin_url',
         'is_verified',

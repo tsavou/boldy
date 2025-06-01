@@ -21,4 +21,15 @@ class FreelancePolicy
     {
         return $user->id === $freelance->user_id;
     }
+
+    /**
+     * Determine whether the user can manage freelance profiles.
+     *
+     * @param  User  $user
+     * @return bool
+     */
+    public function manage(User $user): bool
+    {
+        return $user->role->name === 'admin';
+    }
 }
