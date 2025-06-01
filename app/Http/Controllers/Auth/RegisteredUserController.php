@@ -47,7 +47,7 @@ class RegisteredUserController extends Controller
             'role_id' => Role::where('name', 'freelance')->first()->id,
         ]);
 
-        Freelance::create([
+        $freelance = Freelance::create([
             'user_id' => $user->id,
         ]);
 
@@ -55,6 +55,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('home', absolute: false));
+        return redirect(route('freelance.show', $freelance->slug,  absolute: false));
     }
 }

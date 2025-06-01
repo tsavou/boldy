@@ -1,8 +1,8 @@
 <script setup>
 import Layout from '@/Layouts/AppLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
 import PricingTier from '@/Components/PricingTier.vue';
 import { tiers } from '@/data/pricingTiers.js';
@@ -18,6 +18,8 @@ const slider = ref(null);
 const canScrollLeft = ref(false);
 const canScrollRight = ref(false);
 
+const user = computed(() => usePage().props.auth.user);
+
 const stats = [
     { id: 1, name: 'Freelances inscrits', value: props.freelancesCount },
     { id: 2, name: 'Taux de satisfaction', value: '98%' },
@@ -26,6 +28,7 @@ const stats = [
 ];
 
 const checkScroll = () => {
+    if (!slider.value) return;
     canScrollLeft.value = slider.value.scrollLeft > 0;
     canScrollRight.value =
         slider.value.scrollLeft <
@@ -187,16 +190,29 @@ onMounted(() => {
                             <PrimaryButton
                                 as="Link"
                                 size="xl"
-                                :href="route('register')"
-                                >Rejoindre Boldy
-                                <span aria-hidden="true">→</span></PrimaryButton
+                                :href="
+                                    user
+                                        ? route(
+                                              'freelance.show',
+                                              user.freelance.slug,
+                                          )
+                                        : route('register')
+                                "
                             >
+                                {{
+                                    user
+                                        ? 'Accéder à mon profil'
+                                        : 'Rejoindre Boldy'
+                                }}
+                                <span aria-hidden="true">→</span>
+                            </PrimaryButton>
                             <PrimaryButton
                                 as="Link"
                                 size="xl"
                                 :href="route('freelance.index')"
                                 color="secondary"
-                                >Trouver un freelance
+                            >
+                                Trouver un freelance
                             </PrimaryButton>
                         </div>
                     </div>
