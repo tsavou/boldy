@@ -2,7 +2,6 @@
 import Layout from '@/Layouts/AppLayout.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import ProfileHeader from '@/Components/FreelanceProfile/ProfileHeader.vue';
-import { PlusIcon, LinkIcon } from '@heroicons/vue/24/solid';
 import Bio from '@/Components/FreelanceProfile/Bio.vue';
 import AlertBanner from '@/Components/AlertBanner.vue';
 import { CheckCircleIcon } from '@heroicons/vue/24/solid/index.js';
@@ -13,6 +12,8 @@ import CertificationList from '@/Components/FreelanceProfile/Certifications/Cert
 import SkillSelect from '@/Components/FreelanceProfile/SkillSelect.vue';
 import ExperienceList from '@/Components/FreelanceProfile/Experiences/ExperienceList.vue';
 import Links from '@/Components/FreelanceProfile/Links.vue';
+import VideoGallery from '@/Components/FreelanceProfile/VideoGallery.vue';
+import PhotoGallery from '@/Components/FreelanceProfile/PhotoGallery.vue';
 
 const props = defineProps({
     freelance: Object,
@@ -114,20 +115,11 @@ const handleNotification = () => {
                     </div>
 
                     <!-- Photos -->
-                    <div class="columns-2 gap-4">
-                        <div
-                            v-for="photo in photos"
-                            :key="photo.id"
-                            class="mb-4 break-inside-avoid"
-                        >
-                            <img
-                                v-if="photo.type === 'image'"
-                                :src="photo.url"
-                                alt="Média"
-                                class="w-full rounded-xl object-cover object-center shadow-lg"
-                            />
-                        </div>
-                    </div>
+                    <PhotoGallery
+                        :photos="photos"
+                        :is-editable="isEditable"
+                        @notify="handleNotification"
+                    />
                 </div>
 
                 <!-- colonne de droite -->
@@ -167,20 +159,11 @@ const handleNotification = () => {
                         />
                     </div>
 
-                    <div class="gap-4">
-                        <div
-                            v-for="video in videos"
-                            :key="video.id"
-                            class="mb-4 break-inside-avoid"
-                        >
-                            <iframe
-                                :src="video.url"
-                                title="Vidéo"
-                                allowfullscreen
-                                class="aspect-video w-full rounded-xl object-cover object-center shadow-lg md:h-[414px]"
-                            ></iframe>
-                        </div>
-                    </div>
+                    <VideoGallery
+                        :videos="videos"
+                        :isEditable="isEditable"
+                        @notify="handleNotification"
+                    />
                 </div>
             </div>
         </section>
