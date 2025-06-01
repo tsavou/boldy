@@ -60,8 +60,11 @@ const logout = () => {
                                 Freelances
                             </NavLink>
                             <NavLink
+                                v-if="user.role.name === 'admin'"
                                 :href="route('admin.freelances.pending')"
-                                :active="route().current('admin.freelances.pending')"
+                                :active="
+                                    route().current('admin.freelances.pending')
+                                "
                             >
                                 Validation des freelances
                             </NavLink>
@@ -227,6 +230,7 @@ const logout = () => {
                         Freelances
                     </ResponsiveNavLink>
                     <ResponsiveNavLink
+                        v-if="user.role.name === 'admin'"
                         :href="route('admin.freelances.pending')"
                         :active="route().current('admin.freelances.pending')"
                     >
