@@ -59,6 +59,12 @@ const logout = () => {
                             >
                                 Freelances
                             </NavLink>
+                            <NavLink
+                                :href="route('admin.freelances.pending')"
+                                :active="route().current('admin.freelances.pending')"
+                            >
+                                Validation des freelances
+                            </NavLink>
                         </div>
                     </div>
 
@@ -219,6 +225,12 @@ const logout = () => {
                         :active="route().current('freelance.index')"
                     >
                         Freelances
+                    </ResponsiveNavLink>
+                    <ResponsiveNavLink
+                        :href="route('admin.freelances.pending')"
+                        :active="route().current('admin.freelances.pending')"
+                    >
+                        Validation des freelances
                     </ResponsiveNavLink>
                 </div>
 
