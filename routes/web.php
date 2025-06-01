@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminFreelanceController;
 use App\Http\Controllers\CertificationController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\FreelanceController;
@@ -52,6 +53,8 @@ Route::middleware(['auth', 'can:update,freelance'])->group(function () {
     Route::put('/freelances/{freelance}/professions', [FreelanceController::class, 'updateProfessions'])->name('freelances.updateProfessions');
     Route::put('/freelances/{freelance}/skills', [FreelanceController::class, 'updateSkills'])->name('freelances.updateSkills');
 });
+Route::post('/freelances/verify', [FreelanceController::class, 'verifyFreelance'])->name('freelance.verify');
+
 
 // Certifications
 Route::middleware(['auth'])->group(function () {
@@ -78,6 +81,15 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::post('/freelance-medias', [FreelanceMediaController::class, 'store'])->name('freelance-medias.store');
     Route::delete('/freelance-medias/{media}', [FreelanceMediaController::class, 'destroy'])->name('freelance-medias.destroy');
+});
+
+// Admin
+Route::middleware(['auth', 'can:manage, App\Models\Freelance'])->group(function () {
+    Route::get('/admin/freelances/pending', [AdminFreelanceController::class, 'index'])
+        ->name('admin.freelances.pending');
+
+    Route::post('/admin/freelance/{freelance}/approve', [AdminFreelanceController::class, 'approve'])
+        ->name('admin.freelance.approve');
 });
 
 

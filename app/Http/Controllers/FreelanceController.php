@@ -250,4 +250,25 @@ class FreelanceController extends Controller
         return back()->with('success', 'Compétences mises à jour.');
     }
 
+    public function verifyFreelance(Request $request)
+    {
+
+        $request->validate([
+            'siret' => 'required|string|size:14',
+            'identity_document' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        ]);
+
+        $freelance = auth()->user()->freelance;
+
+        $path = $request->file('identity_document')->storeAs('identity_documents', $freelance->slug . '-ID' , 'public');
+
+        $freelance->update([
+            'siret' => $request->siret,
+            'identity_document_path' => Storage::url($path),
+            'is_verified' => false
+        ]);
+
+        return back()->with('success', 'Vos informations ont bien été enregistrées. Votre compte sera vérifié sous peu.');
+    }
+
 }
