@@ -172,6 +172,7 @@ class FreelanceController extends Controller
         if ($request->hasFile('cover')) {
             if ($freelance->cover_picture) {
                 Storage::disk('public')->delete($freelance->cover_picture);
+                $freelance->update(['cover_picture' => null]);
             }
             $coverPath = $request->file('cover')->storeAs('freelances', $freelance->slug.'-cover', 'public');
             $freelance->update(['cover_picture' => Storage::url($coverPath)]);
@@ -181,6 +182,7 @@ class FreelanceController extends Controller
         if ($request->hasFile('avatar')) {
             if ($freelance->profile_picture) {
                 Storage::disk('public')->delete($freelance->profile_picture);
+                $freelance->update(['profile_picture' => null]);
             }
             $avatarPath = $request->file('avatar')->storeAs('freelances', $freelance->slug.'-avatar', 'public');
             $freelance->update(['profile_picture' => Storage::url($avatarPath)]);
