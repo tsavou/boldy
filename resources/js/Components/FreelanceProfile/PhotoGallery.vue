@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
-import { PlusIcon, XMarkIcon } from '@heroicons/vue/24/solid';
+import { PhotoIcon, XMarkIcon } from '@heroicons/vue/24/solid';
 import ConfirmDialog from '@/Components/ConfirmDialog.vue';
 
 defineProps({
@@ -79,7 +79,7 @@ const handleFileChange = (e) => {
             <label
                 class="shadow-xs inline-flex cursor-pointer gap-x-1.5 rounded-md border border-green-900 bg-green-900 px-2 py-1 text-sm font-bold text-orange-50 hover:border-green-900 hover:bg-orange-50 hover:text-green-900 hover:duration-300 hover:ease-in-out"
             >
-                <PlusIcon class="size-5" />
+                <PhotoIcon class="size-5" />
                 Ajouter une photo
                 <input
                     type="file"

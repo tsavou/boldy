@@ -11,7 +11,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import ConfirmDialog from '@/Components/ConfirmDialog.vue';
 import Modal from '@/Components/Modal.vue';
 import ExperienceForm from '@/Components/FreelanceProfile/Experiences/ExperienceForm.vue';
-import { formatDate } from '../../../utils/formatters.js';
+import { formatDate } from '@/utils/formatters.js';
 
 defineProps({
     experiences: Array,
@@ -77,6 +77,12 @@ const cancelDelete = () => {
                 <PlusIcon class="size-5" />
                 Ajouter
             </PrimaryButton>
+        </div>
+
+        <div v-if="experiences.length === 0">
+            <p class="mt-4 text-sm text-green-800">
+                Aucune certification ajoutée.
+            </p>
         </div>
 
         <ul class="mt-6 space-y-3">
