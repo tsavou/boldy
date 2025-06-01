@@ -37,8 +37,6 @@ class FreelanceFactory extends Factory
             'profile_picture' => null,
             'cover_picture' => null,
             'siret' => $this->faker->numerify('##############'),
-            'portfolio_url' => $this->faker->url(),
-            'linkedin_url' => 'https://www.linkedin.com/in/' . $this->faker->userName() . '/',
             'is_verified' => true,
             'is_available' => $this->faker->boolean(),
             'created_at' => Carbon::now(),

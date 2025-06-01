@@ -7,7 +7,7 @@ use App\Models\Freelance;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
-class ExperiencesFactory extends Factory
+class ExperienceFactory extends Factory
 {
     protected $model = Experience::class;
 
