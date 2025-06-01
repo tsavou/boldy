@@ -58,10 +58,6 @@ class FreelanceFactory extends Factory
             if ($this->faker->boolean()) {
                 $freelance->boosts()->save(Boost::factory()->make());
             }
-
-            if ($this->faker->boolean()) {
-                $freelance->user->subscription()->save(Subscription::factory()->make());
-            }
         });
     }
 }
