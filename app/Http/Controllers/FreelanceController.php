@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FreelanceFilterRequest;
 use App\Models\Freelance;
 use App\Models\Profession;
-use App\Models\Scopes\VerifiedScope;
 use App\Models\Skill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -17,7 +16,8 @@ class FreelanceController extends Controller
     {
         // Récupérer les freelances avec leurs professions, compétences et expériences
         // et filtrer en fonction des critères de recherche
-        $query = Freelance::with('professions', 'skills', 'experiences')
+        $query = Freelance::verified()
+            ->with(['professions', 'skills', 'experiences'])
 
             // disponibilité
             ->when($request->has('available'), fn($q) => $q->where('is_available', $request->input('available')))
@@ -127,7 +127,6 @@ class FreelanceController extends Controller
     {
         // Fetch the freelance profile with the given slug, including related data
         $freelance = Freelance::where('slug', $slug)
-            ->withoutGlobalScopes([VerifiedScope::class])
             ->with([
                 'user',
                 'skills',
