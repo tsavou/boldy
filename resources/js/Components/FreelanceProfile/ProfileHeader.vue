@@ -5,11 +5,11 @@ import {
     XMarkIcon,
     CheckCircleIcon,
     CameraIcon,
-    MapPinIcon,
 } from '@heroicons/vue/24/solid';
 import AlertBanner from '@/Components/AlertBanner.vue';
 import { EnvelopeIcon } from '@heroicons/vue/24/solid/index.js';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import Location from '@/Components/FreelanceProfile/Location.vue';
 
 const props = defineProps({
     freelance: Object,
@@ -200,12 +200,11 @@ const submitAvatarImage = () => {
                             </span>
                         </span>
                     </div>
-                    <div class="flex items-center">
-                        <MapPinIcon class="h-4 w-4 text-gray-400" />
-                        <p class="text-sm text-gray-400 sm:text-base">
-                            {{ freelance.location }}
-                        </p>
-                    </div>
+                    <Location
+                        :freelance="freelance"
+                        :is-editable="isEditable"
+                        @notify="emit('notify')"
+                    />
                 </div>
                 <div
                     class="flex min-w-0 flex-1 items-center justify-end space-x-6 pb-1"

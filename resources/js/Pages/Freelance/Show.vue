@@ -71,7 +71,7 @@ const handleNotification = () => {
             :errors="errors"
             @notify="handleNotification"
         />
-        <section class="mx-auto mt-4 max-w-6xl px-4">
+        <section class="mx-auto my-4 max-w-6xl px-4">
             <JobSelect
                 :jobs="professions"
                 :freelance="freelance"

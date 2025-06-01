@@ -192,6 +192,18 @@ class FreelanceController extends Controller
         return back()->with('success', $success);
     }
 
+    public function updateLocation(Request $request, Freelance $freelance)
+    {
+
+        $validated = $request->validate([
+            'location' => 'required|string|max:255',
+        ]);
+
+        $freelance->update(['location' => $validated['location']]);
+
+        return back()->with('success', 'Votre localisation a été mise à jour');
+    }
+
     public function updateProfessions(Request $request, Freelance $freelance)
     {
         $validated = $request->validate([
