@@ -48,23 +48,38 @@ const saveSkills = () => {
             <WrenchScrewdriverIcon class="mr-2 size-5" />
             Compétences
         </h2>
-        <PrimaryButton
-            as="button"
-            :color="editing ? 'secondary' : 'green'"
-            size="sm"
-            v-if="isEditable"
-            @click="handleEditing"
-        >
-            <XMarkIcon v-if="editing" class="size-5" />
-            <PencilIcon v-else class="size-5" />
-            {{
-                editing
-                    ? 'Annuler'
-                    : freelance.skills.length === 0
-                      ? 'Ajouter'
-                      : 'Modifier'
-            }}
-        </PrimaryButton>
+        <div class="flex gap-2">
+            <PrimaryButton
+                as="button"
+                :color="editing ? 'secondary' : 'green'"
+                size="sm"
+                v-if="isEditable"
+                @click="handleEditing"
+            >
+                <XMarkIcon v-if="editing" class="size-5" />
+                <PencilIcon v-else class="size-5" />
+                {{
+                    editing
+                        ? 'Annuler'
+                        : freelance.skills.length === 0
+                          ? 'Ajouter'
+                          : 'Modifier'
+                }}
+            </PrimaryButton>
+            <PrimaryButton
+                v-if="editing"
+                size="sm"
+                color="green"
+                @click="saveSkills"
+                as="button"
+            >
+                <CheckIcon class="size-5" />
+                Valider
+            </PrimaryButton>
+
+
+        </div>
+
     </div>
 
     <!-- Affichage simple -->
@@ -93,17 +108,5 @@ const saveSkills = () => {
             value-key="id"
             placeholder="Sélectionner des compétences"
         />
-        <div class="flex justify-end">
-            <PrimaryButton
-                size="sm"
-                color="green"
-                class="flex gap-2 ring-1 ring-green-900"
-                @click="saveSkills"
-                as="button"
-            >
-                <CheckIcon class="size-5" />
-                Valider
-            </PrimaryButton>
-        </div>
     </div>
 </template>
