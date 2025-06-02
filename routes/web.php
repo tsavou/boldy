@@ -7,6 +7,7 @@ use App\Http\Controllers\FreelanceController;
 use App\Http\Controllers\FreelanceLinkController;
 use App\Http\Controllers\FreelanceMediaController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -90,6 +91,11 @@ Route::middleware(['auth', 'can:manage, App\Models\Freelance'])->group(function 
 
     Route::post('/admin/freelance/{freelance}/approve', [AdminFreelanceController::class, 'approve'])
         ->name('admin.freelance.approve');
+});
+
+// Payment
+Route::middleware('auth')->group(function () {
+    Route::get('/payment', [PaymentController::class, 'show'])->name('payment.show');
 });
 
 
