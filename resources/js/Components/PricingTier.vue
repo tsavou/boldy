@@ -1,7 +1,9 @@
 <template>
     <div
         :class="[
-            tier.mostPopular ? 'ring-2 ring-green-900 scale-105' : 'ring-1 ring-gray-400',
+            tier.mostPopular
+                ? 'scale-105 ring-2 ring-green-900'
+                : 'ring-1 ring-gray-400',
             'rounded-3xl p-8 xl:p-10',
         ]"
     >
@@ -69,18 +71,18 @@
         <p v-else class="mt-6 text-4xl font-semibold text-gray-900">Gratuit</p>
 
         <!-- CTA button -->
-        <a
-            :href="tier.href"
+        <button
+            @click="goToPayment(tier)"
             :aria-describedby="tier.id"
             :class="[
                 tier.mostPopular
                     ? 'bg-green-900 text-orange-50 shadow-sm hover:bg-green-700'
                     : 'text-green-900 ring-1 ring-inset ring-green-900 hover:bg-green-900 hover:text-orange-50',
-                'mt-6 block rounded-md px-3 py-2 text-center text-sm font-semibold',
+                'mt-6 block w-full rounded-md px-3 py-2 text-center text-sm font-semibold',
             ]"
         >
             {{ tier.cta }}
-        </a>
+        </button>
 
         <!-- Features -->
         <ul role="list" class="mt-8 space-y-3 text-sm text-gray-600 xl:mt-10">
@@ -92,9 +94,18 @@
                 <CheckIcon
                     class="h-6 w-5 flex-none text-green-900"
                     aria-hidden="true"
-                    v-if="feature !== 'Shooting photos' || selectedFrequency?.frequency === 'Annuel'"
+                    v-if="
+                        feature !== 'Shooting photos' ||
+                        selectedFrequency?.frequency === 'Annuel'
+                    "
                 />
-                {{ feature !== 'Shooting photos' ? feature : selectedFrequency.frequency === 'Annuel' ? 'Shooting photos' : '' }}
+                {{
+                    feature !== 'Shooting photos'
+                        ? feature
+                        : selectedFrequency.frequency === 'Annuel'
+                          ? 'Shooting photos'
+                          : ''
+                }}
             </li>
         </ul>
     </div>
@@ -104,6 +115,7 @@
 import { computed, ref } from 'vue';
 import { RadioGroup, RadioGroupOption } from '@headlessui/vue';
 import { CheckIcon } from '@heroicons/vue/24/outline';
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
     tier: Object,
@@ -123,4 +135,24 @@ const formattedFrequency = computed(() => {
             return selectedFrequency.value.frequency;
     }
 });
+
+const goToPayment = (tier) => {
+    if (tier.id === 'tier-boost') {
+        router.visit(
+            route('payment.show', {
+                mode: 'boost',
+                option: selectedFrequency.value.id,
+            }),
+        );
+    } else if (tier.id === 'tier-premium') {
+        router.visit(
+            route('payment.show', {
+                mode: 'premium',
+                option: selectedFrequency.value.id,
+            }),
+        );
+    } else if (tier.id === 'tier-free') {
+        router.visit(route('register'));
+    }
+};
 </script>

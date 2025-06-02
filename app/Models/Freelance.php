@@ -35,7 +35,7 @@ class Freelance extends Model
         'slug',
     ];
 
-    protected $appends = ['full_name', 'first_name'];
+    protected $appends = ['full_name', 'first_name', 'is_premium'];
 
     protected static function boot(): void
     {
@@ -75,10 +75,18 @@ class Freelance extends Model
     {
         return $this->user->first_name;
     }
+
+    public function getIsPremiumAttribute()
+    {
+        return $this->user->subscribed();
+    }
+
     public function scopeVerified(Builder $query)
     {
         return $query->where('is_verified', true);
     }
+
+
 
     public function scopeBoosted(Builder $query)
     {

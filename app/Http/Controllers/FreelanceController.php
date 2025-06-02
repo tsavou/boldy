@@ -254,7 +254,7 @@ class FreelanceController extends Controller
     {
 
         $request->validate([
-            'siret' => 'required|string|size:14',
+            'siret' => 'required|string|size:14|unique:freelances,siret',
             'identity_document' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ]);
 

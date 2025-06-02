@@ -4,7 +4,7 @@
         class="group relative block w-80 max-w-full rounded-lg bg-green-900 pt-6 text-center text-orange-50 shadow-lg transition-transform duration-200 hover:scale-105"
     >
         <span
-            v-if="freelance.is_boosted"
+            v-if="freelance.is_premium"
             class="group/boost absolute left-4 top-4"
         >
             <img src="/img/logo.svg" alt="Logo" class="h-6 w-6" />
