@@ -22,7 +22,7 @@ const emit = defineEmits(['notify']);
 const editing = ref(false);
 const form = useForm({
     is_available: !!props.freelance.is_available,
-    price_per_day: props.freelance.price_per_day,
+    price_per_day: props.freelance.price_per_day || 0,
 });
 
 const handleEditing = () => {
