@@ -22,7 +22,7 @@
         >
             <BoltIcon class="size-4 text-green-800" />
             <span
-                class="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-green-800 px-2 py-1 text-xs text-orange-50 opacity-0 transition-opacity group-hover/boost:opacity-100"
+                class="absolute -top-10 left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded bg-green-800 px-2 py-1 text-xs text-orange-50 opacity-0 transition-opacity group-hover/boost:opacity-100 sm:block"
             >
                 Boosté - ce freelance est mis en avant !
             </span>
