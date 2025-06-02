@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Experiences;
+use App\Models\Experience;
 use App\Models\Freelance;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
-class ExperiencesFactory extends Factory
+class ExperienceFactory extends Factory
 {
-    protected $model = Experiences::class;
+    protected $model = Experience::class;
 
     public function definition(): array
     {

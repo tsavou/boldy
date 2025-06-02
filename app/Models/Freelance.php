@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Scopes\ExperienceDataScope;
-use App\Models\Scopes\VerifiedScope;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
-#[ScopedBy([ExperienceDataScope::class, VerifiedScope::class])]
+#[ScopedBy([ExperienceDataScope::class])]
 class Freelance extends Model
 {
     use HasFactory;
@@ -27,6 +26,7 @@ class Freelance extends Model
         'profile_picture',
         'cover_picture',
         'siret',
+        'identity_document_path',
         'portfolio_url',
         'linkedin_url',
         'is_verified',
@@ -75,13 +75,18 @@ class Freelance extends Model
     {
         return $this->user->first_name;
     }
+    public function scopeVerified(Builder $query)
+    {
+        return $query->where('is_verified', true);
+    }
 
     public function scopeBoosted(Builder $query)
     {
         return $query->whereHas('boosts', function ($query) {
             $query->where('end_date', '>', now());
             $query->where('start_date', '<', now());
-        });
+        })
+            ->where('is_verified', true);
     }
     public function user(): BelongsTo
     {
@@ -105,7 +110,7 @@ class Freelance extends Model
 
     public function experiences(): HasMany
     {
-        return $this->hasMany(Experiences::class, 'freelance_id');
+        return $this->hasMany(Experience::class, 'freelance_id');
     }
 
     public function freelanceMedias(): HasMany
@@ -116,5 +121,10 @@ class Freelance extends Model
     public function boosts(): HasMany
     {
         return $this->hasMany(Boost::class, 'freelance_id');
+    }
+
+    public function links(): HasMany
+    {
+        return $this->hasMany(FreelanceLink::class, 'freelance_id');
     }
 }

@@ -9,7 +9,7 @@ const props = defineProps({
     size: {
         type: String,
         default: 'md',
-        validator: value => ['xs', 'sm', 'md', 'lg', 'xl'].includes(value),
+        validator: (value) => ['xs', 'sm', 'md', 'lg', 'xl'].includes(value),
     },
     color: {
         type: String,
@@ -35,8 +35,8 @@ const buttonColorClass = computed(() => {
         green: 'border border-green-900 bg-green-900 hover:bg-orange-50 hover:border-green-900 text-orange-50 hover:text-green-900',
         secondary:
             'border border-orange-50 bg-orange-50 hover:bg-green-900 hover:border-green-900 text-green-900 hover:text-orange-50',
-        white: 'border border-gray-300 bg-white hover:bg-gray-50 text-gray-700',
-        red: 'border border-red-600 bg-red-600 hover:bg-red-400 hover:border-red-400 text-white',
+        white: 'border border-gray-300 bg-orange-50 hover:bg-gray-50 text-gray-700',
+        red: 'border border-red-500 bg-red-600 hover:bg-red-400 hover:border-red-400 text-white',
         orange: 'border border-orange-500 bg-orange-500 hover:bg-orange-400 hover:border-orange-400 text-white',
         gray: 'border border-gray-100 bg-gray-100 hover:bg-gray-200 hover:border-gray-200 text-gray-700',
     }[props.color];
@@ -45,7 +45,8 @@ const buttonColorClass = computed(() => {
 const processingClass = computed(() => {
     return {
         purple: 'text-white',
-        green: 'text-white',
+        green: 'text-orange-50',
+        secondary: 'text-green-900',
         white: 'text-gray-700',
         red: 'text-white',
         orange: 'text-white',
@@ -114,10 +115,29 @@ const borderRadiusClass = computed(() => {
         ]"
         :aria-disabled="disabled"
     >
-        <span v-if="processing" :class="[processingClass, processingSizeClass, 'inline-block']">
-            <svg class="animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+        <span
+            v-if="processing"
+            :class="[processingClass, processingSizeClass, 'inline-block']"
+        >
+            <svg
+                class="animate-spin"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+            >
+                <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                />
+                <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
             </svg>
         </span>
         <slot />

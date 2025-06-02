@@ -1,11 +1,12 @@
 <script setup>
 import Layout from '@/Layouts/AppLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
 import PricingTier from '@/Components/PricingTier.vue';
 import { tiers } from '@/data/pricingTiers.js';
+import { formatExperience } from '../utils/formatters.js';
 
 const props = defineProps({
     boosted: Array,
@@ -17,6 +18,8 @@ const slider = ref(null);
 const canScrollLeft = ref(false);
 const canScrollRight = ref(false);
 
+const user = computed(() => usePage().props.auth.user);
+
 const stats = [
     { id: 1, name: 'Freelances inscrits', value: props.freelancesCount },
     { id: 2, name: 'Taux de satisfaction', value: '98%' },
@@ -25,6 +28,7 @@ const stats = [
 ];
 
 const checkScroll = () => {
+    if (!slider.value) return;
     canScrollLeft.value = slider.value.scrollLeft > 0;
     canScrollRight.value =
         slider.value.scrollLeft <
@@ -63,9 +67,9 @@ const getExperienceLevelColor = (level) => {
 };
 
 const getTJMColor = (price) => {
-    if (price < 250) return 'bg-green-200 text-green-900 fill-green-500';
-    if (price < 500) return 'bg-yellow-200 text-yellow-900 fill-yellow-500';
-    return 'bg-red-200 text-red-900 fill-red-500';
+    if (price < 350) return 'bg-emerald-100 text-emerald-800 fill-emerald-500';
+    if (price < 600) return 'bg-amber-100 text-amber-800 fill-amber-500';
+    return 'bg-rose-100 text-rose-800 fill-rose-500';
 };
 
 onMounted(() => {
@@ -186,16 +190,29 @@ onMounted(() => {
                             <PrimaryButton
                                 as="Link"
                                 size="xl"
-                                :href="route('register')"
-                                >Rejoindre Boldy
-                                <span aria-hidden="true">→</span></PrimaryButton
+                                :href="
+                                    user
+                                        ? route(
+                                              'freelance.show',
+                                              user.freelance.slug,
+                                          )
+                                        : route('register')
+                                "
                             >
+                                {{
+                                    user
+                                        ? 'Accéder à mon profil'
+                                        : 'Rejoindre Boldy'
+                                }}
+                                <span aria-hidden="true">→</span>
+                            </PrimaryButton>
                             <PrimaryButton
                                 as="Link"
                                 size="xl"
                                 :href="route('freelance.index')"
                                 color="secondary"
-                                >Trouver un freelance
+                            >
+                                Trouver un freelance
                             </PrimaryButton>
                         </div>
                     </div>
@@ -292,7 +309,9 @@ onMounted(() => {
                             "
                         >
                             {{ freelance.experience_level }}
-                            ({{ freelance.experience_in_years }} ans)
+                            ({{
+                                formatExperience(freelance.experience_in_years)
+                            }})
                         </span>
 
                         <!-- Badge TJM -->
@@ -332,7 +351,7 @@ onMounted(() => {
             </div>
         </section>
 
-        <section class="relative" id="categories">
+        <section class="relative bg-orange-50" id="categories">
             <div class="mx-auto max-w-7xl">
                 <div class="relative z-10 lg:w-full lg:max-w-2xl">
                     <svg
@@ -364,6 +383,7 @@ onMounted(() => {
                                     :key="category.id"
                                 >
                                     <Link
+                                        v-if="category.freelances_count > 0"
                                         :href="
                                             route('freelance.index', {
                                                 job: category.name,

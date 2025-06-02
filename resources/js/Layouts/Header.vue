@@ -59,6 +59,15 @@ const logout = () => {
                             >
                                 Freelances
                             </NavLink>
+                            <NavLink
+                                v-if="user?.role.name === 'admin'"
+                                :href="route('admin.freelances.pending')"
+                                :active="
+                                    route().current('admin.freelances.pending')
+                                "
+                            >
+                                Validation des freelances
+                            </NavLink>
                         </div>
                     </div>
 
@@ -130,6 +139,7 @@ const logout = () => {
                                         @click="logout"
                                         method="post"
                                         as="button"
+                                        href="#"
                                     >
                                         Déconnexion
                                     </DropdownLink>
@@ -219,6 +229,13 @@ const logout = () => {
                     >
                         Freelances
                     </ResponsiveNavLink>
+                    <ResponsiveNavLink
+                        v-if="user?.role.name === 'admin'"
+                        :href="route('admin.freelances.pending')"
+                        :active="route().current('admin.freelances.pending')"
+                    >
+                        Validation des freelances
+                    </ResponsiveNavLink>
                 </div>
 
                 <!-- Responsive Settings Options -->
@@ -246,6 +263,7 @@ const logout = () => {
                             @click="logout"
                             method="post"
                             as="button"
+                            href="#"
                         >
                             Déconnexion
                         </ResponsiveNavLink>

@@ -18,6 +18,15 @@
     --slider-handle-ring-color: #016630;
 }
 
+.slider--lime {
+    --slider-connect-bg: #bff164;
+    --slider-tooltip-bg: #fff7ed;
+    --slider-handle-ring-color: #bff164;
+}
+
+.slider--lime .slider-tooltip {
+    color: #016630;
+}
 
 input[type='checkbox'] {
     color: #016630;
