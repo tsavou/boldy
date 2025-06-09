@@ -12,19 +12,19 @@ class FreelanceMediaController extends Controller
     {
         $validated = $request->validate([
             'media' => 'required|mimes:jpeg,png,jpg,gif,svg,mp4,mov,ogg,qt|max:20000',
-            'type'  => 'required|string|in:image,video',
+            'type' => 'required|string|in:image,video',
         ]);
 
         $freelance = auth()->user()->freelance;
 
-        $path = $request->file('media')->storeAs('freelances', $freelance->slug . '-' . $request->type . '-' . time(), 'public');
+        $path = $request->file('media')->storeAs('freelances', $freelance->slug.'-'.$request->type.'-'.time(), 'public');
 
         $freelance->freelanceMedias()->create([
             'type' => $validated['type'],
-            'url'  => Storage::url($path),
+            'url' => Storage::url($path),
         ]);
 
-        return back()->with('success', $request->type . ' ajouté avec succès.');
+        return back()->with('success', $request->type.' ajouté avec succès.');
     }
 
     public function destroy(FreelanceMedia $media)

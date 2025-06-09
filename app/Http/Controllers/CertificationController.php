@@ -15,6 +15,7 @@ class CertificationController extends Controller
 
         return redirect()->back()->with('success', 'Certification ajoutée avec succès');
     }
+
     public function update(CertificationRequest $request, Certification $certification)
     {
 

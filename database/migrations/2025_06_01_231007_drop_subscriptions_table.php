@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::dropIfExists('subscriptions');
@@ -14,7 +15,7 @@ return new class extends Migration {
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
-            //$table->enum('plan', ['free', 'premium', 'business_club'])->default('free');
+            // $table->enum('plan', ['free', 'premium', 'business_club'])->default('free');
             $table->timestamp('start_date')->default(now());
             $table->timestamp('end_date')->nullable();
             $table->decimal('price', 10, 2);

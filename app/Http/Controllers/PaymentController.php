@@ -14,7 +14,7 @@ class PaymentController extends Controller
         $mode = $request->query('mode');
         $option = $request->query('option');
 
-        if (!in_array($mode, ['boost', 'premium'])) {
+        if (! in_array($mode, ['boost', 'premium'])) {
             abort(404);
         }
 
@@ -23,6 +23,7 @@ class PaymentController extends Controller
             'option' => $option,
         ]);
     }
+
     public function subscribePremium(Request $request)
     {
         $user = auth()->user();
@@ -32,9 +33,9 @@ class PaymentController extends Controller
             'payment_method' => 'required|string', // id Stripe du moyen de paiement
         ]);
 
-        $planId = config('stripe.plans.' . $request->plan);
+        $planId = config('stripe.plans.'.$request->plan);
 
-        if (!$planId) {
+        if (! $planId) {
             return response()->json(['message' => 'Plan invalide'], 422);
         }
 
@@ -58,14 +59,14 @@ class PaymentController extends Controller
             'boost_duration' => 'required|in:7_days,14_days,30_days',
             'payment_method' => 'required|string',
         ]);
-        $boostConfig = config('stripe.boosts.' . $request->boost_duration);
+        $boostConfig = config('stripe.boosts.'.$request->boost_duration);
 
-        if (!$boostConfig) {
+        if (! $boostConfig) {
             return response()->json(['message' => 'Durée boost invalide'], 422);
         }
 
         $amount = $boostConfig['amount'];
-        //$priceId = $boostConfig['price_id'];
+        // $priceId = $boostConfig['price_id'];
 
         if ($freelance->boosts()->where('end_date', '>', now())->exists()) {
             return response()->json(['message' => 'Vous avez déjà un boost actif'], 422);
@@ -83,7 +84,7 @@ class PaymentController extends Controller
             'customer' => $user->stripe_id,
             'confirm' => true,
             'payment_method_types' => ['card'], // ← ici tu forces explicitement
-            'description' => 'Achat boost ' . $request->boost_duration,
+            'description' => 'Achat boost '.$request->boost_duration,
         ]);
 
         // Définir les dates du boost
@@ -95,7 +96,6 @@ class PaymentController extends Controller
             '30_days' => $startDate->copy()->addDays(30),
         };
 
-
         // Enregistrement en base
         Boost::create([
             'freelance_id' => $freelance->id,
@@ -105,7 +105,7 @@ class PaymentController extends Controller
 
         return response()->json([
             'message' => 'Boost acheté et activé avec succès !',
-            'paymentIntent' => $paymentIntent
+            'paymentIntent' => $paymentIntent,
         ]);
     }
 }

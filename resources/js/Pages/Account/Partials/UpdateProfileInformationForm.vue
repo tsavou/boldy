@@ -31,7 +31,8 @@ const form = useForm({
             </h2>
 
             <p class="mt-1 text-sm text-gray-600">
-                Mettez à jour les informations de votre profil et votre adresse email.
+                Mettez à jour les informations de votre profil et votre adresse
+                email.
             </p>
         </header>
 
@@ -95,7 +96,7 @@ const form = useForm({
                         as="button"
                         class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
-                       Cliquez ici pour renvoyer l'email de vérification.
+                        Cliquez ici pour renvoyer l'email de vérification.
                     </Link>
                 </p>
 
@@ -103,12 +104,15 @@ const form = useForm({
                     v-show="status === 'verification-link-sent'"
                     class="mt-2 text-sm font-medium text-green-600"
                 >
-                   Un nouveau lien de vérification a été envoyé à votre adresse email.
+                    Un nouveau lien de vérification a été envoyé à votre adresse
+                    email.
                 </div>
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Enregistrer</PrimaryButton>
+                <PrimaryButton :disabled="form.processing"
+                    >Enregistrer</PrimaryButton
+                >
 
                 <Transition
                     enter-active-class="transition ease-in-out"

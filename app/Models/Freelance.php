@@ -86,8 +86,6 @@ class Freelance extends Model
         return $query->where('is_verified', true);
     }
 
-
-
     public function scopeBoosted(Builder $query)
     {
         return $query->whereHas('boosts', function ($query) {
@@ -96,6 +94,7 @@ class Freelance extends Model
         })
             ->where('is_verified', true);
     }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

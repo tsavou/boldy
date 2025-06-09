@@ -46,8 +46,6 @@ const submitLocation = () => {
 
 <template>
     <div class="flex items-center gap-2">
-
-
         <!-- Affichage de la localisation si présente -->
         <template v-if="freelance.location && !isEditing">
             <MapPinIcon class="h-4 w-4 text-gray-400" />

@@ -31,7 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     ])
                         ->toResponse($request)
                         ->setStatusCode($status),
-                    419     => back()->setStatusCode(419)->with('Page Expired', 'Please refresh the page'),
+                    419 => back()->setStatusCode(419)->with('Page Expired', 'Please refresh the page'),
                     default => null,
                 };
             }

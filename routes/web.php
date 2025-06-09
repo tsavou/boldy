@@ -13,18 +13,17 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::fallback(fn() => inertia()->render('Error', [
-    'status'  => 404,
-    'message' => 'Page introuvable'
+Route::fallback(fn () => inertia()->render('Error', [
+    'status' => 404,
+    'message' => 'Page introuvable',
 ]))->withoutMiddleware('auth');
-
 
 Route::get('/welcome', function () {
     return Inertia::render('Welcome', [
-        'canLogin'       => Route::has('login'),
-        'canRegister'    => Route::has('register'),
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
-        'phpVersion'     => PHP_VERSION,
+        'phpVersion' => PHP_VERSION,
     ]);
 });
 
@@ -56,7 +55,6 @@ Route::middleware(['auth', 'can:update,freelance'])->group(function () {
 });
 Route::post('/freelances/verify', [FreelanceController::class, 'verifyFreelance'])->name('freelance.verify');
 
-
 // Certifications
 Route::middleware(['auth'])->group(function () {
     Route::post('/certifications', [CertificationController::class, 'store'])->name('certifications.store');
@@ -78,7 +76,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/freelance-links/{link}', [FreelanceLinkController::class, 'destroy'])->name('freelance-links.destroy')->can('update', 'link');
 });
 
-//Freelance Medias
+// Freelance Medias
 Route::middleware(['auth'])->group(function () {
     Route::post('/freelance-medias', [FreelanceMediaController::class, 'store'])->name('freelance-medias.store');
     Route::delete('/freelance-medias/{media}', [FreelanceMediaController::class, 'destroy'])->name('freelance-medias.destroy');
@@ -98,13 +96,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/payment', [PaymentController::class, 'show'])->name('payment.show');
 });
 
-
-
 // Pages légales
 
-Route::get('/cgu', fn() => Inertia::render('Legal/CGU'))->name('cgu');
-Route::get('/cgv', fn() => Inertia::render('Legal/CGV'))->name('cgv');
-Route::get('/politique-de-confidentialite', fn() => Inertia::render('Legal/Privacy'))->name('privacy');
-Route::get('/mentions-legales', fn() => Inertia::render('Legal/Mentions'))->name('mentions');
+Route::get('/cgu', fn () => Inertia::render('Legal/CGU'))->name('cgu');
+Route::get('/cgv', fn () => Inertia::render('Legal/CGV'))->name('cgv');
+Route::get('/politique-de-confidentialite', fn () => Inertia::render('Legal/Privacy'))->name('privacy');
+Route::get('/mentions-legales', fn () => Inertia::render('Legal/Mentions'))->name('mentions');
 
 require __DIR__.'/auth.php';

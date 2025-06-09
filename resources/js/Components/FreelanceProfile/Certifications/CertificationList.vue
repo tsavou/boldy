@@ -85,7 +85,6 @@ const cancelDelete = () => {
             </p>
         </div>
 
-
         <ul class="mt-4 space-y-3">
             <li
                 v-for="cert in certifications"

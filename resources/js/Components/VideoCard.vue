@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { PlayIcon } from '@heroicons/vue/24/solid';
 
-const props = defineProps({
+defineProps({
     src: String,
 });
 

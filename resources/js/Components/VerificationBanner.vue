@@ -35,8 +35,8 @@ const submit = () => {
             </p>
 
             <p v-else>
-                Un nouveau lien de vérification a été envoyé à l'adresse e-mail que
-                vous avez fournie lors de l'inscription.
+                Un nouveau lien de vérification a été envoyé à l'adresse e-mail
+                que vous avez fournie lors de l'inscription.
             </p>
             <button
                 @click="submit"

@@ -11,7 +11,7 @@ class RegistrationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->seed(RoleSeeder::class);
@@ -51,6 +51,6 @@ class RegistrationTest extends TestCase
         // Vérifie que le freelance existe bien
         $this->assertNotNull($freelance);
 
-        $response->assertRedirect(route('freelance.show',$freelance->slug, absolute: false));
+        $response->assertRedirect(route('freelance.show', $freelance->slug, absolute: false));
     }
 }

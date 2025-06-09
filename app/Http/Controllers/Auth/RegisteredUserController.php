@@ -55,6 +55,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('freelance.show', $freelance->slug,  absolute: false));
+        return redirect(route('freelance.show', $freelance->slug, absolute: false));
     }
 }

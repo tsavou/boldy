@@ -41,13 +41,17 @@ const updatePassword = () => {
             </h2>
 
             <p class="mt-1 text-sm text-gray-600">
-                Assurez-vous que votre compte utilise un mot de passe long et aléatoire pour rester en sécurité.
+                Assurez-vous que votre compte utilise un mot de passe long et
+                aléatoire pour rester en sécurité.
             </p>
         </header>
 
         <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
             <div>
-                <InputLabel for="current_password" value="Mot de passe actuel" />
+                <InputLabel
+                    for="current_password"
+                    value="Mot de passe actuel"
+                />
 
                 <TextInput
                     id="current_password"
@@ -100,7 +104,9 @@ const updatePassword = () => {
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Enregistrer</PrimaryButton>
+                <PrimaryButton :disabled="form.processing"
+                    >Enregistrer</PrimaryButton
+                >
 
                 <Transition
                     enter-active-class="transition ease-in-out"

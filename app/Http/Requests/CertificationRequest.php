@@ -11,7 +11,7 @@ class CertificationRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'institution' => 'nullable|string|max:255',
-            'year' => 'required|integer|min:1950|max:' . date('Y'),
+            'year' => 'required|integer|min:1950|max:'.date('Y'),
         ];
     }
 

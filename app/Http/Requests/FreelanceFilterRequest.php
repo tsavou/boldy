@@ -23,18 +23,18 @@ class FreelanceFilterRequest extends FormRequest
     {
         return [
             'available' => 'nullable|boolean',
-            'job'       => 'nullable|string|max:100',
-            'skill'     => 'nullable|string|max:255',
-            'city'      => 'nullable|string',
-            'search'    => 'nullable|string',
+            'job' => 'nullable|string|max:100',
+            'skill' => 'nullable|string|max:255',
+            'city' => 'nullable|string',
+            'search' => 'nullable|string',
             'min_price' => 'nullable|integer|min:0',
             'max_price' => 'nullable|integer|min:0',
-            'level'     => 'nullable|array',
-            'level.*'   => 'string|in:Junior,Intermédiaire,Confirmé,Expert',
-            'min_exp'   => 'nullable|integer|min:0',
-            'max_exp'   => 'nullable|integer|min:0',
-            'sort'      => 'nullable|in:price_asc,price_desc,experience_asc,experience_desc,recent',
-            'page'      => 'nullable|integer|min:1',
+            'level' => 'nullable|array',
+            'level.*' => 'string|in:Junior,Intermédiaire,Confirmé,Expert',
+            'min_exp' => 'nullable|integer|min:0',
+            'max_exp' => 'nullable|integer|min:0',
+            'sort' => 'nullable|in:price_asc,price_desc,experience_asc,experience_desc,recent',
+            'page' => 'nullable|integer|min:1',
         ];
     }
 }
