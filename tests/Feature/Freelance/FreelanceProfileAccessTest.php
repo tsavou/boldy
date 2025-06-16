@@ -17,14 +17,14 @@ class FreelanceProfileAccessTest extends TestCase
         $this->seed(RoleSeeder::class);
     }
 
-    public function testShow()
+    public function test_show()
     {
         $freelance = Freelance::factory()->create();
 
         $response = $this->get(route('freelance.show', $freelance->slug));
 
         $response->assertOk();
-        $response->assertInertia(fn($page) => $page->component('Freelance/Show')
+        $response->assertInertia(fn ($page) => $page->component('Freelance/Show')
             ->has('freelance')
             ->has('isEditable')
             ->has('professions')
@@ -32,8 +32,7 @@ class FreelanceProfileAccessTest extends TestCase
         );
     }
 
-
-    public function testUnverifiedProfileIsNotAccessible()
+    public function test_unverified_profile_is_not_accessible()
     {
         $freelance = Freelance::factory()->create(['is_verified' => false]);
 
@@ -41,7 +40,7 @@ class FreelanceProfileAccessTest extends TestCase
         $response->assertNotFound();
     }
 
-    public function testUserCanAccessOwnUnverifiedProfileAndEditIt()
+    public function test_user_can_access_own_unverified_profile_and_edit_it()
     {
         $freelance = Freelance::factory()->create(['is_verified' => false]);
         $this->actingAs($freelance->user);
@@ -49,13 +48,13 @@ class FreelanceProfileAccessTest extends TestCase
         $response = $this->get(route('freelance.show', $freelance->slug));
 
         $response->assertOk();
-        $response->assertInertia(fn($page) => $page->component('Freelance/Show')
+        $response->assertInertia(fn ($page) => $page->component('Freelance/Show')
             ->where('freelance.id', $freelance->id)
             ->where('isEditable', true)
         );
     }
 
-    public function testGuestCannotAccessPrivateRoutes()
+    public function test_guest_cannot_access_private_routes()
     {
         $freelance = Freelance::factory()->create();
 
