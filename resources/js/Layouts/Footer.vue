@@ -127,13 +127,15 @@
 </template>
 
 <script setup>
-import { defineComponent, h } from 'vue';
+import { defineComponent, h, inject } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import {
     PhoneIcon,
     EnvelopeIcon,
     BuildingOffice2Icon,
 } from '@heroicons/vue/24/outline';
+
+const route = inject('route');
 
 const navigation = {
     main: [
