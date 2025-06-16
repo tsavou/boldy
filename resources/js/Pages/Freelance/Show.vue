@@ -50,7 +50,15 @@ const handleNotification = () => {
 };
 </script>
 <template>
-    <Head :title="freelance.full_name" />
+    <Head :title="freelance.full_name">
+        <meta
+            name="description"
+            :content="
+                freelance.bio ||
+                'Profil freelance de ' + freelance.full_name + ' sur Boldy'
+            "
+        />
+    </Head>
     <Layout>
         <AlertBanner
             v-show="showNotification && page.props.flash.success"
