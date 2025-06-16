@@ -2,7 +2,7 @@ export const tiers = [
     {
         name: 'Free',
         id: 'tier-free',
-        href: route('register'),
+        href: '#',
         description:
             'Rejoignez la communauté Boldy et devenez visible sur la plateforme.\n \nCréez et personnalisez votre profil freelance gratuitement.',
         features: [

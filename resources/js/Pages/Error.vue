@@ -3,7 +3,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import { Link } from '@inertiajs/vue3';
 
 defineProps({
-    status: String,
+    status: Number,
     message: String,
 });
 </script>
