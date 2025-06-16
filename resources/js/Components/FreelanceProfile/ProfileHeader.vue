@@ -218,10 +218,12 @@ const submitAvatarImage = () => {
                         :href="`mailto:${freelance.user.email}`"
                     >
                         <EnvelopeIcon
-                            class="-ml-0.5 mr-1 size-5"
+                            class="size-5 sm:-ml-0.5 sm:mr-1"
                             aria-hidden="true"
                         />
-                        <span class="text-xs sm:text-sm">Contacter</span>
+                        <span class="hidden sm:block sm:text-sm"
+                            >Contacter</span
+                        >
                     </PrimaryButton>
                 </div>
             </div>
