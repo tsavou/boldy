@@ -144,7 +144,12 @@ watch(
 </script>
 
 <template>
-    <Head title="Freelances" />
+    <Head title="Freelances">
+        <meta
+            name="description"
+            content="Découvrez notre catalogue de freelances disponibles pour vos projets. Filtrez par métier, localisation, compétences, expérience. Trouvez un freelance vérifié et disponible pour répondre à vos besoins."
+        />
+    </Head>
     <Layout>
         <div class="bg-orange-50">
             <!-- Mobile filter dialog -->
