@@ -21,7 +21,7 @@ class FreelanceEditTest extends TestCase
         $this->seed(RoleSeeder::class);
     }
 
-    public function testUpdateAvatar()
+    public function test_update_avatar()
     {
         Storage::fake('public');
 
@@ -39,7 +39,7 @@ class FreelanceEditTest extends TestCase
         Storage::disk('public')->assertExists('freelances/'.$freelance->slug.'-avatar');
     }
 
-    public function testUpdateCover()
+    public function test_update_cover()
     {
         Storage::fake('public');
 
@@ -57,7 +57,7 @@ class FreelanceEditTest extends TestCase
         Storage::disk('public')->assertExists('freelances/'.$freelance->slug.'-cover');
     }
 
-    public function testUpdateBio()
+    public function test_update_bio()
     {
         $freelance = Freelance::factory()->create();
         $user = $freelance->user;
@@ -72,7 +72,7 @@ class FreelanceEditTest extends TestCase
         $this->assertDatabaseHas('freelances', ['id' => $freelance->id, 'bio' => 'Nouvelle bio']);
     }
 
-    public function testUpdateSkills()
+    public function test_update_skills()
     {
         $freelance = Freelance::factory()->create();
         $user = $freelance->user;
@@ -90,19 +90,19 @@ class FreelanceEditTest extends TestCase
         foreach ($skills as $skill) {
             $this->assertDatabaseHas('freelance_skills', [
                 'freelance_id' => $freelance->id,
-                'skill_id'     => $skill->id,
+                'skill_id' => $skill->id,
             ]);
         }
     }
 
-    public function testUpdateInfos()
+    public function test_update_infos()
     {
         $freelance = Freelance::factory()->create(['price_per_day' => 300, 'is_available' => false]);
         $this->actingAs($freelance->user);
 
         $response = $this->put(route('freelance.updateInfos', $freelance), [
             'price_per_day' => 500,
-            'is_available'  => true,
+            'is_available' => true,
         ]);
 
         $response->assertRedirect();
@@ -112,7 +112,7 @@ class FreelanceEditTest extends TestCase
             ['id' => $freelance->id, 'price_per_day' => 500, 'is_available' => true]);
     }
 
-    public function testUpdateProfessions()
+    public function test_update_professions()
     {
         $freelance = Freelance::factory()->create();
         $user = $freelance->user;
@@ -129,13 +129,13 @@ class FreelanceEditTest extends TestCase
         $this->assertCount(3, $freelance->professions);
         foreach ($professions as $profession) {
             $this->assertDatabaseHas('freelance_professions', [
-                'freelance_id'  => $freelance->id,
-                'profession_id' => $profession->id
+                'freelance_id' => $freelance->id,
+                'profession_id' => $profession->id,
             ]);
         }
     }
 
-    public function testVerifyFreelance()
+    public function test_verify_freelance()
     {
         Storage::fake('public');
         $freelance = Freelance::factory()->create(['siret' => null, 'identity_document_path' => null]);
@@ -144,7 +144,7 @@ class FreelanceEditTest extends TestCase
         $file = UploadedFile::fake()->image('piece.png');
 
         $response = $this->post(route('freelance.verify'), [
-            'siret'             => '12345678901234',
+            'siret' => '12345678901234',
             'identity_document' => $file,
         ]);
 
@@ -155,7 +155,7 @@ class FreelanceEditTest extends TestCase
         Storage::disk('public')->assertExists('identity_documents/'.$freelance->slug.'-ID');
     }
 
-    public function testUpdateLocation()
+    public function test_update_location()
     {
         $freelance = Freelance::factory()->create();
         $user = $freelance->user;

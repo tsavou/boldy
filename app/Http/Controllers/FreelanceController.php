@@ -173,7 +173,7 @@ class FreelanceController extends Controller
                 $freelance->update(['cover_picture' => null]);
             }
             $coverPath = $request->file('cover')->storeAs('freelances', $freelance->slug.'-cover', 'public');
-            $freelance->update(['cover_picture' => Storage::url($coverPath) . '?v=' . now()->timestamp ]);
+            $freelance->update(['cover_picture' => Storage::url($coverPath).'?v='.now()->timestamp]);
             $success = 'Votre bannière a été mise à jour';
         }
 
@@ -183,7 +183,7 @@ class FreelanceController extends Controller
                 $freelance->update(['profile_picture' => null]);
             }
             $avatarPath = $request->file('avatar')->storeAs('freelances', $freelance->slug.'-avatar', 'public');
-            $freelance->update(['profile_picture' => Storage::url($avatarPath) . '?v=' . now()->timestamp ]);
+            $freelance->update(['profile_picture' => Storage::url($avatarPath).'?v='.now()->timestamp]);
             $success = 'Votre photo de profil a été mise à jour';
         }
 
