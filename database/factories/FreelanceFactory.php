@@ -35,7 +35,7 @@ class FreelanceFactory extends Factory
             'location' => $this->faker->city(),
             'profile_picture' => null,
             'cover_picture' => null,
-            'siret' => $this->faker->numerify('##############'),
+            //'siret' => $this->faker->numerify('##############'),
             'is_verified' => true,
             'is_available' => $this->faker->boolean(),
             'created_at' => Carbon::now(),
