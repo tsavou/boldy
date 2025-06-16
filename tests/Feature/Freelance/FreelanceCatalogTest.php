@@ -18,12 +18,12 @@ class FreelanceCatalogTest extends TestCase
         $this->seed(RoleSeeder::class);
     }
 
-    public function testIndex()
+    public function test_index()
     {
         $response = $this->get(route('freelance.index'));
 
         $response->assertOk();
-        $response->assertInertia(fn($page) => $page->component('Freelance/Index')
+        $response->assertInertia(fn ($page) => $page->component('Freelance/Index')
             ->has('freelances')
             ->has('professions')
             ->has('skills')
@@ -32,7 +32,7 @@ class FreelanceCatalogTest extends TestCase
         );
     }
 
-    public function testOnlyVerifiedFreelancesAreVisibleInCatalog()
+    public function test_only_verified_freelances_are_visible_in_catalog()
     {
         $verifiedFreelance = Freelance::factory()->create(['is_verified' => true]);
         $unverifiedFreelance = Freelance::factory()->create(['is_verified' => false]);
@@ -40,16 +40,14 @@ class FreelanceCatalogTest extends TestCase
         $response = $this->get(route('freelance.index'));
 
         $response->assertOk();
-        $response->assertInertia(fn($page) =>
-        $page->has('freelances.data')
-            ->where('freelances.data', fn($freelances) =>
-                collect($freelances)->contains('id', $verifiedFreelance->id) &&
+        $response->assertInertia(fn ($page) => $page->has('freelances.data')
+            ->where('freelances.data', fn ($freelances) => collect($freelances)->contains('id', $verifiedFreelance->id) &&
                 collect($freelances)->doesntContain('id', $unverifiedFreelance->id)
             )
         );
     }
 
-    public function testBoostedFreelancesAppearFirstInCatalog()
+    public function test_boosted_freelances_appear_first_in_catalog()
     {
         $nonBoosted = Freelance::factory()->create(['is_verified' => true]);
         $nonBoosted->boosts()->delete(); // s'assure qu'il n'est pas boosté
@@ -64,13 +62,12 @@ class FreelanceCatalogTest extends TestCase
 
         // Vérifie que le freelance boosté apparaît en premier
         $response->assertOk();
-        $response->assertInertia(fn($page) =>
-        $page->has('freelances.data')
+        $response->assertInertia(fn ($page) => $page->has('freelances.data')
             ->where('freelances.data.0.id', $boosted->id)
         );
     }
 
-    public function testFreelancesFiltersBySkill()
+    public function test_freelances_filters_by_skill()
     {
         // Créer un freelance avec une compétence spécifique
         $skill = Skill::factory()->create(['name' => 'Laravel']);
@@ -86,13 +83,12 @@ class FreelanceCatalogTest extends TestCase
 
         // Vérifier que la réponse contient uniquement le freelance avec la compétence spécifique
         $response->assertOk();
-        $response->assertInertia(fn ($page) =>
-        $page->has('freelances.data', 1)
+        $response->assertInertia(fn ($page) => $page->has('freelances.data', 1)
             ->where('freelances.data.0.id', $freelanceWithSkill->id)
         );
     }
 
-    public function testFreelancesFiltersByCity()
+    public function test_freelances_filters_by_city()
     {
         $freelanceInParis = Freelance::factory()->create(['location' => 'Paris']);
         $freelanceInLyon = Freelance::factory()->create(['location' => 'Lyon']);
@@ -100,13 +96,12 @@ class FreelanceCatalogTest extends TestCase
         $response = $this->get(route('freelance.index', ['city' => 'Paris']));
 
         $response->assertOk();
-        $response->assertInertia(fn ($page) =>
-        $page->has('freelances.data', 1)
+        $response->assertInertia(fn ($page) => $page->has('freelances.data', 1)
             ->where('freelances.data.0.id', $freelanceInParis->id)
         );
     }
 
-    public function testFreelancesFiltersByAvailability()
+    public function test_freelances_filters_by_availability()
     {
         $availableFreelance = Freelance::factory()->create(['is_available' => true]);
         $unavailableFreelance = Freelance::factory()->create(['is_available' => false]);
@@ -114,13 +109,12 @@ class FreelanceCatalogTest extends TestCase
         $response = $this->get(route('freelance.index', ['available' => true]));
 
         $response->assertOk();
-        $response->assertInertia(fn ($page) =>
-        $page->has('freelances.data')
+        $response->assertInertia(fn ($page) => $page->has('freelances.data')
             ->where('freelances.data.0.id', $availableFreelance->id)
         );
     }
 
-    public function testFreelancesFiltersByMinPrice()
+    public function test_freelances_filters_by_min_price()
     {
         $freelanceCheap = Freelance::factory()->create(['price_per_day' => 200]);
         $freelanceExpensive = Freelance::factory()->create(['price_per_day' => 800]);
@@ -128,13 +122,12 @@ class FreelanceCatalogTest extends TestCase
         $response = $this->get(route('freelance.index', ['min_price' => 500]));
 
         $response->assertOk();
-        $response->assertInertia(fn ($page) =>
-        $page->has('freelances.data')
+        $response->assertInertia(fn ($page) => $page->has('freelances.data')
             ->where('freelances.data.0.id', $freelanceExpensive->id)
         );
     }
 
-    public function testFreelancesFiltersByMaxPrice()
+    public function test_freelances_filters_by_max_price()
     {
         $freelanceCheap = Freelance::factory()->create(['price_per_day' => 200]);
         $freelanceExpensive = Freelance::factory()->create(['price_per_day' => 800]);
@@ -142,13 +135,12 @@ class FreelanceCatalogTest extends TestCase
         $response = $this->get(route('freelance.index', ['max_price' => 300]));
 
         $response->assertOk();
-        $response->assertInertia(fn ($page) =>
-        $page->has('freelances.data')
+        $response->assertInertia(fn ($page) => $page->has('freelances.data')
             ->where('freelances.data.0.id', $freelanceCheap->id)
         );
     }
 
-    public function testFreelancesFiltersBySearch()
+    public function test_freelances_filters_by_search()
     {
         $freelance = Freelance::factory()->create();
         $freelance->user->update(['first_name' => 'Toto']);
@@ -156,13 +148,12 @@ class FreelanceCatalogTest extends TestCase
         $response = $this->get(route('freelance.index', ['search' => 'Toto']));
 
         $response->assertOk();
-        $response->assertInertia(fn ($page) =>
-        $page->has('freelances.data')
+        $response->assertInertia(fn ($page) => $page->has('freelances.data')
             ->where('freelances.data.0.id', $freelance->id)
         );
     }
 
-    public function testFreelancesSortedByPriceAsc()
+    public function test_freelances_sorted_by_price_asc()
     {
         $low = Freelance::factory()->create(['price_per_day' => 100, 'is_verified' => true]);
         $high = Freelance::factory()->create(['price_per_day' => 500, 'is_verified' => true]);
@@ -170,13 +161,12 @@ class FreelanceCatalogTest extends TestCase
         $response = $this->get(route('freelance.index', ['sort' => 'price_asc']));
 
         $response->assertOk();
-        $response->assertInertia(fn($page) =>
-        $page->has('freelances.data')
+        $response->assertInertia(fn ($page) => $page->has('freelances.data')
             ->where('freelances.data.0.id', $low->id)
         );
     }
 
-    public function testFreelancesFilteredByExperienceLevel()
+    public function test_freelances_filtered_by_experience_level()
     {
         $junior = Freelance::factory()->create(['is_verified' => true]);
         $junior->experiences()->createMany([
@@ -191,13 +181,12 @@ class FreelanceCatalogTest extends TestCase
         $response = $this->get(route('freelance.index', ['level' => ['Expert']]));
 
         $response->assertOk();
-        $response->assertInertia(fn($page) =>
-        $page->has('freelances.data')
+        $response->assertInertia(fn ($page) => $page->has('freelances.data')
             ->where('freelances.data.0.id', $expert->id)
         );
     }
 
-    public function testFreelancesFilteredByMinAndMaxExperience()
+    public function test_freelances_filtered_by_min_and_max_experience()
     {
         $mid = Freelance::factory()->create(['is_verified' => true]);
         $mid->experiences()->createMany([
@@ -212,11 +201,8 @@ class FreelanceCatalogTest extends TestCase
         $response = $this->get(route('freelance.index', ['min_exp' => 3, 'max_exp' => 8]));
 
         $response->assertOk();
-        $response->assertInertia(fn($page) =>
-        $page->has('freelances.data')
-            ->where('freelances.data', fn($freelances) =>
-                collect($freelances)->contains('id', $expert->id))
+        $response->assertInertia(fn ($page) => $page->has('freelances.data')
+            ->where('freelances.data', fn ($freelances) => collect($freelances)->contains('id', $expert->id))
         );
     }
-
 }
