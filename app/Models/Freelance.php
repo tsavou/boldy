@@ -27,8 +27,6 @@ class Freelance extends Model
         'cover_picture',
         'siret',
         'identity_document_path',
-        'portfolio_url',
-        'linkedin_url',
         'is_verified',
         'is_available',
         'user_id',
@@ -66,22 +64,22 @@ class Freelance extends Model
         return $slug;
     }
 
-    public function getFullNameAttribute()
+    public function getFullNameAttribute(): string
     {
         return $this->user->first_name.' '.$this->user->name;
     }
 
-    public function getFirstNameAttribute()
+    public function getFirstNameAttribute(): string
     {
         return $this->user->first_name;
     }
 
-    public function getIsPremiumAttribute()
+    public function getIsPremiumAttribute(): bool
     {
         return $this->user->subscribed();
     }
 
-    public function scopeVerified(Builder $query)
+    public function scopeVerified(Builder $query): Builder
     {
         return $query->where('is_verified', true);
     }

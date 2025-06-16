@@ -15,7 +15,9 @@ class HomeController extends Controller
             ->get();
 
         $categories = Profession::query()
-            ->withCount(['freelances'])
+            ->withCount(['freelances' => function ($query) {
+                $query->verified();
+            }])
             ->orderBy('freelances_count', 'desc')
             ->get();
 
