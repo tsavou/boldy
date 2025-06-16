@@ -9,7 +9,7 @@ class ProfessionSeeder extends Seeder
 {
     public function run(): void
     {
-        $categories  = [
+        $categories = [
             'Développeur web',
             'UX/UI Designer',
             'Graphiste',
@@ -34,7 +34,7 @@ class ProfessionSeeder extends Seeder
             'Formateur digital',
             'Coach business',
             'Développeur e-commerce',
-            'Traducteur'
+            'Traducteur',
         ];
 
         foreach ($categories as $category) {

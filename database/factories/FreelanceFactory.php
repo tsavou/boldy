@@ -9,7 +9,6 @@ use App\Models\Freelance;
 use App\Models\Profession;
 use App\Models\Role;
 use App\Models\Skill;
-use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -25,7 +24,7 @@ class FreelanceFactory extends Factory
             'first_name' => $this->faker->firstName(),
             'name' => $this->faker->lastName(),
             'email' => function (array $attributes) {
-                return strtolower($attributes['first_name'] . '.' . $attributes['name'] . '@example.com');
+                return strtolower($attributes['first_name'].'.'.$attributes['name'].'@example.com');
             },
             'password' => bcrypt('password'),
         ]);
@@ -57,10 +56,6 @@ class FreelanceFactory extends Factory
 
             if ($this->faker->boolean()) {
                 $freelance->boosts()->save(Boost::factory()->make());
-            }
-
-            if ($this->faker->boolean()) {
-                $freelance->user->subscription()->save(Subscription::factory()->make());
             }
         });
     }

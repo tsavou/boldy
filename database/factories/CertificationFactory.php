@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Certification;
-use App\Models\Freelance;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 

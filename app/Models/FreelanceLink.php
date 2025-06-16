@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FreelanceLink extends Model
 {
-
     protected $fillable = ['freelance_id', 'type', 'url'];
 
     public function freelance(): BelongsTo

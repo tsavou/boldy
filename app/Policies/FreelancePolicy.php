@@ -12,10 +12,6 @@ class FreelancePolicy
 
     /**
      * Determine whether the user can update his freelance profile.
-     *
-     * @param  User  $user
-     * @param  Freelance  $freelance
-     * @return bool
      */
     public function update(User $user, Freelance $freelance): bool
     {
@@ -24,9 +20,6 @@ class FreelancePolicy
 
     /**
      * Determine whether the user can manage freelance profiles.
-     *
-     * @param  User  $user
-     * @return bool
      */
     public function manage(User $user): bool
     {

@@ -33,8 +33,9 @@ const verify = () => {
                 Vérifiez votre profil Freelance
             </h2>
             <p class="mt-1 text-sm text-gray-600">
-                Merci de renseigner votre numéro de SIRET ainsi qu'une pièce d'identité.
-                Une fois validé, votre profil Boldy sera visible sur la plateforme.
+                Merci de renseigner votre numéro de SIRET ainsi qu'une pièce
+                d'identité. Une fois validé, votre profil Boldy sera visible sur
+                la plateforme.
             </p>
         </header>
 
@@ -55,27 +56,40 @@ const verify = () => {
             </div>
 
             <div>
-                <InputLabel for="identity_document" value="Pièce d'identité (JPEG, PNG ou PDF)" />
+                <InputLabel
+                    for="identity_document"
+                    value="Pièce d'identité (JPEG, PNG ou PDF)"
+                />
                 <input
                     id="identity_document"
                     type="file"
                     accept="image/jpeg, image/png, application/pdf"
-                    @change="e => form.identity_document = e.target.files[0]"
+                    @change="
+                        (e) => (form.identity_document = e.target.files[0])
+                    "
                     class="mt-2 block w-full text-sm text-gray-700"
                     required
                 />
-                <InputError :message="form.errors.identity_document" class="mt-2" />
+                <InputError
+                    :message="form.errors.identity_document"
+                    class="mt-2"
+                />
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Envoyer</PrimaryButton>
+                <PrimaryButton :disabled="form.processing"
+                    >Envoyer</PrimaryButton
+                >
                 <Transition
                     enter-active-class="transition ease-in-out"
                     enter-from-class="opacity-0"
                     leave-active-class="transition ease-in-out"
                     leave-to-class="opacity-0"
                 >
-                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">
+                    <p
+                        v-if="form.recentlySuccessful"
+                        class="text-sm text-gray-600"
+                    >
                         Demande envoyée !
                     </p>
                 </Transition>

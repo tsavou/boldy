@@ -74,7 +74,12 @@ const logout = () => {
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 md:flex">
                         <!-- Settings Dropdown -->
                         <div class="relative ms-3 sm:flex sm:items-center">
-                            <Dropdown v-if="user" align="right" width="48" content-classes="bg-green-900">
+                            <Dropdown
+                                v-if="user"
+                                align="right"
+                                width="48"
+                                content-classes="bg-green-900"
+                            >
                                 <template #trigger>
                                     <span
                                         class="inline-flex items-center rounded-full"

@@ -25,14 +25,14 @@ const submit = () => {
     <GuestLayout>
         <Head title="Forgot Password" />
 
-        <div class="mb-4 text-sm text-gray-600 text-pretty">
-            Vous avez oublié votre mot de passe ? Pas de soucis. Indiquez-nous votre adresse e-mail et nous vous enverrons un lien de réinitialisation du mot de passe qui vous permettra d'en choisir un nouveau.
+        <div class="mb-4 text-pretty text-sm text-gray-600">
+            Vous avez oublié votre mot de passe ? Pas de soucis. Indiquez-nous
+            votre adresse e-mail et nous vous enverrons un lien de
+            réinitialisation du mot de passe qui vous permettra d'en choisir un
+            nouveau.
         </div>
 
-        <div
-            v-if="status"
-            class="mb-4 text-sm font-medium text-green-600"
-        >
+        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
             {{ status }}
         </div>
 
@@ -58,7 +58,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                   Envoyer le lien de réinitialisation
+                    Envoyer le lien de réinitialisation
                 </PrimaryButton>
             </div>
         </form>

@@ -23,18 +23,20 @@ defineProps({
                     <h1
                         class="mt-4 text-pretty text-5xl font-semibold tracking-tight text-green-900 sm:text-6xl"
                     >
-                        {{ message ?? "Page introuvable" }}
+                        {{ message ?? 'Page introuvable' }}
                     </h1>
                     <p
                         class="mt-6 text-pretty text-lg font-medium text-green-900 sm:text-xl/8"
                     >
-                        Nous sommes désolé, nous n'avons pas pu trouver la page que vous recherchez.
+                        Nous sommes désolé, nous n'avons pas pu trouver la page
+                        que vous recherchez.
                     </p>
                     <div class="mt-10">
                         <Link
                             :href="route('home')"
                             class="text-sm/7 font-semibold text-green-900"
-                            ><span aria-hidden="true">&larr;</span> Retour à l'accueil</Link
+                            ><span aria-hidden="true">&larr;</span> Retour à
+                            l'accueil</Link
                         >
                     </div>
                 </div>

@@ -54,7 +54,12 @@ watch(query, (value) => {
 </script>
 
 <template>
-    <Combobox as="div" :modelValue="modelValue" @update:modelValue="onSelect" nullable>
+    <Combobox
+        as="div"
+        :modelValue="modelValue"
+        @update:modelValue="onSelect"
+        nullable
+    >
         <div class="relative grid grid-cols-1">
             <ComboboxInput
                 class="col-start-1 row-start-1 h-12 w-full rounded-md border border-gray-300 pl-11 pr-4 text-base text-gray-900 outline-none placeholder:text-gray-400 focus:border-green-900 focus:ring-1 focus:ring-green-900 sm:rounded-none sm:text-sm"

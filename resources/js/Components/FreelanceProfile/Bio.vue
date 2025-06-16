@@ -1,7 +1,12 @@
 <script setup>
 import { nextTick, ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
-import { PencilIcon, CheckIcon, XMarkIcon, ChatBubbleLeftEllipsisIcon } from '@heroicons/vue/24/solid';
+import {
+    PencilIcon,
+    CheckIcon,
+    XMarkIcon,
+    ChatBubbleLeftEllipsisIcon,
+} from '@heroicons/vue/24/solid';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 const props = defineProps({

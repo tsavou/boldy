@@ -13,14 +13,8 @@ import Header from '@/Layouts/Header.vue';
         <div>
             <Link href="/">
                 <div class="flex items-end gap-3">
-                    <ApplicationLogo
-                        class="block h-20 w-auto"
-                    />
-                    <img
-                        src="/img/boldy.png"
-                        alt=""
-                        class="h-14 w-auto"
-                    />
+                    <ApplicationLogo class="block h-20 w-auto" />
+                    <img src="/img/boldy.png" alt="" class="h-14 w-auto" />
                 </div>
             </Link>
         </div>
@@ -32,5 +26,4 @@ import Header from '@/Layouts/Header.vue';
         </div>
     </main>
     <Footer />
-
 </template>

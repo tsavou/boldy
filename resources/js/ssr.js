@@ -18,12 +18,16 @@ createServer((page) =>
                 import.meta.glob('./Pages/**/*.vue'),
             ),
         setup({ App, props, plugin }) {
-            return createSSRApp({ render: () => h(App, props) })
+            const app = createSSRApp({ render: () => h(App, props) })
                 .use(plugin)
                 .use(ZiggyVue, {
                     ...page.props.ziggy,
                     location: new URL(page.props.ziggy.location),
                 });
+            app.config.globalProperties.route =
+                typeof route !== 'undefined' ? route : () => '#';
+
+            return app;
         },
     }),
 );

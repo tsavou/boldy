@@ -187,7 +187,10 @@ const submitAvatarImage = () => {
                         <h1 class="text-md font-bold sm:text-lg">
                             {{ freelance.full_name }}
                         </h1>
-                        <span class="group/premium relative">
+                        <span
+                            v-if="freelance.is_premium"
+                            class="group/premium relative"
+                        >
                             <img
                                 src="/img/logo.svg"
                                 alt="Logo"

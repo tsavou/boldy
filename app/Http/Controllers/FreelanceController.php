@@ -20,53 +20,52 @@ class FreelanceController extends Controller
             ->with(['professions', 'skills', 'experiences'])
 
             // disponibilité
-            ->when($request->has('available'), fn($q) => $q->where('is_available', $request->input('available')))
+            ->when($request->has('available'), fn ($q) => $q->where('is_available', $request->input('available')))
 
             // professions
-            ->when($request->filled('job'), fn($q) => $q->whereHas('professions',
-                fn($subQ) => $subQ->where('name', 'like', $request->input('job'))))
+            ->when($request->filled('job'), fn ($q) => $q->whereHas('professions',
+                fn ($subQ) => $subQ->where('name', 'like', $request->input('job'))))
 
             // skills
             ->when($request->filled('skill'),
-                fn($q) => $q->whereHas('skills', fn($subQ) => $subQ->where('name', 'like', $request->input('skill'))))
+                fn ($q) => $q->whereHas('skills', fn ($subQ) => $subQ->where('name', 'like', $request->input('skill'))))
 
             // ville
-            ->when($request->filled('city'), fn($q) => $q->where('location', 'like', '%'.$request->input('city').'%'))
+            ->when($request->filled('city'), fn ($q) => $q->where('location', 'like', '%'.$request->input('city').'%'))
 
-            //recherche libre parmis les noms, prénoms, compétences et professions
+            // recherche libre parmis les noms, prénoms, compétences et professions
             ->when($request->filled('search'), function ($q) use ($request) {
                 $search = $request->input('search');
                 $q->where(function ($subQ) use ($search) {
-                    $subQ->whereHas('user', fn($userQ) => $userQ->where('name', 'like', "%{$search}%")
+                    $subQ->whereHas('user', fn ($userQ) => $userQ->where('name', 'like', "%{$search}%")
                         ->orWhere('first_name', 'like', "%{$search}%"))
-                        ->orWhereHas('skills', fn($skillQ) => $skillQ->where('name', 'like', "%{$search}%"))
-                        ->orWhereHas('professions', fn($jobQ) => $jobQ->where('name', 'like', "%{$search}%"));
+                        ->orWhereHas('skills', fn ($skillQ) => $skillQ->where('name', 'like', "%{$search}%"))
+                        ->orWhereHas('professions', fn ($jobQ) => $jobQ->where('name', 'like', "%{$search}%"));
                 });
             })
 
             // tarifs
             ->when($request->filled('min_price'),
-                fn($q) => $q->where('price_per_day', '>=', $request->input('min_price')))
+                fn ($q) => $q->where('price_per_day', '>=', $request->input('min_price')))
             ->when($request->filled('max_price'),
-                fn($q) => $q->where('price_per_day', '<=', $request->input('max_price')))
+                fn ($q) => $q->where('price_per_day', '<=', $request->input('max_price')))
 
-            //filtres sur l'experience
+            // filtres sur l'experience
             // En utilisant "having" plutôt que "where" car "experience_in_years" et "experience_level" sont des colonnes virtuelles non existantes dans la DB
             // Elles sont calculées dans le scope ExperienceDataScope
 
             ->when($request->filled('level'), function ($q) use ($request) {
                 $levels = collect($request->input('level'))
-                    ->map(fn($level) => strtolower($level))->toArray();
+                    ->map(fn ($level) => strtolower($level))->toArray();
                 $placeholders = implode(',', array_fill(0, count($levels), '?'));
                 $q->havingRaw("LOWER(experience_level) IN ($placeholders)", $levels);
             })
             ->when($request->filled('min_exp'),
-                fn($q) => $q->having('experience_in_years', '>=', $request->input('min_exp'))
+                fn ($q) => $q->having('experience_in_years', '>=', $request->input('min_exp'))
             )
             ->when($request->filled('max_exp'),
-                fn($q) => $q->having('experience_in_years', '<=', $request->input('max_exp'))
+                fn ($q) => $q->having('experience_in_years', '<=', $request->input('max_exp'))
             );
-
 
         // tri dynamique
         if ($request->filled('sort')) {
@@ -94,7 +93,7 @@ class FreelanceController extends Controller
             'boosts as is_boosted' => function ($q) {
                 $q->where('start_date', '<=', now())
                     ->where('end_date', '>=', now());
-            }
+            },
         ])->orderByDesc('is_boosted');
 
         // Pagination des résultats en gardant les paramètres de requête
@@ -103,16 +102,16 @@ class FreelanceController extends Controller
         // Récupérer les villes distinctes pour le filtre
         $cities = Freelance::whereNotNull('location')
             ->pluck('location')
-            ->map(fn($city) => strtolower(trim($city)))
+            ->map(fn ($city) => strtolower(trim($city)))
             ->unique()
-            ->map(fn($city) => ucfirst($city))
+            ->map(fn ($city) => ucfirst($city))
             ->values();
 
         return Inertia::render('Freelance/Index', [
-            'freelances'    => $freelances,
-            'professions'   => Profession::all(),
-            'skills'        => Skill::all(),
-            'cities'        => $cities,
+            'freelances' => $freelances,
+            'professions' => Profession::all(),
+            'skills' => Skill::all(),
+            'cities' => $cities,
             'activeFilters' => $request->all(),
         ]);
     }
@@ -131,28 +130,28 @@ class FreelanceController extends Controller
                 'user',
                 'skills',
                 'professions',
-                'experiences'    => fn($query) => $query->orderByDesc('start_date'),
-                'certifications' => fn($query) => $query->orderByDesc('year'),
+                'experiences' => fn ($query) => $query->orderByDesc('start_date'),
+                'certifications' => fn ($query) => $query->orderByDesc('year'),
                 'links',
-                'freelanceMedias'
+                'freelanceMedias',
             ])
             ->first();
 
-        if (!$freelance) {
+        if (! $freelance) {
             abort(404, 'Ce profil est introuvable');
         }
 
         $isEditable = auth()->check() && auth()->user()->can('update', $freelance);
 
-        if (!$isEditable && !$freelance->is_verified) {
+        if (! $isEditable && ! $freelance->is_verified) {
             abort(404, 'Ce profil est introuvable, privé ou non vérifié.');
         }
 
         return Inertia::render('Freelance/Show', [
-            'freelance'   => $freelance,
-            'isEditable'  => $isEditable,
+            'freelance' => $freelance,
+            'isEditable' => $isEditable,
             'professions' => $isEditable ? Profession::orderBy('name')->get() : [],
-            'skills'      => $isEditable ? Skill::orderBy('name')->get() : [],
+            'skills' => $isEditable ? Skill::orderBy('name')->get() : [],
         ]);
     }
 
@@ -162,7 +161,7 @@ class FreelanceController extends Controller
     public function updateImage(Request $request, Freelance $freelance)
     {
         $request->validate([
-            'cover'  => 'nullable|image',
+            'cover' => 'nullable|image',
             'avatar' => 'nullable|image',
         ]);
 
@@ -206,7 +205,7 @@ class FreelanceController extends Controller
     public function updateProfessions(Request $request, Freelance $freelance)
     {
         $validated = $request->validate([
-            'professions'   => ['nullable', 'array'],
+            'professions' => ['nullable', 'array'],
             'professions.*' => ['exists:professions,id'],
         ]);
 
@@ -229,7 +228,7 @@ class FreelanceController extends Controller
     public function updateInfos(Request $request, Freelance $freelance)
     {
         $request->validate([
-            'is_available'  => 'required|boolean',
+            'is_available' => 'required|boolean',
             'price_per_day' => 'nullable|integer|min:0',
         ]);
 
@@ -241,7 +240,7 @@ class FreelanceController extends Controller
     public function updateSkills(Request $request, Freelance $freelance)
     {
         $validated = $request->validate([
-            'skills'   => ['nullable', 'array'],
+            'skills' => ['nullable', 'array'],
             'skills.*' => ['exists:skills,id'],
         ]);
 
@@ -254,21 +253,20 @@ class FreelanceController extends Controller
     {
 
         $request->validate([
-            'siret' => 'required|string|size:14',
+            'siret' => 'required|string|size:14|unique:freelances,siret',
             'identity_document' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ]);
 
         $freelance = auth()->user()->freelance;
 
-        $path = $request->file('identity_document')->storeAs('identity_documents', $freelance->slug . '-ID' , 'public');
+        $path = $request->file('identity_document')->storeAs('identity_documents', $freelance->slug.'-ID', 'public');
 
         $freelance->update([
             'siret' => $request->siret,
             'identity_document_path' => Storage::url($path),
-            'is_verified' => false
+            'is_verified' => false,
         ]);
 
         return back()->with('success', 'Vos informations ont bien été enregistrées. Votre compte sera vérifié sous peu.');
     }
-
 }

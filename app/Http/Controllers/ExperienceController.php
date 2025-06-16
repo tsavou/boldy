@@ -15,6 +15,7 @@ class ExperienceController extends Controller
 
         return redirect()->back()->with('success', 'Experience ajoutée avec succès');
     }
+
     public function update(ExperienceRequest $request, Experience $experience)
     {
 

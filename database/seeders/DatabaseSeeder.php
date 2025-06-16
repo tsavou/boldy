@@ -2,13 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Freelance;
-use App\Models\Profession;
-use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Database\Factories\FreelanceFactory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,7 +16,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             SkillSeeder::class,
             ProfessionSeeder::class,
-            FreelanceSeeder::class
+            FreelanceSeeder::class,
         ]);
     }
 }

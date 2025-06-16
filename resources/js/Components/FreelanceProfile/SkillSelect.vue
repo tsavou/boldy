@@ -76,10 +76,7 @@ const saveSkills = () => {
                 <CheckIcon class="size-5" />
                 Valider
             </PrimaryButton>
-
-
         </div>
-
     </div>
 
     <!-- Affichage simple -->

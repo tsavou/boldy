@@ -35,7 +35,9 @@ const close = () => {
                     textColor,
                 ]"
             >
-                <div class="flex items-center gap-2 text-sm/6 leading-5 flex-wrap">
+                <div
+                    class="flex flex-wrap items-center gap-2 text-sm/6 leading-5"
+                >
                     <slot name="icon">
                         <InformationCircleIcon
                             class="size-5"
