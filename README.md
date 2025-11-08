@@ -2,6 +2,8 @@
 
 **Boldy** est une application web développée dans le cadre de mon projet de formation CDA (Concepteur Développeur d'Applications). Elle vise à offrir aux freelances une vitrine professionnelle centralisée, tout en permettant aux recruteurs de découvrir facilement des profils vérifiés.
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/tsavou/boldy)
+
 🔗 **Lien vers le site en ligne** : [https://boldy.laravel.cloud/](https://boldy.laravel.cloud/)
 
 ## 🚀 Fonctionnalités principales
